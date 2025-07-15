@@ -1,0 +1,75 @@
+import React from 'react';
+import { Card } from './Card';
+import { Button } from './Button';
+
+interface InfoModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
+            <div 
+                className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" 
+                onClick={e => e.stopPropagation()}
+            >
+                <header className="p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200">사용 방법 안내</h2>
+                </header>
+                <main className="overflow-y-auto p-6 space-y-6 text-slate-700 dark:text-slate-300">
+                    <section>
+                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">1. 시험 설정</h3>
+                        <p className="mb-2">
+                            시작하기 전에 풀이할 시험을 설정합니다.
+                        </p>
+                        <ul className="list-disc list-inside space-y-1 pl-2">
+                            <li><strong>과목 프리셋:</strong> 국어, 수학 등 주요 과목 버튼을 누르면 해당 과목의 시험 시간과 문제 번호가 자동으로 입력됩니다.</li>
+                            <li><strong>직접 입력:</strong> 시작/종료 번호와 총 시험 시간을 직접 설정할 수 있습니다.</li>
+                            <li><strong>무제한 모드:</strong> 시간 제한 없이 자유롭게 문제를 풀고 싶을 때 이 옵션을 활성화하세요.</li>
+                        </ul>
+                    </section>
+                     <section>
+                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">2. 시험 진행</h3>
+                        <p className="mb-2">
+                            '시험 시작' 버튼을 누르면 타이머가 작동하며 문제 풀이를 기록할 수 있습니다.
+                        </p>
+                        <ul className="list-disc list-inside space-y-1 pl-2">
+                            <li><strong>답안 마킹:</strong>
+                                <ul className="list-['\2013'] list-inside pl-4 mt-1 space-y-1">
+                                    <li><strong>클릭:</strong> 문제 번호(예: <span className="font-mono bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded">13번</span>) 또는 객관식 번호(1~5)를 클릭하여 답안을 기록합니다.</li>
+                                    <li><strong>키보드 단축키:</strong> 키보드의 숫자 키 (1, 2, 3, 4, 5)를 누르면 현재 포커스된 문제의 답이 바로 마킹되고 다음 문제로 넘어갑니다. (가장 빠른 방법)</li>
+                                    <li><strong>주관식:</strong> 답안 입력 후 '저장' 버튼을 누르거나 Enter 키를 쳐서 기록합니다.</li>
+                                </ul>
+                            </li>
+                            <li><strong>현재 문제 리셋:</strong> '현재 문제 풀이 시간'을 0으로 초기화합니다.</li>
+                            <li><strong>일괄 선택 (배치 모드):</strong>
+                                <ul className="list-['\2013'] list-inside pl-4 mt-1 space-y-1">
+                                    <li>'일괄 채점 모드' 토글을 켜면 여러 문제를 동시에 선택할 수 있습니다.</li>
+                                    <li>선택 후 '일괄 기록' 버튼을 누르면, 마지막 기록부터 현재까지의 시간을 선택된 문제들에 균등하게 배분하여 기록합니다.</li>
+                                    <li><strong>사용 예시:</strong> 여러 쉬운 문제를 연속으로 푼 뒤, 한 번에 시간을 기록하고 싶을 때 유용합니다.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                     <section>
+                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">3. 시험 종료 및 분석</h3>
+                        <p className="mb-2">
+                            '시험 종료' 버튼을 누르면 풀이가 중단되고 '풀이 과정 분석 리포트'가 나타납니다.
+                        </p>
+                        <ul className="list-disc list-inside space-y-1 pl-2">
+                            <li><strong>결과 확인:</strong> 최종 답안, 문제별 풀이 시간, 풀이 시간 분석, 시각화 차트 등을 통해 자신의 풀이 습관을 복기할 수 있습니다.</li>
+                            <li><strong>이어서 진행:</strong> 잠시 쉬었다가 다시 시험을 이어갈 수 있습니다.</li>
+                             <li><strong>새로운 시험 시작:</strong> 현재 기록을 모두 초기화하고 새로운 시험을 시작합니다.</li>
+                        </ul>
+                    </section>
+                </main>
+                 <footer className="p-4 bg-slate-100 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+                    <Button onClick={onClose} variant="primary">닫기</Button>
+                </footer>
+            </div>
+        </div>
+    );
+};
