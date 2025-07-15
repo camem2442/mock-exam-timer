@@ -10,14 +10,16 @@ const App: React.FC = () => {
   return (
     <>
       <main className="container mx-auto p-4 sm:p-6 lg:p-8 font-sans">
-        <div className="text-center mb-8 relative">
-          <h1 className="text-4xl font-bold text-primary-600 dark:text-primary-400">모의고사 타이머 & 분석기</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-2">시간 관리 능력을 극대화하여 최고의 성과를 만드세요.</p>
-           <Button 
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">모의고사 타이머 & 분석기</h1>
+            <p className="text-slate-600 dark:text-slate-400 mt-2">시간 관리 능력을 극대화하여 최고의 성과를 만드세요.</p>
+          </div>
+          <Button 
             variant="ghost" 
             size="icon" 
             onClick={() => setShowInfoModal(true)} 
-            className="absolute top-0 right-0"
+            className="flex-shrink-0 ml-4"
             aria-label="사용 방법 안내"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
