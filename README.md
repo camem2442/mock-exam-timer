@@ -2,7 +2,7 @@
 
 실전과 같은 환경에서 시간 관리 능력을 극대화하고, 자신의 풀이 습관을 분석하기 위한 타이머 및 분석 도구입니다.
 
-[![Deploy with Vercel](https://vercel.com/button)]([https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcamem2442%2Fmock-exam-timer](https://mock-exam-timer-6okcaxiiw-camem2442s-projects.vercel.app))
+[![Deploy with Vercel](https://vercel.com/button)](https://mock-exam-timer.vercel.app)
 
 ---
 
