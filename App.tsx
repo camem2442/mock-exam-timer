@@ -27,6 +27,9 @@ const App: React.FC = () => {
         </div>
         <ExamScreen />
         <AdPlaceholder />
+        <footer className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400">
+          <p>문의: camem2442@gmail.com</p>
+        </footer>
       </main>
       <InfoModal isOpen={showInfoModal} onClose={() => setShowInfoModal(false)} />
     </>

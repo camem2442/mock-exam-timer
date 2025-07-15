@@ -63,7 +63,8 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
 
                 <div className="flex items-stretch gap-2" onClick={e => e.stopPropagation()}>
                     <Input
-                        type="text"
+                        type="tel"
+                        inputMode="numeric"
                         placeholder="주관식 답안"
                         className="bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 !w-28"
                         value={subjectiveInput}
