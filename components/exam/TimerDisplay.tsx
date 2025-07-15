@@ -27,18 +27,18 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ isUnlimited, timeLeft, tota
             <div className={`transition-all duration-300 ${isPaused ? 'blur-sm opacity-50' : ''}`}>
                 <div>
                     <p className="text-lg text-slate-400">{timeUp ? '초과 시간' : '전체 남은 시간'}</p>
-                    <p className={`text-6xl font-bold tabular-nums ${timeUp ? 'text-red-500' : 'text-primary-400'}`}>
+                    <p className={`text-4xl sm:text-5xl lg:text-6xl font-bold tabular-nums ${timeUp ? 'text-red-500' : 'text-primary-400'}`}>
                         {isUnlimited ? '∞' : formatTime(displayTime)}
                     </p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                      <div>
                         <p className="text-sm text-slate-400">총 문제 풀이 시간</p>
-                        <p className="text-3xl font-semibold tabular-nums">{formatTime(totalElapsed)}</p>
+                        <p className="text-2xl sm:text-3xl font-semibold tabular-nums">{formatTime(totalElapsed)}</p>
                     </div>
                     <div>
                         <p className="text-sm text-slate-400">현재 문제 풀이 시간</p>
-                        <p className="text-3xl font-semibold tabular-nums">{formatTime(currentProblem)}</p>
+                        <p className="text-2xl sm:text-3xl font-semibold tabular-nums">{formatTime(currentProblem)}</p>
                     </div>
                 </div>
             </div>
