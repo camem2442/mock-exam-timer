@@ -131,9 +131,10 @@ export const GradingModal: FC<GradingModalProps> = ({
                     {chunk.map(num => (
                       <td key={num} className="p-1">
                         <Input
-                          ref={el => inputRefs.current[num] = el}
+                          ref={el => { inputRefs.current[num] = el; }}
                           id={`answer-${num}`}
-                          type="text"
+                          type="tel"
+                          inputMode="numeric"
                           value={answers[num] || ''}
                           onChange={(e) => handleAnswerChange(num, e.target.value)}
                           className="w-full text-center text-base"
