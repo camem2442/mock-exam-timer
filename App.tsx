@@ -17,7 +17,6 @@ const App: React.FC = () => {
         <meta property="og:title" content="모의고사 타이머 & 분석기" />
         <meta property="og:description" content="실시간 풀이 시간 측정과 상세한 분석으로 시험을 정복하세요." />
         <meta property="og:type" content="website" />
-        <meta name="google-site-verification" content="HGU4EYxFRCTG5VId2sJbwrOLnL8GlzQH8PAkT8vcPHc" />
       </Helmet>
       <main className="container mx-auto p-4 sm:p-6 lg:p-8 font-sans">
         <div className="flex items-center justify-between mb-8">
