@@ -214,6 +214,11 @@ const ExamScreen: React.FC = () => {
             return;
         }
         
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
         resetExamState();
 
         const initialQuestions: Record<number, Question> = {};
