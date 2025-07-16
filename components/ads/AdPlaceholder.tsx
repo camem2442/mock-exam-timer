@@ -46,8 +46,8 @@ const AdPlaceholder: React.FC<{ className?: string }> = ({ className = '' }) => 
         <div ref={adContainerRef} className={`w-full my-6 text-center ${className}`} style={{ minHeight: '90px' }}>
              <ins className="adsbygoogle"
                  style={{ display: 'block' }}
-                 data-ad-client="ca-pub-1091793304609487"
-                 data-ad-slot="5567931498"
+                 data-ad-client="ca-pub-4111764703044544"
+                 data-ad-slot="7248802537"
                  data-ad-format="auto"
                  data-full-width-responsive="true"></ins>
         </div>
