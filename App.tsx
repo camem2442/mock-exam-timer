@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import ExamScreen from './components/ExamScreen';
 import AdPlaceholder from './components/ads/AdPlaceholder';
 import { InfoModal } from './components/ui/InfoModal';
@@ -10,6 +11,14 @@ const App: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>모의고사 타이머 & 분석기</title>
+        <meta name="description" content="실시간으로 모의고사 시간을 측정하고, 문제별 풀이 시간을 기록하며 상세한 분석 리포트를 받아보세요. 수능, 공무원 시험 등 모든 시험에 활용 가능합니다." />
+        <meta property="og:title" content="모의고사 타이머 & 분석기" />
+        <meta property="og:description" content="실시간 풀이 시간 측정과 상세한 분석으로 시험을 정복하세요." />
+        <meta property="og:type" content="website" />
+        <meta name="google-site-verification" content="HGU4EYxFRCTG5VId2sJbwrOLnL8GlzQH8PAkT8vcPHc" />
+      </Helmet>
       <main className="container mx-auto p-4 sm:p-6 lg:p-8 font-sans">
         <div className="flex items-center justify-between mb-8">
           <div>
