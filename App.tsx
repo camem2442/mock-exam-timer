@@ -3,6 +3,7 @@ import ExamScreen from './components/ExamScreen';
 import AdPlaceholder from './components/ads/AdPlaceholder';
 import { InfoModal } from './components/ui/InfoModal';
 import { Button } from './components/ui/Button';
+import { Analytics } from '@vercel/analytics/react';
 
 const App: React.FC = () => {
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -33,6 +34,7 @@ const App: React.FC = () => {
           <p>문의: camem2442@gmail.com</p>
         </footer>
       </main>
+      <Analytics />
       <InfoModal isOpen={showInfoModal} onClose={() => setShowInfoModal(false)} />
     </>
   );
