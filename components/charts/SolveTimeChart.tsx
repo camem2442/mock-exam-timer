@@ -68,8 +68,14 @@ const SolveTimeChart: React.FC<{ questions: Question[] }> = ({ questions }) => {
                         >
                             <Recharts.CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                             <Recharts.XAxis dataKey="name" tick={{ fontSize: 12, fill: tickColor }} />
-                            <Recharts.YAxis yAxisId="left" tick={{ fontSize: 12, fill: tickColor }} label={{ value: '구간별 시간', angle: -90, position: 'insideLeft', fill: tickColor, style: {textAnchor: 'middle'} }} />
-                            <Recharts.YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12, fill: tickColor }} label={{ value: '누적 시간', angle: 90, position: 'insideRight', fill: tickColor, style: {textAnchor: 'middle'} }}/>
+                            <Recharts.YAxis yAxisId="left" tickFormatter={formatMinSec} tick={{ fontSize: 12, fill: tickColor }} label={{ value: '구간별 시간', angle: -90, position: 'insideLeft', fill: tickColor, style: {textAnchor: 'middle'} }} />
+                            <Recharts.YAxis 
+                                yAxisId="right" 
+                                orientation="right" 
+                                tick={{ fontSize: 12, fill: tickColor }} 
+                                label={{ value: '누적 시간', angle: 90, position: 'insideRight', fill: tickColor, style: {textAnchor: 'middle'} }}
+                                tickFormatter={formatMinSec}
+                            />
                             <Recharts.Tooltip content={<CustomTooltip />} cursor={{fill: 'rgba(100,116,139,0.1)'}} />
                             <Recharts.Legend formatter={renderLegendText} />
                             <Recharts.Bar yAxisId="left" dataKey="lapTime" name="구간별 풀이 시간" fill="#3b82f6" isAnimationActive={false} />
@@ -83,6 +89,7 @@ const SolveTimeChart: React.FC<{ questions: Question[] }> = ({ questions }) => {
                             <Recharts.CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                             <Recharts.XAxis dataKey="name" tick={{ fontSize: 12, fill: tickColor }} />
                             <Recharts.YAxis 
+                                tickFormatter={formatMinSec}
                                 tick={{ fontSize: 12, fill: tickColor }} 
                                 label={{ value: '풀이 시간', angle: -90, position: 'insideLeft', fill: tickColor, style: {textAnchor: 'middle'} }}
                             />
