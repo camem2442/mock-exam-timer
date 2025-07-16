@@ -1,4 +1,4 @@
-import React, { type FC, useState, useRef, useEffect } from 'react';
+import React, { type FC, useRef, useEffect } from 'react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -9,6 +9,10 @@ interface GradingModalProps {
   onSubmit: (answers: Record<number, string>) => void;
   startProblem: number;
   endProblem: number;
+  answers: Record<number, string>;
+  onAnswerChange: (answers: Record<number, string>) => void;
+  subjectiveProblems: Set<number>;
+  onSubjectiveChange: (subjectiveProblems: Set<number>) => void;
 }
 
 export const GradingModal: FC<GradingModalProps> = ({
@@ -17,18 +21,13 @@ export const GradingModal: FC<GradingModalProps> = ({
   onSubmit,
   startProblem,
   endProblem,
+  answers,
+  onAnswerChange,
+  subjectiveProblems,
+  onSubjectiveChange,
 }) => {
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [subjectiveProblems, setSubjectiveProblems] = useState<Set<number>>(new Set());
   const inputRefs = useRef<Record<number, HTMLInputElement | null>>({});
   const isDesktop = useMediaQuery('(min-width: 1024px)');
-
-  useEffect(() => {
-    if (isOpen) {
-      setAnswers({});
-      setSubjectiveProblems(new Set());
-    }
-  }, [isOpen]);
 
   const problemNumbers = Array.from(
     { length: endProblem - startProblem + 1 },
@@ -36,16 +35,13 @@ export const GradingModal: FC<GradingModalProps> = ({
   );
 
   const handleAnswerChange = (problemNumber: number, value: string) => {
-    // Only allow single digit for non-subjective problems for auto-advance
     if (!subjectiveProblems.has(problemNumber) && value.length > 1) {
-       setAnswers((prev) => ({ ...prev, [problemNumber]: value.slice(-1) }));
-       // Don't auto-advance if user is correcting, let them see the change.
+       onAnswerChange({ ...answers, [problemNumber]: value.slice(-1) });
        return;
     }
 
-    setAnswers((prev) => ({ ...prev, [problemNumber]: value }));
+    onAnswerChange({ ...answers, [problemNumber]: value });
 
-    // Auto-advance logic
     if (!subjectiveProblems.has(problemNumber) && /^\d$/.test(value)) {
         const currentIndex = problemNumbers.indexOf(problemNumber);
         if (currentIndex === -1) return;
@@ -63,15 +59,13 @@ export const GradingModal: FC<GradingModalProps> = ({
   };
 
   const handleToggleSubjective = (problemNumber: number) => {
-    setSubjectiveProblems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(problemNumber)) {
-        newSet.delete(problemNumber);
-      } else {
-        newSet.add(problemNumber);
-      }
-      return newSet;
-    });
+    const newSet = new Set(subjectiveProblems);
+    if (newSet.has(problemNumber)) {
+      newSet.delete(problemNumber);
+    } else {
+      newSet.add(problemNumber);
+    }
+    onSubjectiveChange(newSet);
   };
 
   const handleSubmit = () => {

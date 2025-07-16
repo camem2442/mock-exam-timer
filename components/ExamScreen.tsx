@@ -25,6 +25,10 @@ const ExamScreen: React.FC = () => {
     const [totalMinutesStr, setTotalMinutesStr] = useState('70');
     const [isUnlimitedTime, setIsUnlimitedTime] = useState(false);
     const [setupError, setSetupError] = useState('');
+    const [submittedCorrectAnswers, setSubmittedCorrectAnswers] = useState<Record<number, string>>({});
+    const [gradingModalInputs, setGradingModalInputs] = useState<Record<number, string>>({});
+    const [gradingModalSubjective, setGradingModalSubjective] = useState<Set<number>>(new Set());
+
 
     // Exam Data State
     const [questions, setQuestions] = useState<Record<number, Question>>({});
@@ -58,25 +62,32 @@ const ExamScreen: React.FC = () => {
 
     // Effect for saving state to localStorage
     useEffect(() => {
-        if (isExamActive) {
-            const stateToSave = {
+        const isReviewing = !isExamActive && showReview;
+        if (isExamActive || isReviewing) {
+             const stateToSave = {
                 questions, questionNumbers, subjectiveInputs,
                 totalElapsedTime, overallTimeLeft, currentProblemTime,
                 lapCounter, timeUp, isPaused,
                 startTime, lastLapTimestamp, pauseTime,
                 focusedQuestionNumber, batchMode, batchSelectedQuestions: Array.from(batchSelectedQuestions),
                 examConfig: examConfigRef.current,
-                startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime
+                startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime,
+                submittedCorrectAnswers,
+                gradingModalInputs,
+                gradingModalSubjective: Array.from(gradingModalSubjective),
+                // Add flags to know where we are
+                isExamActive,
+                showReview,
             };
             localStorage.setItem('examState', JSON.stringify(stateToSave));
-        } else {
-            localStorage.removeItem('examState');
         }
+        // Data is now cleared only on explicit reset
     }, [
-        isExamActive, questions, questionNumbers, subjectiveInputs,
+        isExamActive, showReview, questions, questionNumbers, subjectiveInputs,
         totalElapsedTime, overallTimeLeft, currentProblemTime,
         lapCounter, timeUp, isPaused, startTime, lastLapTimestamp, pauseTime,
-        focusedQuestionNumber, batchMode, batchSelectedQuestions
+        focusedQuestionNumber, batchMode, batchSelectedQuestions, submittedCorrectAnswers,
+        gradingModalInputs, gradingModalSubjective
     ]);
 
      // Effect for loading state from localStorage on initial mount
@@ -106,8 +117,14 @@ const ExamScreen: React.FC = () => {
                 setEndQuestionStr(savedState.endQuestionStr);
                 setTotalMinutesStr(savedState.totalMinutesStr);
                 setIsUnlimitedTime(savedState.isUnlimitedTime);
+                setSubmittedCorrectAnswers(savedState.submittedCorrectAnswers || {});
+                setGradingModalInputs(savedState.gradingModalInputs || {});
+                setGradingModalSubjective(new Set(savedState.gradingModalSubjective || []));
 
-                setIsExamActive(true);
+                // Restore flags
+                setIsExamActive(savedState.isExamActive);
+                setShowReview(savedState.showReview);
+
             } else {
                 localStorage.removeItem('examState');
             }
@@ -136,6 +153,9 @@ const ExamScreen: React.FC = () => {
         setTimeUp(false);
         setIsPaused(false);
         setIsGradingModalOpen(false);
+        setSubmittedCorrectAnswers({});
+        setGradingModalInputs({});
+        setGradingModalSubjective(new Set());
         if (typeof timerRef.current === 'number') {
             cancelAnimationFrame(timerRef.current);
             timerRef.current = undefined;
@@ -364,27 +384,27 @@ const ExamScreen: React.FC = () => {
         setFocusedQuestionNumber(questionNumber);
     }, []);
 
-    const handleGradeSubmit = (submittedCorrectAnswers: Record<number, string>) => {
-        setQuestions(prevQuestions => {
-            const newQuestions = JSON.parse(JSON.stringify(prevQuestions));
-            for (const qNumStr in newQuestions) {
-                const qNum = parseInt(qNumStr, 10);
-                const question = newQuestions[qNum];
-                if (question) {
-                    const correctAnswer = submittedCorrectAnswers[qNum];
-                    if (correctAnswer !== undefined && correctAnswer !== null) {
-                        const userAnswerTrimmed = (question.answer || '').toString().trim();
-                        const correctAnswerTrimmed = correctAnswer.toString().trim();
-                        question.isCorrect = userAnswerTrimmed !== '' && userAnswerTrimmed === correctAnswerTrimmed;
-                    } else {
-                        question.isCorrect = undefined;
-                    }
-                }
-            }
-            return newQuestions;
-        });
+    const handleGradeSubmit = (submittedAnswers: Record<number, string>) => {
+        setSubmittedCorrectAnswers(submittedAnswers);
         setIsGradingModalOpen(false);
     };
+
+    const questionsWithGrading = React.useMemo(() => {
+        if (Object.keys(submittedCorrectAnswers).length === 0) {
+            return Object.values(questions);
+        }
+
+        return Object.values(questions).map(q => {
+            const correctAnswer = submittedCorrectAnswers[q.number];
+            let isCorrect: boolean | undefined = undefined;
+            if (correctAnswer !== undefined && correctAnswer !== null) {
+                const userAnswerTrimmed = (q.answer || '').toString().trim();
+                const correctAnswerTrimmed = correctAnswer.toString().trim();
+                isCorrect = userAnswerTrimmed !== '' && userAnswerTrimmed === correctAnswerTrimmed;
+            }
+            return { ...q, isCorrect };
+        });
+    }, [questions, submittedCorrectAnswers]);
 
 
     useEffect(() => {
@@ -452,7 +472,7 @@ const ExamScreen: React.FC = () => {
     return (
         <>
             {showReview && <ReviewModal 
-                questions={Object.values(questions)} 
+                questions={questionsWithGrading} 
                 onContinue={handleContinueExam} 
                 onRestart={handleRestartExam} 
                 onGradeRequest={() => setIsGradingModalOpen(true)}
@@ -463,6 +483,10 @@ const ExamScreen: React.FC = () => {
                 onSubmit={handleGradeSubmit}
                 startProblem={questionNumbers.length > 0 ? questionNumbers[0] : parseInt(startQuestionStr) || 1}
                 endProblem={questionNumbers.length > 0 ? questionNumbers[questionNumbers.length - 1] : parseInt(endQuestionStr) || 45}
+                answers={gradingModalInputs}
+                onAnswerChange={setGradingModalInputs}
+                subjectiveProblems={gradingModalSubjective}
+                onSubjectiveChange={setGradingModalSubjective}
             />
 
             <StatusPanelModal
