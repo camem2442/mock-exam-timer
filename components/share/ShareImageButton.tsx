@@ -170,15 +170,15 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                             </div>
                         </div>
                         
-                        <div className="flex-1 flex justify-center items-center overflow-y-auto max-h-[80vh] bg-transparent p-0 relative w-full overflow-x-hidden">
+                        <div className="flex-1 flex justify-center items-center overflow-y-auto max-h-[80vh] bg-transparent p-0 relative">
                            {isLoading && (
                              <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/40">
                                <Spinner />
                                <span className="mt-2 text-white text-sm">이미지 생성 중...</span>
                              </div>
                            )}
-                            <div ref={previewRef} className="w-full max-w-[420px] sm:max-w-full" style={{ boxSizing: 'border-box', overflowX: 'hidden' }}>
-                                <div style={{ width: '100%', maxWidth: 420, fontFamily: "'Noto Sans KR', sans-serif" }}>
+                            <div ref={previewRef} style={{maxWidth: '100vw'}}>
+                                <div style={{ width: 420, maxWidth: '100%', fontFamily: "'Noto Sans KR', sans-serif" }}>
                                     <ResultImage 
                                         questions={questions} 
                                         examName={shareExamName} 
