@@ -2,6 +2,8 @@ import React from 'react';
 import { Card } from './Card';
 import { Button } from './Button';
 import { SocialShareBadges } from './SocialShareBadges';
+import { Link } from 'react-router-dom';
+import { siteConfig } from '../../config/site';
 
 interface InfoModalProps {
     isOpen: boolean;
@@ -28,98 +30,98 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                     <div className="border-t border-slate-200 dark:border-slate-700 my-6"></div>
                     
                     <section>
-                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">1. 시험 설정</h3>
-                        <p className="mb-2">
-                            시작하기 전에 풀이할 시험을 설정합니다.
-                        </p>
-                        <ul className="list-disc space-y-2 pl-6">
-                            <li className="pl-2"><strong>과목 프리셋:</strong> 국어, 수학 등 주요 과목 버튼을 누르면 해당 과목의 시험 시간과 문제 번호가 자동으로 입력됩니다.</li>
-                            <li className="pl-2"><strong>직접 입력:</strong> 시작/종료 번호와 총 시험 시간을 직접 설정할 수 있습니다.</li>
-                            <li className="pl-2"><strong>무제한 모드:</strong> 시간 제한 없이 자유롭게 문제를 풀고 싶을 때 이 옵션을 활성화하세요.</li>
-                        </ul>
+                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-3">🚀 빠른 시작</h3>
+                        <div className="space-y-3 text-sm">
+                            <div className="flex items-start gap-3">
+                                <span className="bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</span>
+                                <div>
+                                    <strong>시험 설정:</strong> 과목 프리셋 버튼을 누르거나 직접 시간과 문제 번호를 입력하세요.
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <span className="bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</span>
+                                <div>
+                                    <strong>시험 시작:</strong> '시험 시작' 버튼을 누르면 타이머가 작동합니다.
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <span className="bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</span>
+                                <div>
+                                    <strong>답안 기록:</strong> 문제 번호를 클릭하거나 키보드 숫자 키(1~5)를 사용하세요.
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <span className="bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">4</span>
+                                <div>
+                                    <strong>결과 확인:</strong> '시험 종료' 후 상세한 분석 리포트를 확인하세요.
+                                </div>
+                            </div>
+                        </div>
                     </section>
-                     <section>
-                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">2. 시험 진행</h3>
-                        <p className="mb-2">
-                            '시험 시작' 버튼을 누르면 타이머가 작동하며 문제 풀이를 기록할 수 있습니다.
-                        </p>
-                        <ul className="list-disc space-y-3 pl-6">
-                            <li className="pl-2">
-                                <strong>답안 마킹:</strong>
-                                <ul className="list-['\2013'] space-y-2 pl-6 mt-2">
-                                    <li className="pl-2"><strong>클릭:</strong> 문제 번호(예: <span className="font-mono bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded">13번</span>) 또는 객관식 번호(1~5)를 클릭하여 답안을 기록합니다.</li>
-                                    <li className="pl-2"><strong>키보드 단축키:</strong> 키보드의 숫자 키 (1, 2, 3, 4, 5)를 누르면 현재 포커스된 문제의 답이 바로 마킹되고 다음 문제로 넘어갑니다. (가장 빠른 방법)</li>
-                                    <li className="pl-2"><strong>주관식:</strong> 답안 입력 후 '저장' 버튼을 누르거나 Enter 키를 쳐서 기록합니다.</li>
-                                </ul>
-                            </li>
-                            <li className="pl-2"><strong>현재 문제 리셋:</strong> '현재 문제 풀이 시간'을 0으로 초기화합니다.</li>
-                            <li className="pl-2">
-                                <strong>일괄 선택 (배치 모드):</strong>
-                                <ul className="list-['\2013'] space-y-2 pl-6 mt-2">
-                                    <li className="pl-2">'일괄 채점 모드' 토글을 켜면 여러 문제를 동시에 선택할 수 있습니다.</li>
-                                    <li className="pl-2">선택 후 '일괄 기록' 버튼을 누르면, 마지막 기록부터 현재까지의 시간을 선택된 문제들에 균등하게 배분하여 기록합니다.</li>
-                                    <li className="pl-2">여러 쉬운 문제를 연속으로 푼 뒤, 한 번에 시간을 기록하고 싶을 때 유용합니다.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </section>
-                     <section>
-                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">3. 시험 종료 및 분석</h3>
-                        <p className="mb-2">
-                            '시험 종료' 버튼을 누르면 풀이가 중단되고 '풀이 과정 분석 리포트'가 나타납니다.
-                        </p>
-                        <ul className="list-disc space-y-2 pl-6">
-                            <li className="pl-2"><strong>결과 확인:</strong> 최종 답안, 문제별 풀이 시간, 풀이 시간 분석, 시각화 차트 등을 통해 자신의 풀이 습관을 복기할 수 있습니다.</li>
-                            <li className="pl-2"><strong>이어서 진행:</strong> 잠시 쉬었다가 다시 시험을 이어갈 수 있습니다.</li>
-                            <li className="pl-2"><strong>새로운 시험 시작:</strong> 현재 기록을 모두 초기화하고 새로운 시험을 시작합니다.</li>
-                        </ul>
-                    </section>
+                    
                     <section>
-                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">4. 시험 기록 저장 및 관리</h3>
-                        <p className="mb-2">
-                            풀이 과정 분석 리포트에서 시험 결과를 저장하고 관리할 수 있습니다.
-                        </p>
-                        <ul className="list-disc space-y-2 pl-6">
-                            <li className="pl-2"><strong>시험 기록 저장:</strong> '시험 기록 저장 (베타)' 버튼을 클릭하면 시험 이름을 입력하여 브라우저 저장소에 저장할 수 있습니다.</li>
-                            <li className="pl-2"><strong>저장된 기록 확인:</strong> 메인 화면의 '저장된 시험 기록' 버튼을 클릭하면 이전에 저장한 시험 기록을 확인할 수 있습니다.</li>
-                            <li className="pl-2"><strong>기록 불러오기:</strong> 저장된 기록을 클릭하여 이전 결과를 다시 확인하거나 분석할 수 있습니다.</li>
-                            <li className="pl-2"><strong>기록 편집:</strong> 저장된 기록에서 연필 아이콘을 클릭하여 이름을 변경할 수 있습니다.</li>
-                            <li className="pl-2"><strong>데이터 내보내기:</strong> 각 기록에서 CSV 복사 또는 CSV 다운로드 버튼을 사용하여 엑셀이나 구글 시트에서 분석할 수 있습니다.</li>
-                            <li className="pl-2"><strong>주의사항:</strong> 브라우저를 바꾸거나 데이터를 삭제하면 저장된 기록이 사라질 수 있습니다.</li>
-                        </ul>
+                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-3">⚡ 핵심 기능</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
+                                <strong>키보드 단축키:</strong> 숫자 키 1~5로 빠른 답안 입력
+                            </div>
+                            <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
+                                <strong>일괄 채점:</strong> 여러 문제를 동시에 선택하여 시간 기록
+                            </div>
+                            <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
+                                <strong>주관식 지원:</strong> 텍스트 입력으로 주관식 답안 기록
+                            </div>
+                            <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
+                                <strong>CSV 내보내기:</strong> 엑셀 활용을 위한 데이터 내보내기
+                            </div>
+                        </div>
                     </section>
                     
                     <div className="border-t border-slate-200 dark:border-slate-700 my-6"></div>
                     
-                    <section>
-                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">업데이트 기록</h3>
-                        <div className="space-y-4">
-                            <div>
-                                <h4 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">v1.2.0 (2025년 7월 17일)</h4>
-                                <ul className="list-disc space-y-1 pl-6 text-sm">
-                                    <li className="pl-2">시험 이름 입력 기능 추가</li>
-                                    <li className="pl-2">타이머 화면에 시험 이름 표시</li>
-                                    <li className="pl-2">모바일 UI 개선 및 반응형 디자인 강화</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">v1.1.0 (2025년 7월 17일)</h4>
-                                <ul className="list-disc space-y-1 pl-6 text-sm">
-                                    <li className="pl-2">시험 기록 저장 및 관리 기능 추가</li>
-                                    <li className="pl-2">CSV 내보내기 기능</li>
-                                    <li className="pl-2">일괄 채점 모드 개선</li>
-                                    <li className="pl-2">모바일 최적화</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">v1.0.0 (2025년 7월 15일)</h4>
-                                <ul className="list-disc space-y-1 pl-6 text-sm">
-                                    <li className="pl-2">기본 타이머 및 문제 풀이 기록 기능</li>
-                                    <li className="pl-2">풀이 과정 분석 리포트</li>
-                                    <li className="pl-2">키보드 단축키 지원</li>
-                                    <li className="pl-2">주관식 답안 입력 기능</li>
-                                </ul>
-                            </div>
+                    <section className="text-center space-y-4">
+                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400">📚 더 자세한 정보가 필요하신가요?</h3>
+                        <div className="flex flex-wrap justify-center gap-3">
+                            <Link 
+                                to="/guide" 
+                                onClick={onClose}
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors text-sm font-medium"
+                            >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                                상세 사용법
+                            </Link>
+                            <Link 
+                                to="/changelog" 
+                                onClick={onClose}
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors text-sm font-medium"
+                            >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                업데이트 기록
+                            </Link>
+                            <Link 
+                                to="/contact" 
+                                onClick={onClose}
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors text-sm font-medium"
+                            >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                문의하기
+                            </Link>
+                            <Link 
+                                to="/faq" 
+                                onClick={onClose}
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors text-sm font-medium"
+                            >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9h8M8 13h6m-6 4h8M4 6h16M4 6v12a2 2 0 002 2h12a2 2 0 002-2V6" />
+                                </svg>
+                                자주 묻는 질문
+                            </Link>
                         </div>
                     </section>
                     
@@ -127,7 +129,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                     
                     <section className="text-center">
                         <p className="text-sm text-slate-500 dark:text-slate-400">
-                            문의 : camem2442@gmail.com | © 2025 모의고사 타이머 & 분석기
+                            문의 : {siteConfig.contact.email} | © 2025 모의고사 타이머 & 분석기
                         </p>
                     </section>
                 </main>

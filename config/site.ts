@@ -6,19 +6,23 @@ export const siteConfig = {
     // 사이트 메타 정보
     title: '모의고사 타이머 & 분석기',
     description: '실시간으로 모의고사 시간을 측정하고, 문제별 풀이 시간을 기록하며 상세한 분석 리포트를 받아보세요.',
-    keywords: '공부 타이머, 시험 타이머, 문제풀이 타이머, 모의고사 타이머, 수능 타이머, 공무원시험 타이머, LEET 타이머, CPA 타이머, 학습 타이머, 시간 관리, 문제 풀이 시간, 시험 분석',
+    keywords: '공부 타이머, 시험 타이머, 문제풀이 타이머, 모의고사 타이머, 수능 타이머, 공무원시험 타이머, LEET 타이머, CPA 타이머, 학습 타이머, 시간 관리, 문제 풀이 시간, 시험 분석, 수험생 도구, 공부 도구, 시험 준비',
     
     // 소셜 미디어 설정
     social: {
         twitter: {
-            card: 'summary',
+            card: 'summary_large_image',
             title: '공부 타이머 | 시험 타이머 | 문제풀이 타이머',
             description: '실시간 풀이 시간 측정과 상세한 분석으로 시험을 정복하세요.'
         },
         og: {
             title: '모의고사 타이머 & 분석기 - 공부 타이머 | 시험 타이머 | 문제풀이 타이머',
             description: '수능, 공무원시험, LEET, CPA 등 모든 시험에 활용 가능한 실시간 풀이 시간 측정 및 분석 도구입니다.',
-            type: 'website'
+            type: 'website',
+            locale: 'ko_KR',
+            image: 'https://mock-exam-timer.vercel.app/og-image.png',
+            imageWidth: 1200,
+            imageHeight: 630
         }
     },
     
@@ -27,13 +31,25 @@ export const siteConfig = {
     
     // 문의 정보
     contact: {
-        email: 'camem2442@gmail.com'
+        email: 'mocktimer24@gmail.com'
     },
     
     // 카피라이트 정보
     copyright: {
         year: 2025,
         name: '모의고사 타이머 & 분석기'
+    },
+    
+    // SEO 추가 정보
+    seo: {
+        author: '모의고사 타이머 & 분석기',
+        publisher: '모의고사 타이머 & 분석기',
+        datePublished: '2025-7-15',
+        dateModified: '2025-07-17',
+        version: '1.2.0',
+        language: 'ko',
+        geoRegion: 'KR',
+        geoPlacename: '대한민국'
     }
 };
 
