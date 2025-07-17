@@ -113,7 +113,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, onContinue, onRest
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onContinue}>
             <div 
-                className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col" 
+                className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] min-w-0 overflow-hidden flex flex-col modal-container" 
                 onClick={e => e.stopPropagation()}
             >
                 <header className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">

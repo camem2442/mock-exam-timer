@@ -83,14 +83,14 @@ export const GradingModal: FC<GradingModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
-      <div className={`bg-white dark:bg-slate-900 rounded-lg shadow-xl w-full max-h-[90vh] flex flex-col ${isDesktop ? 'max-w-7xl' : 'max-w-2xl'}`}>
+      <div className={`bg-white dark:bg-slate-900 rounded-lg shadow-xl w-full max-h-[90vh] min-w-0 flex flex-col modal-container ${isDesktop ? 'max-w-7xl' : 'max-w-2xl'}`}>
         <div className="p-4 border-b dark:border-slate-700">
-          <h2 className="text-xl font-bold">정답 입력</h2>
+          <h2 className="text-lg sm:text-xl font-bold">정답 입력</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
              객관식은 숫자만 입력하면 다음 문제로 자동 이동합니다. 주관식으로 체크한 문제는 건너뛰며, 직접 입력할 수 있습니다.
           </p>
         </div>
-        <div className="p-6 overflow-y-auto">
+        <div className="p-4 sm:p-6 overflow-y-auto">
           <table className="w-full border-collapse table-fixed">
             <tbody>
               {chunkedProblems.map((chunk, chunkIndex) => (
@@ -143,8 +143,8 @@ export const GradingModal: FC<GradingModalProps> = ({
           </table>
         </div>
         <div className="p-4 border-t dark:border-slate-700 flex justify-end gap-2">
-          <Button variant="secondary" onClick={onClose}>취소</Button>
-          <Button onClick={handleSubmit}>채점하기</Button>
+          <Button variant="secondary" onClick={onClose} className="text-sm px-3 py-2">취소</Button>
+          <Button onClick={handleSubmit} className="text-sm px-3 py-2">채점하기</Button>
         </div>
       </div>
     </div>

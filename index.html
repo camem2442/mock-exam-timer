@@ -2,8 +2,13 @@
 <html lang="ko" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="google-site-verification" content="3UQhv3Z5VatLkB4P5qZLpSTVDkopAs2zNv7CXS9BMSk" />
+    
+    <!-- iOS 상태바 및 Safe Area 설정 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="모의고사 타이머" />
     
     <!-- SEO 메타 태그 -->
     <title>공부 타이머 | 시험 타이머 | 문제풀이 타이머 - 모의고사 타이머 & 분석기</title>
@@ -91,10 +96,24 @@
     </script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+      
+      /* iOS Safe Area 및 상태바 스타일링 */
+      html {
+        background-color: #020617; /* 다크 모드 배경색 */
+      }
+      
+      .light html {
+        background-color: #f8fafc; /* 라이트 모드 배경색 */
+      }
       body {
         font-family: 'Noto Sans KR', sans-serif;
         background-color: #f8fafc; /* slate-50 */
         color: #0f172a; /* slate-900 */
+        /* iOS Safe Area 지원 */
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
       }
       .dark body {
         background-color: #020617; /* slate-950 */
@@ -111,6 +130,16 @@
         min-width: 320px;
         max-width: 100vw;
         overflow-x: hidden;
+        /* 모바일에서 확대 시 스크롤 방지 */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+      }
+      
+      /* 모바일에서 입력 필드 확대 방지 */
+      input[type="text"], input[type="tel"], input[type="number"] {
+        font-size: 16px !important;
+        transform: scale(1);
+        -webkit-transform: scale(1);
       }
       
       /* 확대 시 텍스트 줄바뀜 방지 */

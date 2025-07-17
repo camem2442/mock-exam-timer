@@ -102,17 +102,17 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
             <div 
-                className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" 
+                className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] min-w-0 overflow-hidden flex flex-col modal-container" 
                 onClick={e => e.stopPropagation()}
             >
-                <header className="p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
-                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200">시험 기록 목록</h2>
+                <header className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
+                    <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">시험 기록 목록</h2>
                     <p className="mt-2 text-slate-600 dark:text-slate-400">
                         저장된 시험 기록을 확인하고 불러올 수 있습니다.
                     </p>
                 </header>
                 
-                <main className="overflow-y-auto overflow-x-hidden p-6 space-y-4">
+                <main className="overflow-y-auto overflow-x-hidden p-4 sm:p-6 space-y-4">
                     {bookmarks.length === 0 ? (
                         <div className="text-center text-slate-500 p-8">
                             저장된 시험 기록이 없습니다.
@@ -132,7 +132,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                                         if (e.key === 'Enter') handleSaveEdit();
                                                         if (e.key === 'Escape') handleCancelEdit();
                                                     }}
-                                                    className="flex-1 px-2 py-1 text-sm font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                                    className="flex-1 px-2 py-1 text-sm font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 text-base"
                                                     autoFocus
                                                 />
                                                 <button

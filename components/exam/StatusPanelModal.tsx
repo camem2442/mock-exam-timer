@@ -28,7 +28,7 @@ const StatusPanelModal: React.FC<StatusPanelModalProps> = ({
             onClick={onClose}
         >
             <div 
-                className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900/95 border border-slate-700 rounded-xl flex flex-col shadow-2xl"
+                className="relative w-full max-w-4xl max-h-[90vh] min-w-0 bg-slate-900/95 border border-slate-700 rounded-xl flex flex-col shadow-2xl modal-container"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="overflow-y-auto p-4">
