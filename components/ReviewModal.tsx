@@ -96,16 +96,21 @@ const ShareButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
 };
 
 // 시험 기록 저장 기능을 위한 컴포넌트
-const SaveExamButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
+const SaveExamButton: React.FC<{ questions: Question[]; examName: string }> = ({ questions, examName }) => {
     const [isExamNameModalOpen, setIsExamNameModalOpen] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [savedExamName, setSavedExamName] = useState('');
 
     const handleSaveExamRecord = () => {
-        setIsExamNameModalOpen(true);
+        // 시험 이름이 이미 입력되어 있으면 바로 저장, 없으면 모달 열기
+        if (examName.trim()) {
+            handleSaveExamName(examName.trim());
+        } else {
+            setIsExamNameModalOpen(true);
+        }
     };
 
-    const handleSaveExamName = (examName: string) => {
+    const handleSaveExamName = (examNameToSave: string) => {
         // 시험 기록 저장 (로컬 스토리지 사용)
         const examRecords = JSON.parse(localStorage.getItem('examBookmarks') || '[]');
         const recordData = {
@@ -181,12 +186,13 @@ const SaveExamButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
 
 interface ReviewModalProps {
   questions: Question[];
+  examName: string;
   onContinue: () => void;
   onRestart: () => void;
   onGradeRequest: () => void;
 }
 
-const ReviewModal: React.FC<ReviewModalProps> = ({ questions, onContinue, onRestart, onGradeRequest }) => {
+const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContinue, onRestart, onGradeRequest }) => {
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onContinue}>
             <div 
@@ -203,7 +209,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, onContinue, onRest
                             아래 데이터를 해설지와 함께 보며 자신의 풀이 습관을 복기해보세요.
                         </p>
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
-                            <SaveExamButton questions={questions} />
+                            <SaveExamButton questions={questions} examName={examName} />
                             <Button onClick={onContinue} variant="secondary" className="w-full sm:w-auto">이어서 진행</Button>
                             <Button onClick={onRestart} variant="primary" className="w-full sm:w-auto">새로운 시험 시작</Button>
                         </div>

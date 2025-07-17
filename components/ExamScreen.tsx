@@ -21,6 +21,7 @@ const ExamScreen: React.FC = () => {
     const [isGradingModalOpen, setIsGradingModalOpen] = useState(false);
 
     // Setup Form State
+    const [examName, setExamName] = useState('');
     const [startQuestionStr, setStartQuestionStr] = useState('1');
     const [endQuestionStr, setEndQuestionStr] = useState('45');
     const [totalMinutesStr, setTotalMinutesStr] = useState('70');
@@ -485,6 +486,7 @@ const ExamScreen: React.FC = () => {
         <>
             {showReview && <ReviewModal 
                 questions={questionsWithGrading} 
+                examName={examName}
                 onContinue={handleContinueExam} 
                 onRestart={handleRestartExam} 
                 onGradeRequest={() => setIsGradingModalOpen(true)}
@@ -546,6 +548,7 @@ const ExamScreen: React.FC = () => {
                     {isExamActive && (
                         <Card className="sticky top-8 z-10 bg-slate-900/80 dark:bg-slate-950/80 backdrop-blur-sm">
                             <TimerDisplay 
+                                examName={examName}
                                 isUnlimited={isUnlimitedTime}
                                 timeLeft={overallTimeLeft}
                                 totalElapsed={totalElapsedTime}
@@ -567,6 +570,8 @@ const ExamScreen: React.FC = () => {
                         <>
                             <Card>
                                 <SetupPanel
+                                    examName={examName}
+                                    setExamName={setExamName}
                                     startQuestion={startQuestionStr}
                                     setStartQuestion={setStartQuestionStr}
                                     endQuestion={endQuestionStr}

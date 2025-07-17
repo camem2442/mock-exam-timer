@@ -4,6 +4,7 @@ import { Button } from '../ui/Button';
 import { formatTime } from '../../utils/formatters';
 
 interface TimerDisplayProps {
+    examName: string;
     isUnlimited: boolean;
     timeLeft: number;
     totalElapsed: number;
@@ -19,11 +20,18 @@ interface TimerDisplayProps {
     totalMinutes: string;
 }
 
-const TimerDisplay: React.FC<TimerDisplayProps> = ({ isUnlimited, timeLeft, totalElapsed, currentProblem, isExamActive, isPaused, timeUp, onTogglePause, onResetTime, onFinish, startQuestion, endQuestion, totalMinutes }) => {
+const TimerDisplay: React.FC<TimerDisplayProps> = ({ examName, isUnlimited, timeLeft, totalElapsed, currentProblem, isExamActive, isPaused, timeUp, onTogglePause, onResetTime, onFinish, startQuestion, endQuestion, totalMinutes }) => {
     const displayTime = timeUp ? Math.abs(timeLeft) : timeLeft;
 
     return (
         <div className="text-center space-y-4">
+            {examName && (
+                <>
+                    <div className="pb-4 border-b border-slate-700">
+                        <h2 className="text-xl font-semibold text-slate-200">{examName}</h2>
+                    </div>
+                </>
+            )}
             <div className={`transition-all duration-300 ${isPaused ? 'blur-sm opacity-50' : ''}`}>
                 <div>
                     <p className="text-lg text-slate-400">{timeUp ? '초과 시간' : '전체 남은 시간'}</p>
@@ -31,7 +39,7 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ isUnlimited, timeLeft, tota
                         {isUnlimited ? '∞' : formatTime(displayTime)}
                     </p>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="mt-6 grid grid-cols-2 gap-4">
                      <div>
                         <p className="text-sm text-slate-400">총 문제 풀이 시간</p>
                         <p className="text-2xl sm:text-3xl font-semibold tabular-nums">{formatTime(totalElapsed)}</p>

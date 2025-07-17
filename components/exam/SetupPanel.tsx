@@ -45,6 +45,8 @@ interface Preset {
   end: number;
 }
 interface SetupPanelProps {
+    examName: string;
+    setExamName: (val: string) => void;
     startQuestion: string;
     setStartQuestion: (val: string) => void;
     endQuestion: string;
@@ -59,6 +61,8 @@ interface SetupPanelProps {
 }
 
 const SetupPanel: FC<SetupPanelProps> = ({
+    examName,
+    setExamName,
     startQuestion,
     setStartQuestion,
     endQuestion,
@@ -85,6 +89,20 @@ const SetupPanel: FC<SetupPanelProps> = ({
             </div>
             <div className="p-6">
                 <div className="space-y-6">
+                    <div>
+                        <h3 className="text-lg font-semibold mb-2">시험 이름 (선택)</h3>
+                        <p className="text-sm text-gray-500 mb-4">시험을 구분하기 위한 이름을 입력하세요.</p>
+                        <Input 
+                            type="text" 
+                            value={examName} 
+                            onChange={e => setExamName(e.target.value)} 
+                            disabled={isExamActive}
+                            placeholder="예: 2024 수능 국어, PSAT 언어논리, 모의고사 1회차"
+                        />
+                    </div>
+
+                    <div className="border-t border-slate-200 dark:border-slate-700 my-4"></div>
+
                     <div>
                         <h3 className="text-lg font-semibold mb-2">프리셋</h3>
                         <p className="text-sm text-gray-500 mb-4">자주 사용하는 시험 설정을 선택하세요.</p>
