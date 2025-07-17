@@ -50,7 +50,7 @@ export const FAQPage: React.FC = () => {
                             </div>
                         </section>
                         <div className="text-center text-xs text-slate-500 dark:text-slate-400 mt-8">
-                            본 사이트는 방문 통계 분석을 위해 비식별화된 트래픽 데이터만 수집합니다. 개인정보는 저장/전송하지 않습니다.
+                            본 사이트는 방문 통계 분석을 위해 비식별화된 익명 데이터만 수집합니다. 개인정보는 저장/전송하지 않습니다.
                         </div>
                     </main>
 
