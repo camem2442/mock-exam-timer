@@ -607,23 +607,23 @@ const ExamScreen: React.FC = () => {
 
                     {!isExamActive && (
                         <>
-                            <Card>
-                                <SetupPanel
+                        <Card>
+                            <SetupPanel
                                     examName={examName}
                                     setExamName={setExamName}
-                                    startQuestion={startQuestionStr}
-                                    setStartQuestion={setStartQuestionStr}
-                                    endQuestion={endQuestionStr}
-                                    setEndQuestion={setEndQuestionStr}
-                                    totalMinutes={totalMinutesStr}
-                                    setTotalMinutes={setTotalMinutesStr}
-                                    isUnlimited={isUnlimitedTime}
-                                    setIsUnlimited={setIsUnlimitedTime}
-                                    isExamActive={isExamActive}
-                                    onStart={handleStartExam}
-                                    error={setupError}
-                                />
-                            </Card>
+                                startQuestion={startQuestionStr}
+                                setStartQuestion={setStartQuestionStr}
+                                endQuestion={endQuestionStr}
+                                setEndQuestion={setEndQuestionStr}
+                                totalMinutes={totalMinutesStr}
+                                setTotalMinutes={setTotalMinutesStr}
+                                isUnlimited={isUnlimitedTime}
+                                setIsUnlimited={setIsUnlimitedTime}
+                                isExamActive={isExamActive}
+                                onStart={handleStartExam}
+                                error={setupError}
+                            />
+                        </Card>
                             
                             <Card>
                                 <div className="p-6">

@@ -36,8 +36,8 @@ const Navigation: React.FC = () => {
   }, [showMenu]);
 
   return (
-    <div className="flex items-center justify-between mb-8">
-      <div>
+        <div className="flex items-center justify-between mb-8">
+          <div>
         <h1
           className="font-bold text-primary-600 dark:text-primary-400 whitespace-nowrap"
           style={{ fontSize: 'clamp(1.2rem, 6vw, 2.25rem)' }}
@@ -51,7 +51,7 @@ const Navigation: React.FC = () => {
         <p className="text-slate-600 dark:text-slate-400 mt-2">
           {location.pathname === '/' ? '시간 관리 능력을 극대화하여 최고의 성과를 만드세요.' : '메인으로 돌아가려면 제목을 클릭하세요.'}
         </p>
-      </div>
+          </div>
       <div className="flex items-center gap-2">
         <Button 
           variant="ghost" 
@@ -165,9 +165,9 @@ const HomePage: React.FC = () => {
         <meta name="twitter:description" content={siteConfig.social.twitter.description} />
       </Helmet>
       <Navigation />
-      <ExamScreen />
-      <AdPlaceholder />
-      <footer className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400">
+        <ExamScreen />
+        <AdPlaceholder />
+        <footer className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400">
         <div className="flex flex-wrap justify-center gap-4 mb-4">
           <Link to="/guide" className="text-primary-600 dark:text-primary-400 hover:underline">
             사용 방법
@@ -183,7 +183,7 @@ const HomePage: React.FC = () => {
           </Link>
         </div>
         <p>문의 : {siteConfig.contact.email} | © {siteConfig.copyright.year} {siteConfig.copyright.name}</p>
-      </footer>
+        </footer>
     </>
   );
 };

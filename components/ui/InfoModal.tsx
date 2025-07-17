@@ -59,7 +59,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                         </div>
                     </section>
                     
-                    <section>
+                     <section>
                         <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-3">⚡ 핵심 기능</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                             <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
