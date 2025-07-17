@@ -10,6 +10,7 @@ import FinalAnswerSheet from './review/FinalAnswerSheet';
 import TimeManagementInsights from './review/TimeManagementInsights';
 import SolvingRecordTable from './review/SolvingRecordTable';
 import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../utils/exportUtils';
+import { SocialShareBadges } from './ui/SocialShareBadges';
 
 // 공유 기능을 위한 컴포넌트
 const ShareButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
@@ -238,6 +239,17 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContin
                     <Card>
                         <SolveTimeChart questions={questions} />
                     </Card>
+                    
+                    {/* 공유 섹션 */}
+                    <Card>
+                        <div className="p-6">
+                            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200 text-center">
+                                이 도구가 도움이 되었다면 공유해주세요! 🚀
+                            </h3>
+                            <SocialShareBadges />
+                        </div>
+                    </Card>
+                    
                     <AdPlaceholder />
                 </main>
             </div>

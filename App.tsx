@@ -5,6 +5,7 @@ import AdPlaceholder from './components/ads/AdPlaceholder';
 import { InfoModal } from './components/ui/InfoModal';
 import { Button } from './components/ui/Button';
 import { Analytics } from '@vercel/analytics/react';
+import { siteConfig } from './config/site';
 
 const App: React.FC = () => {
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -12,35 +13,35 @@ const App: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>공부 타이머 | 시험 타이머 | 문제풀이 타이머 - 모의고사 타이머 & 분석기</title>
-        <meta name="description" content="공부 타이머, 시험 타이머, 문제풀이 타이머로 수능, 공무원시험, LEET, CPA 등 모든 시험에 활용 가능한 실시간 풀이 시간 측정 및 분석 도구입니다." />
-        <meta name="keywords" content="공부 타이머, 시험 타이머, 문제풀이 타이머, 모의고사 타이머, 수능 타이머, 공무원시험 타이머, LEET 타이머, CPA 타이머, 학습 타이머, 시간 관리, 문제 풀이 시간, 시험 분석" />
-        <meta property="og:title" content="모의고사 타이머 & 분석기 - 공부 타이머 | 시험 타이머 | 문제풀이 타이머" />
-        <meta property="og:description" content="수능, 공무원시험, LEET, CPA 등 모든 시험에 활용 가능한 실시간 풀이 시간 측정 및 분석 도구입니다." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://mock-exam-timer.vercel.app" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="공부 타이머 | 시험 타이머 | 문제풀이 타이머" />
-        <meta name="twitter:description" content="실시간 풀이 시간 측정과 상세한 분석으로 시험을 정복하세요." />
+        <title>{siteConfig.title}</title>
+        <meta name="description" content={siteConfig.description} />
+        <meta name="keywords" content={siteConfig.keywords} />
+        <meta property="og:title" content={siteConfig.social.og.title} />
+        <meta property="og:description" content={siteConfig.social.og.description} />
+        <meta property="og:type" content={siteConfig.social.og.type} />
+        <meta property="og:url" content={siteConfig.domain} />
+        <meta name="twitter:card" content={siteConfig.social.twitter.card} />
+        <meta name="twitter:title" content={siteConfig.social.twitter.title} />
+        <meta name="twitter:description" content={siteConfig.social.twitter.description} />
       </Helmet>
       <main className="container mx-auto p-4 sm:p-6 lg:p-8 font-sans">
         <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">모의고사 타이머 & 분석기</h1>
-            <p className="text-slate-600 dark:text-slate-400 mt-2">시간 관리 능력을 극대화하여 최고의 성과를 만드세요.</p>
-          </div>
+                      <div>
+              <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">{siteConfig.title}</h1>
+              <p className="text-slate-600 dark:text-slate-400 mt-2">시간 관리 능력을 극대화하여 최고의 성과를 만드세요.</p>
+            </div>
           <div className="flex items-center gap-2">
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={async () => {
-                const shareText = '모의고사 타이머 & 분석기\n\n실시간으로 모의고사 시간을 측정하고, 문제별 풀이 시간을 기록하며 상세한 분석 리포트를 받아보세요.\n\nhttps://mock-exam-timer.vercel.app';
+                const shareText = `${siteConfig.title}\n\n${siteConfig.description}\n\n${siteConfig.domain}`;
                 if (navigator.share) {
                   try {
                     await navigator.share({
-                      title: '모의고사 타이머 & 분석기',
+                      title: siteConfig.title,
                       text: shareText,
-                      url: 'https://mock-exam-timer.vercel.app'
+                      url: siteConfig.domain
                     });
                   } catch (error) {
                     console.log('공유가 취소되었습니다.');
@@ -77,7 +78,7 @@ const App: React.FC = () => {
         <ExamScreen />
         <AdPlaceholder />
         <footer className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400">
-          <p>문의: camem2442@gmail.com | © 2025 모의고사 타이머 & 분석기</p>
+          <p>문의 : {siteConfig.contact.email} | © {siteConfig.copyright.year} {siteConfig.copyright.name}</p>
         </footer>
       </main>
       <Analytics />

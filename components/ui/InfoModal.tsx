@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from './Card';
 import { Button } from './Button';
+import { SocialShareBadges } from './SocialShareBadges';
 
 interface InfoModalProps {
     isOpen: boolean;
@@ -20,6 +21,12 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                     <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">사용 방법 안내</h2>
                 </header>
                 <main className="overflow-y-auto p-4 sm:p-6 space-y-6 text-slate-700 dark:text-slate-300">
+                    <div className="text-center">
+                        <SocialShareBadges />
+                    </div>
+                    
+                    <div className="border-t border-slate-200 dark:border-slate-700 my-6"></div>
+                    
                     <section>
                         <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">1. 시험 설정</h3>
                         <p className="mb-2">
@@ -114,6 +121,14 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                                 </ul>
                             </div>
                         </div>
+                    </section>
+                    
+                    <div className="border-t border-slate-200 dark:border-slate-700 my-6"></div>
+                    
+                    <section className="text-center">
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            문의 : camem2442@gmail.com | © 2025 모의고사 타이머 & 분석기
+                        </p>
                     </section>
                 </main>
                  <footer className="p-4 bg-slate-100 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex justify-end">

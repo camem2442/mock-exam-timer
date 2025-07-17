@@ -13,6 +13,7 @@ import { Button } from './ui/Button';
 import StatusPanelModal from './exam/StatusPanelModal';
 import { GradingModal } from './review/GradingModal';
 import BookmarkModal from './BookmarkModal'; // 시험 기록 모달
+import { SocialShareBadges } from './ui/SocialShareBadges';
 
 const ExamScreen: React.FC = () => {
     // Component State
@@ -51,6 +52,8 @@ const ExamScreen: React.FC = () => {
     const [batchSelectedQuestions, setBatchSelectedQuestions] = useState<Set<number>>(new Set());
     const [isStatusPanelVisible, setIsStatusPanelVisible] = useState(false);
     const [isBookmarkModalOpen, setIsBookmarkModalOpen] = useState(false);
+    const [showRestartConfirm, setShowRestartConfirm] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
     
     // Refs for timer and scrolling
     const timerRef = useRef<number | undefined>(undefined);
@@ -280,8 +283,14 @@ const ExamScreen: React.FC = () => {
     }, [pauseTime]);
     
     const handleRestartExam = useCallback(() => {
+        setShowRestartConfirm(true);
+    }, []);
+
+    const handleConfirmRestart = useCallback(() => {
+        setShowRestartConfirm(false);
         setShowReview(false);
         resetExamState();
+        setShowShareModal(true);
     }, [resetExamState]);
 
     const handleLap = useCallback((questionNumber: number, answer?: string) => {
@@ -519,6 +528,54 @@ const ExamScreen: React.FC = () => {
                 onLoadBookmark={handleLoadBookmark}
             />
 
+            {/* 새로운 시험 시작 확인 모달 */}
+            {showRestartConfirm && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowRestartConfirm(false)}>
+                    <div className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6" onClick={e => e.stopPropagation()}>
+                        <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 mb-3 sm:mb-4">
+                            새로운 시험을 시작하시겠습니까?
+                        </h3>
+                        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
+                            현재 시험 기록이 모두 삭제됩니다. 계속하시겠습니까?
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                            <Button 
+                                onClick={() => setShowRestartConfirm(false)} 
+                                variant="secondary" 
+                                className="flex-1"
+                            >
+                                취소
+                            </Button>
+                            <Button 
+                                onClick={handleConfirmRestart} 
+                                variant="primary" 
+                                className="flex-1"
+                            >
+                                새로운 시험 시작
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 공유 모달 */}
+            {showShareModal && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowShareModal(false)}>
+                    <div className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6" onClick={e => e.stopPropagation()}>
+                        <SocialShareBadges className="mb-4 sm:mb-6" />
+                        <div className="flex justify-center">
+                            <Button 
+                                onClick={() => setShowShareModal(false)} 
+                                variant="primary"
+                                className="w-full sm:w-auto"
+                            >
+                                닫기
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
              {/* Mobile: Toggle button - now outside the grid */}
             <div className="lg:hidden mb-8">
                 <Button 
@@ -666,6 +723,17 @@ const ExamScreen: React.FC = () => {
                     </Card>
                 </div>
             </div>
+            
+            {/* 공유 유도 섹션 */}
+            {!isExamActive && (
+                <div className="mt-8">
+                    <Card>
+                        <div className="p-6">
+                            <SocialShareBadges />
+                        </div>
+                    </Card>
+                </div>
+            )}
         </>
     );
 };
