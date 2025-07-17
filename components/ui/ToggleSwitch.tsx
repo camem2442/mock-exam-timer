@@ -2,7 +2,7 @@
 import React from 'react';
 
 interface ToggleSwitchProps {
-  label: string;
+  label?: string;
   enabled: boolean;
   onChange: (enabled: boolean) => void;
   disabled?: boolean;
@@ -11,7 +11,9 @@ interface ToggleSwitchProps {
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ label, enabled, onChange, disabled = false }) => {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className={`font-medium text-slate-700 dark:text-slate-300 ${disabled ? 'opacity-50' : ''}`}>{label}</span>
+      {label && (
+        <span className={`font-medium text-slate-700 dark:text-slate-300 ${disabled ? 'opacity-50' : ''}`}>{label}</span>
+      )}
       <button
         type="button"
         disabled={disabled}

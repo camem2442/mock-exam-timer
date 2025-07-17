@@ -11,6 +11,7 @@ import TimeManagementInsights from './review/TimeManagementInsights';
 import SolvingRecordTable from './review/SolvingRecordTable';
 import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../utils/exportUtils';
 import { SocialShareBadges } from './ui/SocialShareBadges';
+import ShareImageButton from './share/ShareImageButton';
 
 // 공유 기능을 위한 컴포넌트
 const ShareButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
@@ -116,7 +117,7 @@ const SaveExamButton: React.FC<{ questions: Question[]; examName: string }> = ({
         const examRecords = JSON.parse(localStorage.getItem('examBookmarks') || '[]');
         const recordData = {
             id: Date.now(),
-            name: examName,
+            name: examNameToSave,
             date: new Date().toISOString(),
             questions: questions,
             summary: `${questions.length}문제, 총 ${questions.reduce((sum, q) => sum + q.solveTime, 0)}초`
@@ -125,7 +126,7 @@ const SaveExamButton: React.FC<{ questions: Question[]; examName: string }> = ({
         localStorage.setItem('examBookmarks', JSON.stringify(examRecords));
         
         // 성공 메시지 표시
-        setSavedExamName(examName);
+        setSavedExamName(examNameToSave);
         setShowSuccessMessage(true);
         
         // 5초 후 메시지 자동 숨김
@@ -191,15 +192,17 @@ interface ReviewModalProps {
   onContinue: () => void;
   onRestart: () => void;
   onGradeRequest: () => void;
+  totalMinutes?: number;
 }
 
-const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContinue, onRestart, onGradeRequest }) => {
+const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContinue, onRestart, onGradeRequest, totalMinutes }) => {
+
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onContinue}>
-            <div 
-                className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] min-w-0 overflow-hidden flex flex-col modal-container" 
-                onClick={e => e.stopPropagation()}
-            >
+                <div 
+                    className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] min-w-0 overflow-hidden flex flex-col modal-container" 
+                    onClick={e => e.stopPropagation()}
+                >
                 <header className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">풀이 과정 분석 리포트</h2>
@@ -211,6 +214,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContin
                         </p>
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
                             <SaveExamButton questions={questions} examName={examName} />
+                            <ShareImageButton questions={questions} examName={examName} totalMinutes={totalMinutes} />
                             <Button onClick={onContinue} variant="secondary" className="w-full sm:w-auto">이어서 진행</Button>
                             <Button onClick={onRestart} variant="primary" className="w-full sm:w-auto">새로운 시험 시작</Button>
                         </div>
@@ -244,7 +248,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContin
                     <Card>
                         <div className="p-6">
                             <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200 text-center">
-                                이 도구가 도움이 되었다면 공유해주세요! 🚀
+                                이 타이머가 도움이 되었다면 공유해주세요! 🚀
                             </h3>
                             <SocialShareBadges />
                         </div>

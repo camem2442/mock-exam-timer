@@ -499,6 +499,7 @@ const ExamScreen: React.FC = () => {
                 onContinue={handleContinueExam} 
                 onRestart={handleRestartExam} 
                 onGradeRequest={() => setIsGradingModalOpen(true)}
+                totalMinutes={parseInt(totalMinutesStr, 10)}
             />}
             <GradingModal
                 isOpen={isGradingModalOpen}

@@ -4,9 +4,10 @@ import { type Question } from '../../types';
 
 interface FinalAnswerSheetProps {
     questions: Question[];
+    blurAnswer?: boolean;
 }
 
-const FinalAnswerSheet: React.FC<FinalAnswerSheetProps> = ({ questions }) => {
+const FinalAnswerSheet: React.FC<FinalAnswerSheetProps> = ({ questions, blurAnswer }) => {
     const sortedQuestions = useMemo(() => [...questions].sort((a, b) => a.number - b.number), [questions]);
 
     const getStyles = (q: Question): string => {
@@ -30,7 +31,11 @@ const FinalAnswerSheet: React.FC<FinalAnswerSheetProps> = ({ questions }) => {
                     className={`p-1.5 rounded-md flex flex-col items-center justify-center text-center border transition-colors ${getStyles(q)}`}
                 >
                     <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{q.number}</span>
-                    <span className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">{q.answer ?? '-'}</span>
+                    <span
+                        className={`text-sm font-bold text-slate-800 dark:text-slate-200 truncate ${blurAnswer ? 'blur-sm select-none' : ''}`}
+                    >
+                        {q.answer ?? '-'}
+                    </span>
                 </div>
             ))}
         </div>

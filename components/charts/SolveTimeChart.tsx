@@ -6,8 +6,13 @@ import { ToggleSwitch } from '../ui/ToggleSwitch';
 import { useChartData } from '../../hooks/useChartData';
 import { formatMinSec } from '../../utils/formatters';
 
-const SolveTimeChart: React.FC<{ questions: Question[] }> = ({ questions }) => {
-    const [visualizeBySolveOrder, setVisualizeBySolveOrder] = useState(false);
+interface SolveTimeChartProps {
+    questions: Question[];
+    forceSolveOrderMode?: boolean;
+}
+
+const SolveTimeChart: React.FC<SolveTimeChartProps> = ({ questions, forceSolveOrderMode = false }) => {
+    const [visualizeBySolveOrder, setVisualizeBySolveOrder] = useState(forceSolveOrderMode);
     const { hasData, questionNumberData, solveOrderData } = useChartData(questions);
 
     const tickColor = '#94a3b8'; // slate-400
@@ -53,11 +58,13 @@ const SolveTimeChart: React.FC<{ questions: Question[] }> = ({ questions }) => {
         <div>
             <div className="flex justify-between items-center mb-4">
                  <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200">문제별 풀이 시간 시각화</h3>
-                 <ToggleSwitch
-                    label="풀이 순서대로 보기"
-                    enabled={visualizeBySolveOrder}
-                    onChange={setVisualizeBySolveOrder}
-                />
+                 {!forceSolveOrderMode && (
+                     <ToggleSwitch
+                        label="풀이 순서대로 보기"
+                        enabled={visualizeBySolveOrder}
+                        onChange={setVisualizeBySolveOrder}
+                    />
+                 )}
             </div>
              <div className="w-full h-96">
                 <Recharts.ResponsiveContainer width="100%" height="100%">
