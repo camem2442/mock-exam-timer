@@ -558,24 +558,6 @@ const ExamScreen: React.FC = () => {
                 </div>
             )}
 
-            {/* 공유 모달 */}
-            {showShareModal && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowShareModal(false)}>
-                    <div className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6" onClick={e => e.stopPropagation()}>
-                        <SocialShareBadges className="mb-4 sm:mb-6" />
-                        <div className="flex justify-center">
-                            <Button 
-                                onClick={() => setShowShareModal(false)} 
-                                variant="primary"
-                                className="w-full sm:w-auto"
-                            >
-                                닫기
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
              {/* Mobile: Toggle button - now outside the grid */}
             <div className="lg:hidden mb-8">
                 <Button 
