@@ -6,11 +6,9 @@ import { formatMinSec } from '../../utils/formatters';
 
 interface SimpleSolveTimeChartProps {
     questions: Question[];
-    yAxisFormatter?: (sec: number) => string;
-    rightYAxisFormatter?: (sec: number) => string;
 }
 
-const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions, yAxisFormatter = formatMinSec, rightYAxisFormatter = formatMinSec }) => {
+const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions }) => {
     const { hasData, solveOrderData } = useChartData(questions);
 
     const tickColor = '#94a3b8'; // slate-400
@@ -40,6 +38,9 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions, 
         return null;
     };
 
+    // 분 단위만 표시하는 포맷터
+    const formatMinute = (sec: number) => `${Math.floor(sec / 60)}분`;
+
     return (
         <div className="w-full h-64">
             <Recharts.ResponsiveContainer width="100%" height="100%">
@@ -55,7 +56,7 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions, 
                     />
                     <Recharts.YAxis 
                         yAxisId="left" 
-                        tickFormatter={yAxisFormatter} 
+                        tickFormatter={formatMinute} 
                         tick={{ fontSize: 10, fill: tickColor }} 
                         label={{ 
                             value: '구간별 시간', 
@@ -76,7 +77,7 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions, 
                             fill: tickColor, 
                             style: {textAnchor: 'middle', fontSize: 12} 
                         }}
-                        tickFormatter={rightYAxisFormatter}
+                        tickFormatter={formatMinute}
                     />
                     <Recharts.Tooltip content={<CustomTooltip />} cursor={{fill: 'rgba(100,116,139,0.1)'}} />
                     <Recharts.Bar 
