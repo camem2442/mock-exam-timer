@@ -7,8 +7,12 @@
     
     <!-- iOS 상태바 및 Safe Area 설정 -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="모의고사 타이머" />
+    
+    <!-- iOS 상태바 색상 설정 -->
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
     
     <!-- SEO 메타 태그 -->
     <title>공부 타이머 | 시험 타이머 | 문제풀이 타이머 - 모의고사 타이머 & 분석기</title>
@@ -31,7 +35,6 @@
     
     <!-- 추가 SEO 메타 태그 -->
     <meta name="application-name" content="모의고사 타이머 & 분석기" />
-    <meta name="theme-color" content="#3b82f6" />
     <meta name="msapplication-TileColor" content="#3b82f6" />
     <link rel="canonical" href="https://mock-exam-timer.vercel.app" />
     
@@ -104,6 +107,32 @@
       
       .light html {
         background-color: #f8fafc; /* 라이트 모드 배경색 */
+      }
+      
+      /* iOS 상태바 색상 강제 설정 */
+      @supports (-webkit-touch-callout: none) {
+        body {
+          background-color: #020617 !important;
+        }
+        .light body {
+          background-color: #f8fafc !important;
+        }
+        
+        /* iOS Safari에서 상태바 영역 배경색 강제 설정 */
+        body::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: env(safe-area-inset-top);
+          background-color: #020617;
+          z-index: 9999;
+        }
+        
+        .light body::before {
+          background-color: #f8fafc;
+        }
       }
       body {
         font-family: 'Noto Sans KR', sans-serif;
