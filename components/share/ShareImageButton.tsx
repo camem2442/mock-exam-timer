@@ -178,7 +178,10 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                               </div>
                             )}
                             <div ref={previewRef} className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-[420px] flex justify-center items-center overflow-x-hidden mx-auto" style={{overflowX: 'hidden'}}>
-                                <div className="w-full max-w-full overflow-x-hidden" style={{fontFamily: "'Noto Sans KR', sans-serif"}}>
+                                <div
+                                  className="w-full max-w-[420px] overflow-x-hidden"
+                                  style={{ fontFamily: "'Noto Sans KR', sans-serif", width: '100vw', maxWidth: 420 }}
+                                >
                                     <ResultImage 
                                         questions={questions} 
                                         examName={shareExamName} 
