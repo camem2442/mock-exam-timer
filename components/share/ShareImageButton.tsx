@@ -19,6 +19,7 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
     const [includeGrading, setIncludeGrading] = useState(true);
     const [blurAnswer, setBlurAnswer] = useState(false);
     const previewRef = useRef<HTMLDivElement>(null);
+    const captureRef = useRef<HTMLDivElement>(null); // 캡처용 숨김 ref 추가
     const [isLoading, setIsLoading] = useState(false);
     const [showDownloadNotice, setShowDownloadNotice] = useState(false);
 
@@ -28,16 +29,15 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
     };
 
     const handleShareImage = async () => {
-        if (!previewRef.current) {
-            alert('미리보기 영역(previewRef)가 null입니다.');
+        if (!captureRef.current) {
+            alert('캡처용 가상 div(captureRef)가 null입니다.');
             return;
         }
         setIsLoading(true);
         try {
             await new Promise((resolve) => setTimeout(resolve, 100)); // 렌더 타이밍 여유
-            const blob = await htmlToImage.toBlob(previewRef.current, {
+            const blob = await htmlToImage.toBlob(captureRef.current, {
                 pixelRatio: 2,
-                // useCORS: true, // 필요시 활성화
             });
             if (!blob) {
                 alert('Blob 생성 실패 (html-to-image 변환 실패)');
@@ -93,15 +93,6 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
 
     return (
         <>
-            {/* 메인 버튼 */}
-            <Button 
-                onClick={() => setShowShareImageModal(true)} 
-                variant="secondary" 
-                className="w-full sm:w-auto"
-            >
-                이미지로 공유 (베타)
-            </Button>
-
             {/* 설정 모달 */}
             {showShareImageModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
@@ -154,75 +145,70 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
 
             {/* 미리보기 모달 */}
             {showPreviewModal && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-2 sm:p-4 overflow-x-hidden">
-                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
-                        <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700">
-                            <div className="flex justify-between items-center">
-                                <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">공유 이미지 미리보기</h3>
-                                <button 
-                                    onClick={() => setShowPreviewModal(false)}
-                                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-                                >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
+                <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center">
+                    <div className="relative bg-white dark:bg-slate-900 rounded-xl shadow-xl p-0">
+                        {/* 닫기 버튼 */}
+                        <button
+                          onClick={() => setShowPreviewModal(false)}
+                          className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                          aria-label="닫기"
+                        >
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                        {/* 이미지 미리보기 */}
+                        <div className="flex justify-center items-center p-6">
+                          <div style={{ width: 420 }}>
+                            <ResultImage 
+                              questions={questions} 
+                              examName={shareExamName} 
+                              includeGrading={includeGrading} 
+                              blurAnswer={blurAnswer}
+                              totalMinutes={totalMinutes}
+                            />
+                          </div>
                         </div>
-                        
-                        <div className="flex-1 flex justify-center items-center overflow-y-auto max-h-[80vh] bg-transparent p-0 relative w-full max-w-full overflow-x-hidden">
-                            {isLoading && (
-                              <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/40">
-                                <Spinner />
-                                <span className="mt-2 text-white text-sm">이미지 생성 중...</span>
-                              </div>
-                            )}
-                            <div ref={previewRef} className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-[420px] flex justify-center items-center overflow-x-hidden mx-auto" style={{overflowX: 'hidden'}}>
-                                <div
-                                  className="w-full max-w-[420px] overflow-x-hidden"
-                                  style={{ fontFamily: "'Noto Sans KR', sans-serif", width: '100vw', maxWidth: 420 }}
-                                >
-                                    <ResultImage 
-                                        questions={questions} 
-                                        examName={shareExamName} 
-                                        includeGrading={includeGrading} 
-                                        blurAnswer={blurAnswer}
-                                        totalMinutes={totalMinutes}
-                                    />
-                                </div>
-                            </div>
-                           {/* 다운로드 안내 */}
-                           {showDownloadNotice && (
-                             <div className="w-full text-xs text-slate-400 text-center mt-3 absolute bottom-[-2.5rem] left-0">
-                               이미지는 다운로드됩니다
-                             </div>
-                           )}
+                        {/* 하단 버튼 */}
+                        <div className="flex gap-2 p-4 border-t border-slate-200 dark:border-slate-700">
+                          <button 
+                            className="flex-1 py-3 px-4 bg-slate-500 text-white rounded-lg font-medium hover:bg-slate-600 transition-colors"
+                            onClick={() => { setShowPreviewModal(false); setShowShareImageModal(true); }}
+                            disabled={isLoading}
+                          >
+                            수정하기
+                          </button>
+                          <Button
+                            type="button"
+                            className="flex-1"
+                            onClick={handleShareImage}
+                            disabled={isLoading}
+                          >
+                            {isMobileDevice() ? '공유하기' : '이미지 다운로드'}
+                          </Button>
                         </div>
-                        
-                        <div className="sticky bottom-0 left-0 w-full bg-slate-800/80 dark:bg-slate-900/80 p-2 sm:p-4 flex flex-col sm:flex-row gap-2 z-10 rounded-b-xl backdrop-blur">
-                            <div className="flex gap-2 mt-4 w-full">
-                                <button 
-                                    className="flex-1 py-3 px-4 bg-slate-500 text-white rounded-lg font-medium hover:bg-slate-600 transition-colors"
-                                    onClick={() => { setShowPreviewModal(false); setShowShareImageModal(true); }}
-                                    disabled={isLoading}
-                                >
-                                    수정하기
-                                </button>
-                                <Button
-                                    type="button"
-                                    className="flex-1"
-                                    onClick={handleShareImage}
-                                    disabled={isLoading}
-                                >
-                                    {isMobileDevice() ? '공유하기' : '이미지 다운로드'}
-                                </Button>
-                            </div>
-                            {/* 설정 모달(공유 옵션 입력 단계)에서만 안내 문구 표시 */}
-                            {showShareImageModal && !isMobileDevice() && (
-                              <div className="text-xs text-slate-400 text-center mt-2">
-                                이미지는 다운로드됩니다
-                              </div>
-                            )}
+                        {/* 캡처용 숨김 div: 화면 밖에 렌더링, 오직 420px 고정 크기 */}
+                        <div
+                          ref={captureRef}
+                          style={{
+                            width: 420,
+                            position: 'absolute',
+                            left: -9999,
+                            top: 0,
+                            zIndex: -1,
+                            background: '#0f172a',
+                            padding: 0,
+                            margin: 0,
+                            overflow: 'visible',
+                          }}
+                        >
+                          <ResultImage
+                            questions={questions}
+                            examName={shareExamName}
+                            includeGrading={includeGrading}
+                            blurAnswer={blurAnswer}
+                            totalMinutes={totalMinutes}
+                          />
                         </div>
                     </div>
                 </div>
