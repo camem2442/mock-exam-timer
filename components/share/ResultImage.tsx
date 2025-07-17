@@ -87,7 +87,11 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
         <section className="mb-4 bg-slate-800/60 p-4 rounded-lg border border-slate-700">
              <h2 className="text-xl font-semibold mb-3 text-center text-slate-200">풀이 시간 그래프</h2>
              <div style={{ height: 250 }}>
-                <SimpleSolveTimeChart questions={questions} />
+                <SimpleSolveTimeChart 
+                  questions={questions} 
+                  yAxisFormatter={sec => `${Math.floor(sec/60)}분`}
+                  rightYAxisFormatter={sec => `${Math.floor(sec/60)}분`}
+                />
              </div>
         </section>
 
