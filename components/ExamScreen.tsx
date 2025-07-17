@@ -111,10 +111,15 @@ const ExamScreen: React.FC = () => {
                 setCurrentProblemTime(savedState.currentProblemTime);
                 setLapCounter(savedState.lapCounter);
                 setTimeUp(savedState.timeUp);
-                setIsPaused(savedState.isPaused);
-                setStartTime(savedState.startTime);
-                setLastLapTimestamp(savedState.lastLapTimestamp);
-                setPauseTime(savedState.pauseTime);
+                setIsPaused(true); // 항상 일시정지 상태로 복원
+
+                // 타이머 기준값을 현재 시각 기준으로 보정
+                const now = performance.now();
+                const startTimeOffset = now - (savedState.totalElapsedTime * 1000);
+                setStartTime(startTimeOffset);
+                setLastLapTimestamp(startTimeOffset + (savedState.lastLapTimestamp - savedState.startTime));
+                setPauseTime(now);
+
                 setFocusedQuestionNumber(savedState.focusedQuestionNumber);
                 setBatchMode(savedState.batchMode);
                 setBatchSelectedQuestions(new Set(savedState.batchSelectedQuestions));
@@ -273,14 +278,9 @@ const ExamScreen: React.FC = () => {
     }, [startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime, resetExamState]);
     
     const handleContinueExam = useCallback(() => {
-        if (pauseTime === 0) return;
-        const pausedDuration = performance.now() - pauseTime;
-        setStartTime(prev => prev + pausedDuration);
-        setLastLapTimestamp(prev => prev + pausedDuration);
-        
         setShowReview(false);
         setIsExamActive(true);
-    }, [pauseTime]);
+    }, []);
     
     const handleRestartExam = useCallback(() => {
         setShowRestartConfirm(true);

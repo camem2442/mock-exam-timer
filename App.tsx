@@ -38,9 +38,12 @@ const Navigation: React.FC = () => {
   return (
     <div className="flex items-center justify-between mb-8">
       <div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">
+        <h1
+          className="font-bold text-primary-600 dark:text-primary-400 whitespace-nowrap"
+          style={{ fontSize: 'clamp(1.2rem, 6vw, 2.25rem)' }}
+        >
           {location.pathname === '/' ? siteConfig.title : (
-            <Link to="/" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">
+            <Link to="/" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors whitespace-nowrap">
               {siteConfig.title}
             </Link>
           )}

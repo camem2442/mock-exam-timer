@@ -13,10 +13,6 @@ export const ContactPage: React.FC = () => {
                             문의 및 피드백
                         </h1>
                         <div className="border-b border-slate-200 dark:border-slate-700 mb-6"></div>
-                        <div className="text-center mb-6">
-                            <SocialShareBadges />
-                        </div>
-                        <div className="border-t border-slate-200 dark:border-slate-700 my-6"></div>
                     </header>
                     
                     <main className="space-y-8 text-slate-700 dark:text-slate-300">
@@ -132,6 +128,10 @@ export const ContactPage: React.FC = () => {
                             </div>
                         </section>
                     </main>
+
+                    <div className="my-8">
+                        <SocialShareBadges />
+                    </div>
                     
                     <footer className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
                         <div className="text-center">

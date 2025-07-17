@@ -13,10 +13,6 @@ export const FAQPage: React.FC = () => {
                             자주 묻는 질문 (FAQ)
                         </h1>
                         <div className="border-b border-slate-200 dark:border-slate-700 mb-6"></div>
-                        <div className="text-center mb-6">
-                            <SocialShareBadges />
-                        </div>
-                        <div className="border-t border-slate-200 dark:border-slate-700 my-6"></div>
                     </header>
                     <main className="space-y-8 text-slate-700 dark:text-slate-300">
                         <section className="space-y-6">
@@ -57,6 +53,10 @@ export const FAQPage: React.FC = () => {
                             본 사이트는 방문 통계 분석을 위해 비식별화된 트래픽 데이터만 수집합니다. 개인정보는 저장/전송하지 않습니다.
                         </div>
                     </main>
+
+                    <div className="my-8">
+                        <SocialShareBadges />
+                    </div>
                     <footer className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
                         <div className="text-center">
                             <a 
