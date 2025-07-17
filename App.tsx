@@ -77,7 +77,7 @@ const App: React.FC = () => {
         <ExamScreen />
         <AdPlaceholder />
         <footer className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400">
-          <p>문의: camem2442@gmail.com</p>
+          <p>문의: camem2442@gmail.com | © 2025 모의고사 타이머 & 분석기</p>
         </footer>
       </main>
       <Analytics />

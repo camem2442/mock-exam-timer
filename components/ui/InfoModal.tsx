@@ -81,6 +81,40 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                             <li className="pl-2"><strong>주의사항:</strong> 브라우저를 바꾸거나 데이터를 삭제하면 저장된 기록이 사라질 수 있습니다.</li>
                         </ul>
                     </section>
+                    
+                    <div className="border-t border-slate-200 dark:border-slate-700 my-6"></div>
+                    
+                    <section>
+                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">업데이트 기록</h3>
+                        <div className="space-y-4">
+                            <div>
+                                <h4 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">v1.2.0 (2025년 7월 17일)</h4>
+                                <ul className="list-disc space-y-1 pl-6 text-sm">
+                                    <li className="pl-2">시험 이름 입력 기능 추가</li>
+                                    <li className="pl-2">타이머 화면에 시험 이름 표시</li>
+                                    <li className="pl-2">모바일 UI 개선 및 반응형 디자인 강화</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">v1.1.0 (2025년 7월 17일)</h4>
+                                <ul className="list-disc space-y-1 pl-6 text-sm">
+                                    <li className="pl-2">시험 기록 저장 및 관리 기능 추가</li>
+                                    <li className="pl-2">CSV 내보내기 기능</li>
+                                    <li className="pl-2">일괄 채점 모드 개선</li>
+                                    <li className="pl-2">모바일 최적화</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-1">v1.0.0 (2025년 7월 15일)</h4>
+                                <ul className="list-disc space-y-1 pl-6 text-sm">
+                                    <li className="pl-2">기본 타이머 및 문제 풀이 기록 기능</li>
+                                    <li className="pl-2">풀이 과정 분석 리포트</li>
+                                    <li className="pl-2">키보드 단축키 지원</li>
+                                    <li className="pl-2">주관식 답안 입력 기능</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
                 </main>
                  <footer className="p-4 bg-slate-100 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex justify-end">
                     <Button onClick={onClose} variant="primary" className="text-sm px-3 py-2">닫기</Button>
