@@ -158,13 +158,13 @@ const SaveExamButton: React.FC<{ questions: Question[]; examName: string }> = ({
                             </svg>
                         </div>
                         <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium text-primary-800 dark:text-primary-200 whitespace-nowrap">
+                            <h4 className="text-sm font-medium text-primary-800 dark:text-primary-200">
                                 시험 기록 저장 완료
                             </h4>
-                            <p className="mt-1 text-xs sm:text-sm text-primary-700 dark:text-primary-300 whitespace-nowrap overflow-hidden text-ellipsis">
+                            <p className="mt-1 text-xs sm:text-sm text-primary-700 dark:text-primary-300 break-words">
                                 "{savedExamName}" 시험 기록이 브라우저 저장소에 저장되었습니다.
                             </p>
-                            <p className="mt-1 text-xs text-primary-600 dark:text-primary-400 whitespace-nowrap overflow-hidden text-ellipsis">
+                            <p className="mt-1 text-xs text-primary-600 dark:text-primary-400 break-words">
                                 ※ 브라우저를 바꾸거나 데이터를 삭제하면 기록이 사라질 수 있습니다.
                             </p>
                         </div>
