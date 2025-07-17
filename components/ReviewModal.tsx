@@ -17,7 +17,7 @@ const ShareButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
     const [showCopyMessage, setShowCopyMessage] = useState(false);
 
     const handleShare = async () => {
-        const shareText = `모의고사 타이머로 ${questions.length}문제를 풀었습니다! 총 소요시간: ${Math.floor(questions.reduce((sum, q) => sum + q.solveTime, 0) / 60)}분\n\nhttps://mock-exam-timer.vercel.app`;
+        const shareText = `모의고사 타이머로 ${questions.length}문제를 풀었습니다. 총 소요시간: ${Math.floor(questions.reduce((sum, q) => sum + q.solveTime, 0) / 60)}분\n\nhttps://mocktimer.kr`;
         
         if (navigator.share) {
             // 네이티브 공유 API 사용 (모바일)
@@ -25,7 +25,7 @@ const ShareButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
                 await navigator.share({
                     title: '모의고사 타이머 & 분석기',
                     text: shareText,
-                    url: 'https://mock-exam-timer.vercel.app'
+                    url: 'https://mocktimer.kr'
                 });
             } catch (error) {
                 console.log('공유가 취소되었습니다.');
