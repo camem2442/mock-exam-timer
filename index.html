@@ -46,6 +46,20 @@
           font-size: 14px;
         }
       }
+      
+      /* 확대 시에도 레이아웃 보호 */
+      .modal-container {
+        min-width: 320px;
+        max-width: 100vw;
+        overflow-x: hidden;
+      }
+      
+      /* 확대 시 텍스트 줄바뀜 방지 */
+      .no-wrap {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     </style>
   <script type="importmap">
 {

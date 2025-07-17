@@ -12,6 +12,7 @@ import ProblemList from './exam/ProblemList';
 import { Button } from './ui/Button';
 import StatusPanelModal from './exam/StatusPanelModal';
 import { GradingModal } from './review/GradingModal';
+import BookmarkModal from './BookmarkModal'; // 시험 기록 모달
 
 const ExamScreen: React.FC = () => {
     // Component State
@@ -48,6 +49,7 @@ const ExamScreen: React.FC = () => {
     const [batchMode, setBatchMode] = useState(false);
     const [batchSelectedQuestions, setBatchSelectedQuestions] = useState<Set<number>>(new Set());
     const [isStatusPanelVisible, setIsStatusPanelVisible] = useState(false);
+    const [isBookmarkModalOpen, setIsBookmarkModalOpen] = useState(false);
     
     // Refs for timer and scrolling
     const timerRef = useRef<number | undefined>(undefined);
@@ -389,6 +391,16 @@ const ExamScreen: React.FC = () => {
         setIsGradingModalOpen(false);
     };
 
+    const handleLoadBookmark = (bookmarkQuestions: Question[]) => {
+        // 즐겨찾기에서 불러온 데이터로 상태 복원
+        const questionNumbers = bookmarkQuestions.map(q => q.number);
+        setQuestions(bookmarkQuestions.reduce((acc, q) => ({ ...acc, [q.number]: q }), {}));
+        setQuestionNumbers(questionNumbers);
+        setFocusedQuestionNumber(questionNumbers[0]);
+        setIsExamActive(false);
+        setShowReview(true);
+    };
+
     const questionsWithGrading = React.useMemo(() => {
         if (Object.keys(submittedCorrectAnswers).length === 0) {
             return Object.values(questions);
@@ -499,6 +511,12 @@ const ExamScreen: React.FC = () => {
                 lapCounter={lapCounter}
             />
 
+            <BookmarkModal
+                isOpen={isBookmarkModalOpen}
+                onClose={() => setIsBookmarkModalOpen(false)}
+                onLoadBookmark={handleLoadBookmark}
+            />
+
              {/* Mobile: Toggle button - now outside the grid */}
             <div className="lg:hidden mb-8">
                 <Button 
@@ -546,21 +564,41 @@ const ExamScreen: React.FC = () => {
                     )}
 
                     {!isExamActive && (
-                        <Card>
-                            <SetupPanel
-                                startQuestion={startQuestionStr}
-                                setStartQuestion={setStartQuestionStr}
-                                endQuestion={endQuestionStr}
-                                setEndQuestion={setEndQuestionStr}
-                                totalMinutes={totalMinutesStr}
-                                setTotalMinutes={setTotalMinutesStr}
-                                isUnlimited={isUnlimitedTime}
-                                setIsUnlimited={setIsUnlimitedTime}
-                                isExamActive={isExamActive}
-                                onStart={handleStartExam}
-                                error={setupError}
-                            />
-                        </Card>
+                        <>
+                            <Card>
+                                <SetupPanel
+                                    startQuestion={startQuestionStr}
+                                    setStartQuestion={setStartQuestionStr}
+                                    endQuestion={endQuestionStr}
+                                    setEndQuestion={setEndQuestionStr}
+                                    totalMinutes={totalMinutesStr}
+                                    setTotalMinutes={setTotalMinutesStr}
+                                    isUnlimited={isUnlimitedTime}
+                                    setIsUnlimited={setIsUnlimitedTime}
+                                    isExamActive={isExamActive}
+                                    onStart={handleStartExam}
+                                    error={setupError}
+                                />
+                            </Card>
+                            
+                            <Card>
+                                <div className="p-6">
+                                    <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">
+                                        저장된 시험 기록
+                                    </h3>
+                                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                                        이전에 저장한 시험 기록을 확인할 수 있습니다.
+                                    </p>
+                                    <Button 
+                                        onClick={() => setIsBookmarkModalOpen(true)}
+                                        variant="secondary"
+                                        className="w-full"
+                                    >
+                                        📊 시험 기록 목록 보기
+                                    </Button>
+                                </div>
+                            </Card>
+                        </>
                     )}
 
                     {isExamActive && focusedQuestion && (

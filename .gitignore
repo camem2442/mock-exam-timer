@@ -38,3 +38,8 @@ dist-ssr
 .DS_Store
 Thumbs.db
 metadata.json
+
+# 테스트 코드 무시
+__tests__/
+*.test.ts
+*.test.tsx
