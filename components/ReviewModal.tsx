@@ -90,7 +90,7 @@ const SaveExamButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
                 variant="secondary"
                 size="md"
             >
-                💾 시험 기록 저장 (베타)
+                시험 기록 저장 (베타)
             </Button>
             <ExamNameModal
                 isOpen={isExamNameModalOpen}
@@ -117,20 +117,20 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, onContinue, onRest
                 onClick={e => e.stopPropagation()}
             >
                 <header className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">풀이 과정 분석 리포트</h2>
+                        <ShareButton questions={questions} />
+                    </div>
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
+                        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 sm:mt-0 mt-2">
+                            아래 데이터를 해설지와 함께 보며 자신의 풀이 습관을 복기해보세요.
+                        </p>
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
-                            <div className="flex items-center gap-2">
-                                <ShareButton questions={questions} />
-                                <SaveExamButton questions={questions} />
-                            </div>
+                            <SaveExamButton questions={questions} />
                             <Button onClick={onContinue} variant="secondary" className="w-full sm:w-auto">이어서 진행</Button>
                             <Button onClick={onRestart} variant="primary" className="w-full sm:w-auto">새로운 시험 시작</Button>
                         </div>
                     </div>
-                    <p className="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-400">
-                        아래 데이터를 해설지와 함께 보며 자신의 풀이 습관을 복기해보세요.
-                    </p>
                 </header>
                 <main className="overflow-y-auto overflow-x-hidden p-4 sm:p-6 space-y-6 sm:space-y-8">
                     <Card>

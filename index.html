@@ -119,6 +119,34 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
+      
+      /* 스크롤바 스타일링 */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #64748b;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+      
+      /* 다크 모드 스크롤바 */
+      .dark ::-webkit-scrollbar-thumb {
+        background: #475569;
+      }
+      
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
+      }
     </style>
   <script type="importmap">
 {

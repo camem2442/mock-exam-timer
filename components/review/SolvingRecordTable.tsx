@@ -78,20 +78,20 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                     <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800">
                         {sortBySolveOrder ? (
                             <tr>
-                                <th className="p-3">순서</th>
-                                <th className="p-3">문제 번호</th>
-                                <th className="p-3">소요 시간</th>
-                                <th className="p-3">누적 시간</th>
-                                <th className="p-3">제출 답안</th>
-                                <th className="p-3 text-center">정답 여부</th>
+                                <th className="p-3 text-sm whitespace-nowrap">순서</th>
+                                <th className="p-3 text-sm whitespace-nowrap">문제 번호</th>
+                                <th className="p-3 text-sm whitespace-nowrap">소요 시간</th>
+                                <th className="p-3 text-sm whitespace-nowrap">누적 시간</th>
+                                <th className="p-3 text-sm whitespace-nowrap">제출 답안</th>
+                                <th className="p-3 text-sm whitespace-nowrap text-center">정답 여부</th>
                             </tr>
                         ) : (
                             <tr>
-                                <th className="p-3">문제 번호</th>
-                                <th className="p-3">총 소요 시간</th>
-                                <th className="p-3">시도 횟수</th>
-                                <th className="p-3">최종 답안</th>
-                                <th className="p-3 text-center">정답 여부</th>
+                                <th className="p-3 text-sm whitespace-nowrap">문제 번호</th>
+                                <th className="p-3 text-sm whitespace-nowrap">총 소요 시간</th>
+                                <th className="p-3 text-sm whitespace-nowrap">시도 횟수</th>
+                                <th className="p-3 text-sm whitespace-nowrap">최종 답안</th>
+                                <th className="p-3 text-sm whitespace-nowrap text-center">정답 여부</th>
                             </tr>
                         )}
                     </thead>
@@ -101,12 +101,12 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                                 const question = questionsByNumber[event.questionNumber];
                                 return (
                                 <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <td className="p-3 font-medium">{String(index + 1).padStart(2, '0')}</td>
-                                    <td className="p-3 font-medium">{event.questionNumber}</td>
-                                    <td className="p-3 tabular-nums text-primary-600 dark:text-primary-400 font-semibold">{formatTime(event.duration)}</td>
-                                    <td className="p-3 tabular-nums">{formatTime(event.timestamp)}</td>
-                                    <td className="p-3">{event.answer ?? '미입력'}</td>
-                                    <td className="p-3 text-center">{correctnessIndicator(question?.isCorrect)}</td>
+                                    <td className="p-3 text-sm font-medium whitespace-nowrap">{String(index + 1).padStart(2, '0')}</td>
+                                    <td className="p-3 text-sm font-medium whitespace-nowrap">{event.questionNumber}</td>
+                                    <td className="p-3 text-sm tabular-nums text-primary-600 dark:text-primary-400 font-semibold whitespace-nowrap">{formatTime(event.duration)}</td>
+                                    <td className="p-3 text-sm tabular-nums whitespace-nowrap">{formatTime(event.timestamp)}</td>
+                                    <td className="p-3 text-sm whitespace-nowrap">{event.answer ?? '미입력'}</td>
+                                    <td className="p-3 text-sm text-center whitespace-nowrap">{correctnessIndicator(question?.isCorrect)}</td>
                                 </tr>
                                 )
                             }) : (
@@ -117,11 +117,11 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                         ) : (
                              sortedQuestions.map((q) => (
                                 <tr key={q.number} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <td className="p-3 font-bold">{q.number}</td>
-                                    <td className="p-3 tabular-nums text-primary-600 dark:text-primary-400 font-semibold">{formatTime(q.solveTime)}</td>
-                                    <td className="p-3 tabular-nums">{q.attempts > 0 ? `${q.attempts}회` : '-'}</td>
-                                    <td className="p-3">{q.answer ?? '미입력'}</td>
-                                    <td className="p-3 text-center">{correctnessIndicator(q.isCorrect)}</td>
+                                    <td className="p-3 text-sm font-bold whitespace-nowrap">{q.number}</td>
+                                    <td className="p-3 text-sm tabular-nums text-primary-600 dark:text-primary-400 font-semibold whitespace-nowrap">{formatTime(q.solveTime)}</td>
+                                    <td className="p-3 text-sm tabular-nums whitespace-nowrap">{q.attempts > 0 ? `${q.attempts}회` : '-'}</td>
+                                    <td className="p-3 text-sm whitespace-nowrap">{q.answer ?? '미입력'}</td>
+                                    <td className="p-3 text-sm text-center whitespace-nowrap">{correctnessIndicator(q.isCorrect)}</td>
                                 </tr>
                             ))
                         )}
