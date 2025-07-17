@@ -120,10 +120,10 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                     ) : (
                         bookmarks.map((bookmark) => (
                             <Card key={bookmark.id} className="p-4">
-                                <div className="flex justify-between items-start gap-4">
-                                    <div className="flex-1">
+                                <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                                    <div className="flex-1 w-full">
                                         {editingId === bookmark.id ? (
-                                            <div className="flex items-center gap-2 mb-2">
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2">
                                                 <input
                                                     type="text"
                                                     value={editingName}
@@ -135,28 +135,30 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                                     className="flex-1 px-2 py-1 text-sm font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 text-base"
                                                     autoFocus
                                                 />
-                                                <button
-                                                    onClick={handleSaveEdit}
-                                                    className="opacity-70 hover:opacity-100 transition-opacity p-1"
-                                                    title="저장"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                </button>
-                                                <button
-                                                    onClick={handleCancelEdit}
-                                                    className="opacity-70 hover:opacity-100 transition-opacity p-1"
-                                                    title="취소"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
+                                                <div className="flex gap-1">
+                                                    <button
+                                                        onClick={handleSaveEdit}
+                                                        className="opacity-70 hover:opacity-100 transition-opacity p-1"
+                                                        title="저장"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    </button>
+                                                    <button
+                                                        onClick={handleCancelEdit}
+                                                        className="opacity-70 hover:opacity-100 transition-opacity p-1"
+                                                        title="취소"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
                                             </div>
                                         ) : (
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <h3 className="font-semibold text-slate-800 dark:text-slate-200">
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2">
+                                                <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base">
                                                     {bookmark.name || '이름 없는 시험'}
                                                 </h3>
                                                 <button
@@ -177,36 +179,43 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                             총 소요시간: {formatTime(bookmark.questions.reduce((sum, q) => sum + q.solveTime, 0))}
                                         </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <Button 
-                                            onClick={() => handleLoadBookmark(bookmark)}
-                                            variant="primary"
-                                            size="sm"
-                                        >
-                                            불러오기
-                                        </Button>
-
-                                        <Button 
-                                            onClick={() => handleExportBookmark(bookmark)}
-                                            variant="secondary"
-                                            size="sm"
-                                        >
-                                            CSV 복사
-                                        </Button>
-                                        <Button 
-                                            onClick={() => handleDownloadBookmarkCSV(bookmark)}
-                                            variant="secondary"
-                                            size="sm"
-                                        >
-                                            CSV 다운로드
-                                        </Button>
-                                        <Button 
-                                            onClick={() => handleDeleteBookmark(bookmark.id)}
-                                            variant="danger"
-                                            size="sm"
-                                        >
-                                            삭제
-                                        </Button>
+                                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                                        <div className="flex gap-2">
+                                            <Button 
+                                                onClick={() => handleLoadBookmark(bookmark)}
+                                                variant="primary"
+                                                size="sm"
+                                                className="flex-1 sm:flex-none text-xs sm:text-sm"
+                                            >
+                                                불러오기
+                                            </Button>
+                                            <Button 
+                                                onClick={() => handleDeleteBookmark(bookmark.id)}
+                                                variant="danger"
+                                                size="sm"
+                                                className="flex-1 sm:flex-none text-xs sm:text-sm"
+                                            >
+                                                삭제
+                                            </Button>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <Button 
+                                                onClick={() => handleExportBookmark(bookmark)}
+                                                variant="secondary"
+                                                size="sm"
+                                                className="flex-1 sm:flex-none text-xs sm:text-sm"
+                                            >
+                                                CSV 복사
+                                            </Button>
+                                            <Button 
+                                                onClick={() => handleDownloadBookmarkCSV(bookmark)}
+                                                variant="secondary"
+                                                size="sm"
+                                                className="flex-1 sm:flex-none text-xs sm:text-sm"
+                                            >
+                                                CSV 다운로드
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
                             </Card>
@@ -215,7 +224,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                 </main>
                 
                 <footer className="p-4 border-t border-slate-200 dark:border-slate-700 flex justify-end">
-                    <Button onClick={onClose} variant="secondary">
+                    <Button onClick={onClose} variant="secondary" className="text-sm px-3 py-2">
                         닫기
                     </Button>
                 </footer>
