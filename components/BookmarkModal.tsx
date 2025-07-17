@@ -3,6 +3,7 @@ import { type Question } from '../types';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
 import { formatTime } from '../utils/formatters';
+import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../utils/exportUtils';
 
 interface BookmarkData {
     id: number;
@@ -36,6 +37,39 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
     const handleLoadBookmark = (bookmark: BookmarkData) => {
         onLoadBookmark(bookmark.questions);
         onClose();
+    };
+
+    const handleExportBookmark = async (bookmark: BookmarkData) => {
+        const totalTime = bookmark.questions.reduce((sum, q) => sum + q.solveTime, 0);
+        const exportData: ExportData = {
+            questions: bookmark.questions,
+            totalTime,
+            totalQuestions: bookmark.questions.length,
+            date: new Date(bookmark.date).toLocaleString('ko-KR')
+        };
+
+        const csvData = generateCSV(exportData);
+        const success = await copyToClipboard(csvData);
+        
+        if (success) {
+            alert('풀이 데이터가 클립보드에 복사되었습니다!\n\n엑셀에서 Ctrl+V로 붙여넣기 하세요.');
+        } else {
+            alert('클립보드 복사에 실패했습니다.');
+        }
+    };
+
+    const handleDownloadBookmarkCSV = (bookmark: BookmarkData) => {
+        const totalTime = bookmark.questions.reduce((sum, q) => sum + q.solveTime, 0);
+        const exportData: ExportData = {
+            questions: bookmark.questions,
+            totalTime,
+            totalQuestions: bookmark.questions.length,
+            date: new Date(bookmark.date).toLocaleString('ko-KR')
+        };
+
+        const csvData = generateCSV(exportData);
+        const filename = `시험기록_${new Date(bookmark.date).toISOString().split('T')[0]}.csv`;
+        downloadCSV(csvData, filename);
     };
 
     if (!isOpen) return null;
@@ -80,6 +114,20 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                             size="sm"
                                         >
                                             불러오기
+                                        </Button>
+                                        <Button 
+                                            onClick={() => handleExportBookmark(bookmark)}
+                                            variant="secondary"
+                                            size="sm"
+                                        >
+                                            📋 복사
+                                        </Button>
+                                        <Button 
+                                            onClick={() => handleDownloadBookmarkCSV(bookmark)}
+                                            variant="secondary"
+                                            size="sm"
+                                        >
+                                            📄 다운로드
                                         </Button>
                                         <Button 
                                             onClick={() => handleDeleteBookmark(bookmark.id)}

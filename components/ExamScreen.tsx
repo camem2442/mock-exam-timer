@@ -594,7 +594,7 @@ const ExamScreen: React.FC = () => {
                                         variant="secondary"
                                         className="w-full"
                                     >
-                                        📊 시험 기록 목록 보기
+                                        시험 기록 목록 보기
                                     </Button>
                                 </div>
                             </Card>

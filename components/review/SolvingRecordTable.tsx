@@ -2,8 +2,10 @@
 import React, { useState, useMemo } from 'react';
 import { type Question } from '../../types';
 import { ToggleSwitch } from '../ui/ToggleSwitch';
+import { Button } from '../ui/Button';
 import { formatTime } from '../../utils/formatters';
 import { useChartData } from '../../hooks/useChartData';
+import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../../utils/exportUtils';
 
 
 interface SolvingRecordTableProps {
@@ -14,6 +16,39 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
     const [sortBySolveOrder, setSortBySolveOrder] = useState(true);
     
     const { solveHistory } = useChartData(questions);
+
+    const handleExportData = async () => {
+        const totalTime = questions.reduce((sum, q) => sum + q.solveTime, 0);
+        const exportData: ExportData = {
+            questions,
+            totalTime,
+            totalQuestions: questions.length,
+            date: new Date().toLocaleString('ko-KR')
+        };
+
+        const csvData = generateCSV(exportData);
+        const success = await copyToClipboard(csvData);
+        
+        if (success) {
+            alert('풀이 데이터가 클립보드에 복사되었습니다!\n\n엑셀에서 Ctrl+V로 붙여넣기 하세요.');
+        } else {
+            alert('클립보드 복사에 실패했습니다.');
+        }
+    };
+
+    const handleDownloadCSV = () => {
+        const totalTime = questions.reduce((sum, q) => sum + q.solveTime, 0);
+        const exportData: ExportData = {
+            questions,
+            totalTime,
+            totalQuestions: questions.length,
+            date: new Date().toLocaleString('ko-KR')
+        };
+
+        const csvData = generateCSV(exportData);
+        const filename = `시험기록_${new Date().toISOString().split('T')[0]}.csv`;
+        downloadCSV(csvData, filename);
+    };
     
     const questionsByNumber = useMemo(() => {
         const map: Record<number, Question> = {};
@@ -36,7 +71,25 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                 <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200">
                     {sortBySolveOrder ? '풀이 기록표 (시간순)' : '풀이 기록표 (문제 번호순)'}
                 </h3>
-                <ToggleSwitch label="풀이 순서로 보기" enabled={sortBySolveOrder} onChange={setSortBySolveOrder} />
+                <div className="flex items-center gap-2">
+                    <Button 
+                        onClick={handleExportData} 
+                        variant="ghost" 
+                        size="sm"
+                        className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                    >
+                        📋 엑셀 복사
+                    </Button>
+                    <Button 
+                        onClick={handleDownloadCSV} 
+                        variant="ghost" 
+                        size="sm"
+                        className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                    >
+                        📄 CSV 다운로드
+                    </Button>
+                    <ToggleSwitch label="풀이 순서로 보기" enabled={sortBySolveOrder} onChange={setSortBySolveOrder} />
+                </div>
             </div>
             <div className="max-h-[500px] overflow-y-auto">
                 <table className="w-full text-left">
