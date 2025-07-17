@@ -28,40 +28,30 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
     };
 
     const handleShareImage = async () => {
-        alert('[디버그] 공유하기 버튼 클릭\n' + JSON.stringify({
-            shareExamName,
-            includeGrading,
-            blurAnswer,
-            totalMinutes
-        }, null, 2));
         if (!previewRef.current) {
-            alert('[디버그] 미리보기 영역(previewRef)가 null입니다.');
+            alert('미리보기 영역(previewRef)가 null입니다.');
             return;
         }
         setIsLoading(true);
         try {
             await new Promise((resolve) => setTimeout(resolve, 100)); // 렌더 타이밍 여유
-            alert('[디버그] html-to-image 변환 시작');
             const blob = await htmlToImage.toBlob(previewRef.current, {
                 pixelRatio: 2,
                 // useCORS: true, // 필요시 활성화
             });
             if (!blob) {
-                alert('[디버그] Blob 생성 실패 (html-to-image 변환 실패)');
+                alert('Blob 생성 실패 (html-to-image 변환 실패)');
                 setIsLoading(false);
                 return;
             }
-            alert('[디버그] 이미지 Blob 생성 성공');
             const file = new File([blob], `${shareExamName || '시험결과'}.png`, { type: blob.type });
 
             // 모바일/데스크톱/맥 사파리 환경 분기
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             const isMacSafari = /Macintosh.*Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
             if (isMobile && !isMacSafari && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-                alert('[디버그] Web Share API 지원, 공유 시도');
                 try {
                     await navigator.share({ files: [file], title: shareExamName || '시험결과' });
-                    alert('[디버그] Web Share API 공유 성공');
                 } catch (e) {
                     // 공유 실패 시 다운로드로 폴백
                     triggerDownload(blob, file);
@@ -80,7 +70,7 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
             } else {
                 errorMsg = String(error);
             }
-            alert('[디버그] 이미지 공유/생성 중 오류 발생: ' + errorMsg);
+            alert('이미지 공유/생성 중 오류 발생: ' + errorMsg);
         } finally {
             setIsLoading(false);
         }
