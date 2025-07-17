@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { type Question } from '../types';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
+import { ExamNameModal } from './ui/ExamNameModal';
 import AdPlaceholder from './ads/AdPlaceholder';
 import SolveTimeChart from './charts/SolveTimeChart';
 import FinalAnswerSheet from './review/FinalAnswerSheet';
@@ -10,26 +11,8 @@ import TimeManagementInsights from './review/TimeManagementInsights';
 import SolvingRecordTable from './review/SolvingRecordTable';
 import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../utils/exportUtils';
 
-// 브라우저 즐겨찾기와 공유 기능을 위한 컴포넌트
-const ShareButtons: React.FC<{ questions: Question[] }> = ({ questions }) => {
-
-
-    const handleSaveExamRecord = () => {
-        // 시험 기록 저장 (로컬 스토리지 사용)
-        const examRecords = JSON.parse(localStorage.getItem('examBookmarks') || '[]');
-        const recordData = {
-            id: Date.now(),
-            date: new Date().toISOString(),
-            questions: questions,
-            summary: `${questions.length}문제, 총 ${questions.reduce((sum, q) => sum + q.solveTime, 0)}초`
-        };
-        examRecords.push(recordData);
-        localStorage.setItem('examBookmarks', JSON.stringify(examRecords));
-        alert('시험 기록이 브라우저 저장소에 저장되었습니다!\n\n※ 브라우저를 바꾸거나 데이터를 삭제하면 기록이 사라질 수 있습니다.');
-    };
-
-
-
+// 공유 기능을 위한 컴포넌트
+const ShareButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
     const handleShare = async () => {
         const shareText = `모의고사 타이머로 ${questions.length}문제를 풀었습니다! 총 소요시간: ${Math.floor(questions.reduce((sum, q) => sum + q.solveTime, 0) / 60)}분\n\nhttps://mock-exam-timer.vercel.app`;
         
@@ -63,29 +46,58 @@ const ShareButtons: React.FC<{ questions: Question[] }> = ({ questions }) => {
     };
 
     return (
-        <div className="flex items-center gap-2">
+        <Button 
+            onClick={handleShare} 
+            variant="ghost" 
+            size="icon"
+            className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex-shrink-0"
+            aria-label="결과 공유"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+            </svg>
+        </Button>
+    );
+};
+
+// 시험 기록 저장 기능을 위한 컴포넌트
+const SaveExamButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
+    const [isExamNameModalOpen, setIsExamNameModalOpen] = useState(false);
+
+    const handleSaveExamRecord = () => {
+        setIsExamNameModalOpen(true);
+    };
+
+    const handleSaveExamName = (examName: string) => {
+        // 시험 기록 저장 (로컬 스토리지 사용)
+        const examRecords = JSON.parse(localStorage.getItem('examBookmarks') || '[]');
+        const recordData = {
+            id: Date.now(),
+            name: examName,
+            date: new Date().toISOString(),
+            questions: questions,
+            summary: `${questions.length}문제, 총 ${questions.reduce((sum, q) => sum + q.solveTime, 0)}초`
+        };
+        examRecords.push(recordData);
+        localStorage.setItem('examBookmarks', JSON.stringify(examRecords));
+        alert(`"${examName}" 시험 기록이 브라우저 저장소에 저장되었습니다!\n\n※ 브라우저를 바꾸거나 데이터를 삭제하면 기록이 사라질 수 있습니다.`);
+    };
+
+    return (
+        <>
             <Button 
                 onClick={handleSaveExamRecord} 
-                variant="ghost" 
-                size="sm"
-                className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                variant="secondary"
+                size="md"
             >
                 💾 시험 기록 저장 (베타)
             </Button>
-
-
-            <Button 
-                onClick={handleShare} 
-                variant="ghost" 
-                size="icon"
-                className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex-shrink-0"
-                aria-label="결과 공유"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                </svg>
-            </Button>
-        </div>
+            <ExamNameModal
+                isOpen={isExamNameModalOpen}
+                onClose={() => setIsExamNameModalOpen(false)}
+                onSave={handleSaveExamName}
+            />
+        </>
     );
 };
 
@@ -108,7 +120,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, onContinue, onRest
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">풀이 과정 분석 리포트</h2>
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
-                            <ShareButtons questions={questions} />
+                            <div className="flex items-center gap-2">
+                                <ShareButton questions={questions} />
+                                <SaveExamButton questions={questions} />
+                            </div>
                             <Button onClick={onContinue} variant="secondary" className="w-full sm:w-auto">이어서 진행</Button>
                             <Button onClick={onRestart} variant="primary" className="w-full sm:w-auto">새로운 시험 시작</Button>
                         </div>

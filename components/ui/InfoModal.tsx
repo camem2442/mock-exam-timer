@@ -65,6 +65,20 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                              <li><strong>새로운 시험 시작:</strong> 현재 기록을 모두 초기화하고 새로운 시험을 시작합니다.</li>
                         </ul>
                     </section>
+                    <section>
+                        <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">4. 시험 기록 저장 및 관리</h3>
+                        <p className="mb-2">
+                            풀이 과정 분석 리포트에서 시험 결과를 저장하고 관리할 수 있습니다.
+                        </p>
+                        <ul className="list-disc list-inside space-y-1 pl-2">
+                            <li><strong>시험 기록 저장:</strong> '💾 시험 기록 저장 (베타)' 버튼을 클릭하면 시험 이름을 입력하여 브라우저 저장소에 저장할 수 있습니다.</li>
+                            <li><strong>저장된 기록 확인:</strong> 메인 화면의 '저장된 시험 기록' 버튼을 클릭하면 이전에 저장한 모든 시험 기록을 확인할 수 있습니다.</li>
+                            <li><strong>기록 불러오기:</strong> 저장된 기록을 클릭하여 이전 시험 결과를 다시 확인하거나 분석할 수 있습니다.</li>
+                            <li><strong>기록 편집:</strong> 저장된 기록에서 시험 이름 옆의 연필 아이콘을 클릭하여 이름을 변경할 수 있습니다.</li>
+                            <li><strong>데이터 내보내기:</strong> 각 기록에서 CSV 복사 또는 CSV 다운로드 버튼을 사용하여 엑셀이나 구글 시트에서 분석할 수 있습니다.</li>
+                            <li><strong>주의사항:</strong> 브라우저를 바꾸거나 데이터를 삭제하면 저장된 기록이 사라질 수 있습니다.</li>
+                        </ul>
+                    </section>
                 </main>
                  <footer className="p-4 bg-slate-100 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex justify-end">
                     <Button onClick={onClose} variant="primary">닫기</Button>

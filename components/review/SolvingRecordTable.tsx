@@ -30,7 +30,7 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
         const success = await copyToClipboard(csvData);
         
         if (success) {
-            alert('풀이 데이터가 클립보드에 복사되었습니다!\n\n엑셀에서 Ctrl+V로 붙여넣기 하세요.');
+            alert('풀이 데이터가 클립보드에 복사되었습니다!\n\n엑셀이나 구글 시트에서 Ctrl+V로 붙여넣기 하세요.');
         } else {
             alert('클립보드 복사에 실패했습니다.');
         }
@@ -71,25 +71,7 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                 <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200">
                     {sortBySolveOrder ? '풀이 기록표 (시간순)' : '풀이 기록표 (문제 번호순)'}
                 </h3>
-                <div className="flex items-center gap-2">
-                    <Button 
-                        onClick={handleExportData} 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-                    >
-                        📋 엑셀 복사
-                    </Button>
-                    <Button 
-                        onClick={handleDownloadCSV} 
-                        variant="ghost" 
-                        size="sm"
-                        className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-                    >
-                        📄 CSV 다운로드
-                    </Button>
-                    <ToggleSwitch label="풀이 순서로 보기" enabled={sortBySolveOrder} onChange={setSortBySolveOrder} />
-                </div>
+                <ToggleSwitch label="풀이 순서로 보기" enabled={sortBySolveOrder} onChange={setSortBySolveOrder} />
             </div>
             <div className="max-h-[500px] overflow-y-auto">
                 <table className="w-full text-left">
@@ -150,6 +132,24 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                          )}
                     </tbody>
                 </table>
+            </div>
+            <div className="flex justify-end mt-4 gap-2">
+                <Button 
+                    onClick={handleExportData} 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                >
+                    📋 CSV 복사
+                </Button>
+                <Button 
+                    onClick={handleDownloadCSV} 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                >
+                    📄 CSV 다운로드
+                </Button>
             </div>
         </>
     );

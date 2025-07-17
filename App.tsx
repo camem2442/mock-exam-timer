@@ -12,11 +12,18 @@ const App: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>모의고사 타이머 & 분석기</title>
-        <meta name="description" content="실시간으로 모의고사 시간을 측정하고, 문제별 풀이 시간을 기록하며 상세한 분석 리포트를 받아보세요. 수능, 공무원 시험 등 모든 시험에 활용 가능합니다." />
-        <meta property="og:title" content="모의고사 타이머 & 분석기" />
-        <meta property="og:description" content="실시간 풀이 시간 측정과 상세한 분석으로 시험을 정복하세요." />
+        <title>공부 타이머 | 시험 타이머 | 문제풀이 타이머 - 모의고사 타이머 & 분석기</title>
+        <meta name="description" content="공부 타이머, 시험 타이머, 문제풀이 타이머로 수능, 공무원시험, LEET, CPA 등 모든 시험에 활용 가능한 실시간 풀이 시간 측정 및 분석 도구입니다." />
+        <meta name="keywords" content="공부 타이머, 시험 타이머, 문제풀이 타이머, 모의고사 타이머, 수능 타이머, 공무원시험 타이머, LEET 타이머, CPA 타이머, 학습 타이머, 시간 관리, 문제 풀이 시간, 시험 분석" />
+        <meta property="og:title" content="공부 타이머 | 시험 타이머 | 문제풀이 타이머 - 모의고사 타이머 & 분석기" />
+        <meta property="og:description" content="수능, 공무원시험, LEET, CPA 등 모든 시험에 활용 가능한 실시간 풀이 시간 측정 및 분석 도구입니다." />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://mock-exam-timer.vercel.app" />
+        <meta property="og:image" content="https://mock-exam-timer.vercel.app/og-image.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="공부 타이머 | 시험 타이머 | 문제풀이 타이머" />
+        <meta name="twitter:description" content="실시간 풀이 시간 측정과 상세한 분석으로 시험을 정복하세요." />
+        <meta name="twitter:image" content="https://mock-exam-timer.vercel.app/og-image.svg" />
       </Helmet>
       <main className="container mx-auto p-4 sm:p-6 lg:p-8 font-sans">
         <div className="flex items-center justify-between mb-8">

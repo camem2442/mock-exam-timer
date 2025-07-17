@@ -7,6 +7,7 @@ import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../u
 
 interface BookmarkData {
     id: number;
+    name?: string; // 시험 이름 (선택적)
     date: string;
     questions: Question[];
     summary: string;
@@ -20,6 +21,8 @@ interface BookmarkModalProps {
 
 const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBookmark }) => {
     const [bookmarks, setBookmarks] = useState<BookmarkData[]>([]);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [editingName, setEditingName] = useState<string>('');
 
     useEffect(() => {
         if (isOpen) {
@@ -32,6 +35,28 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
         const updatedBookmarks = bookmarks.filter(b => b.id !== id);
         localStorage.setItem('examBookmarks', JSON.stringify(updatedBookmarks));
         setBookmarks(updatedBookmarks);
+    };
+
+    const handleStartEdit = (bookmark: BookmarkData) => {
+        setEditingId(bookmark.id);
+        setEditingName(bookmark.name || '');
+    };
+
+    const handleSaveEdit = () => {
+        if (!editingId) return;
+        
+        const updatedBookmarks = bookmarks.map(b => 
+            b.id === editingId ? { ...b, name: editingName.trim() } : b
+        );
+        localStorage.setItem('examBookmarks', JSON.stringify(updatedBookmarks));
+        setBookmarks(updatedBookmarks);
+        setEditingId(null);
+        setEditingName('');
+    };
+
+    const handleCancelEdit = () => {
+        setEditingId(null);
+        setEditingName('');
     };
 
     const handleLoadBookmark = (bookmark: BookmarkData) => {
@@ -97,11 +122,56 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                             <Card key={bookmark.id} className="p-4">
                                 <div className="flex justify-between items-start gap-4">
                                     <div className="flex-1">
-                                        <h3 className="font-semibold text-slate-800 dark:text-slate-200 mb-2">
-                                            {new Date(bookmark.date).toLocaleString('ko-KR')}
-                                        </h3>
+                                        {editingId === bookmark.id ? (
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <input
+                                                    type="text"
+                                                    value={editingName}
+                                                    onChange={(e) => setEditingName(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') handleSaveEdit();
+                                                        if (e.key === 'Escape') handleCancelEdit();
+                                                    }}
+                                                    className="flex-1 px-2 py-1 text-sm font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                                    autoFocus
+                                                />
+                                                <button
+                                                    onClick={handleSaveEdit}
+                                                    className="opacity-70 hover:opacity-100 transition-opacity p-1"
+                                                    title="저장"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </button>
+                                                <button
+                                                    onClick={handleCancelEdit}
+                                                    className="opacity-70 hover:opacity-100 transition-opacity p-1"
+                                                    title="취소"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <h3 className="font-semibold text-slate-800 dark:text-slate-200">
+                                                    {bookmark.name || '이름 없는 시험'}
+                                                </h3>
+                                                <button
+                                                    onClick={() => handleStartEdit(bookmark)}
+                                                    className="opacity-50 hover:opacity-100 transition-opacity p-1"
+                                                    title="이름 변경"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        )}
                                         <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
-                                            {bookmark.summary}
+                                            {new Date(bookmark.date).toLocaleString('ko-KR')} • {bookmark.summary}
                                         </p>
                                         <div className="text-xs text-slate-500">
                                             총 소요시간: {formatTime(bookmark.questions.reduce((sum, q) => sum + q.solveTime, 0))}
@@ -115,19 +185,20 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                         >
                                             불러오기
                                         </Button>
+
                                         <Button 
                                             onClick={() => handleExportBookmark(bookmark)}
                                             variant="secondary"
                                             size="sm"
                                         >
-                                            📋 복사
+                                            CSV 복사
                                         </Button>
                                         <Button 
                                             onClick={() => handleDownloadBookmarkCSV(bookmark)}
                                             variant="secondary"
                                             size="sm"
                                         >
-                                            📄 다운로드
+                                            CSV 다운로드
                                         </Button>
                                         <Button 
                                             onClick={() => handleDeleteBookmark(bookmark.id)}
