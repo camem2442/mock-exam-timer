@@ -119,11 +119,10 @@ export const ContactPage: React.FC = () => {
                                 <ul className="list-disc space-y-2 pl-6 text-lg">
                                     <li className="pl-2">모든 데이터는 사용자의 브라우저에만 저장됩니다.</li>
                                     <li className="pl-2">서버로 개인정보나 시험 데이터가 전송되지 않습니다.</li>
-                                    <li className="pl-2">쿠키나 추적 기술을 사용하지 않습니다.</li>
                                     <li className="pl-2">문의 시 제공되는 이메일 주소는 답변 목적으로만 사용됩니다.</li>
                                 </ul>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-4">
-                                  본 사이트는 방문 통계 분석을 위해 비식별화된 트래픽 데이터만 수집합니다. 개인정보는 저장/전송하지 않습니다.
+                                  본 사이트는 방문 통계 분석을 위해 비식별화된 익명 데이터만 수집합니다. 개인정보는 저장/전송하지 않습니다.
                                 </p>
                             </div>
                         </section>
