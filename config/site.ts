@@ -1,7 +1,7 @@
 // 사이트 설정 - 도메인 변경 시 이 파일만 수정하면 됩니다
 export const siteConfig = {
     // 기본 도메인 설정
-    domain: 'https://mocktimer.kr',
+    domain: 'https://www.mocktimer.kr',
     
     // 사이트 메타 정보
     title: '모의고사 타이머 & 분석기',
@@ -20,7 +20,7 @@ export const siteConfig = {
             description: '수능, 공무원시험, LEET, CPA 등 다양한 시험을 위한 문제별 풀이 시간 측정 및 분석 도구입니다.',
             type: 'website',
             locale: 'ko_KR',
-            image: 'https://mocktimer.kr/og-image.png',
+            image: 'https://www.mocktimer.kr/og-image.png',
             imageWidth: 1200,
             imageHeight: 630
         }
