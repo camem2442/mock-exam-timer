@@ -212,11 +212,11 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContin
                         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 sm:mt-0 mt-2">
                             아래 데이터를 해설지와 함께 보며 자신의 풀이 습관을 복기해보세요.
                         </p>
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
                             <SaveExamButton questions={questions} examName={examName} />
                             <ShareImageButton questions={questions} examName={examName} totalMinutes={totalMinutes} />
-                            <Button onClick={onContinue} variant="secondary" className="w-full sm:w-auto">이어서 진행</Button>
-                            <Button onClick={onRestart} variant="primary" className="w-full sm:w-auto">새로운 시험 시작</Button>
+                            <Button onClick={onContinue} variant="secondary" className="w-full">이어서 진행</Button>
+                            <Button onClick={onRestart} variant="primary" className="w-full">새로운 시험 시작</Button>
                         </div>
                     </div>
                 </header>
