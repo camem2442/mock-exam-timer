@@ -98,7 +98,7 @@
       overflow-x: hidden;
     }
     
-    .mobile-result-area {
+    .mobile-result-image-wrapper {
       transform: scale(calc((100vw - 32px) / 628px)) !important;
       transform-origin: top center !important;
       width: 100vw !important;
@@ -109,7 +109,7 @@
 
   /* 더 작은 화면에서 강제 축소 */
   @media (max-width: 480px) {
-    .mobile-result-area {
+    .mobile-result-image-wrapper {
       transform: scale(0.6) !important;
       transform-origin: top center !important;
       width: 100vw !important;
