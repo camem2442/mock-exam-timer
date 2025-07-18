@@ -1,269 +1,128 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { type Question, type SolveEvent } from '../types';
+import { type Question } from '../types';
 import ReviewModal from './ReviewModal';
 import LiveStatusPanel from './exam/LiveStatusPanel';
-import SetupPanel from './exam/SetupPanel';
-import TimerDisplay from './exam/TimerDisplay';
-import ControlToolbar from './exam/ControlToolbar';
-import QuickNav from './exam/QuickNav';
 import { Card } from './ui/Card';
-import DynamicMarkingWindow from './exam/DynamicMarkingWindow';
-import ProblemList from './exam/ProblemList';
 import { Button } from './ui/Button';
 import StatusPanelModal from './exam/StatusPanelModal';
 import { GradingModal } from './review/GradingModal';
-import BookmarkModal from './BookmarkModal'; // 시험 기록 모달
+import RecordModal from './RecordModal';
 import { SocialShareBadges } from './ui/SocialShareBadges';
+import { useExamSetup } from '../hooks/useExamSetup';
+import { useReview } from '../hooks/useReview';
+import { useExamRecord, type ExamRecord } from '../hooks/useExamRecord';
+import { useExamPersistence, type PersistenceState } from '../hooks/useExamPersistence';
+import { ConfirmModal } from './ui/ConfirmModal';
+import { useTimer, type TimerRestoreState } from '../hooks/useTimer';
+import { useExamSession } from '../hooks/useExamSession';
+import { ExamSetupView } from './exam/ExamSetupView';
+import { ActiveExamView } from './exam/ActiveExamView';
+import { usePwaInstall } from '../hooks/usePwaInstall';
+import { siteConfig } from '../config/site';
 
 const ExamScreen: React.FC = () => {
-    // Component State
+    // --- State ---
     const [isExamActive, setIsExamActive] = useState(false);
     const [showReview, setShowReview] = useState(false);
-    const [isGradingModalOpen, setIsGradingModalOpen] = useState(false);
-
-    // Setup Form State
-    const [examName, setExamName] = useState('');
-    const [startQuestionStr, setStartQuestionStr] = useState('1');
-    const [endQuestionStr, setEndQuestionStr] = useState('45');
-    const [totalMinutesStr, setTotalMinutesStr] = useState('70');
-    const [isUnlimitedTime, setIsUnlimitedTime] = useState(false);
     const [setupError, setSetupError] = useState('');
-    const [submittedCorrectAnswers, setSubmittedCorrectAnswers] = useState<Record<number, string>>({});
-    const [gradingModalInputs, setGradingModalInputs] = useState<Record<number, string>>({});
-    const [gradingModalSubjective, setGradingModalSubjective] = useState<Set<number>>(new Set());
-
-
-    // Exam Data State
-    const [questions, setQuestions] = useState<Record<number, Question>>({});
-    const [questionNumbers, setQuestionNumbers] = useState<number[]>([]);
-    const [subjectiveInputs, setSubjectiveInputs] = useState<Record<number, string>>({});
-
-    // Timer State
-    const [totalElapsedTime, setTotalElapsedTime] = useState(0);
-    const [overallTimeLeft, setOverallTimeLeft] = useState(Infinity);
-    const [currentProblemTime, setCurrentProblemTime] = useState(0);
-    const [lapCounter, setLapCounter] = useState(0);
-    const [timeUp, setTimeUp] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-
-    // Interaction State
-    const [focusedQuestionNumber, setFocusedQuestionNumber] = useState<number | null>(null);
-    const [batchMode, setBatchMode] = useState(false);
-    const [batchSelectedQuestions, setBatchSelectedQuestions] = useState<Set<number>>(new Set());
     const [isStatusPanelVisible, setIsStatusPanelVisible] = useState(false);
-    const [isBookmarkModalOpen, setIsBookmarkModalOpen] = useState(false);
     const [showRestartConfirm, setShowRestartConfirm] = useState(false);
-    const [showShareModal, setShowShareModal] = useState(false);
     
-    // Refs for timer and scrolling
-    const timerRef = useRef<number | undefined>(undefined);
-    // Convert refs to state for localStorage persistence
-    const [startTime, setStartTime] = useState(0);
-    const [lastLapTimestamp, setLastLapTimestamp] = useState(0);
-    const [pauseTime, setPauseTime] = useState(0);
-    const examConfigRef = useRef({ totalMinutes: 70, isUnlimited: false });
-
+    // --- Refs ---
     const problemRefs = useRef<Record<number, HTMLDivElement | null>>({});
-    const problemListContainerRef = useRef<HTMLDivElement | null>(null);
 
-    // Effect for saving setup settings to localStorage
-    useEffect(() => {
-        const setupSettings = {
-            examName,
-            startQuestionStr,
-            endQuestionStr,
-            totalMinutesStr,
-            isUnlimitedTime,
-        };
-        localStorage.setItem('examSetup', JSON.stringify(setupSettings));
-    }, [examName, startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime]);
+    // --- Hooks ---
+    const examSetup = useExamSetup();
+    const { canInstall, triggerInstallPrompt } = usePwaInstall();
+    const {
+        examName, setExamName,
+        startQuestionStr, setStartQuestionStr,
+        endQuestionStr, setEndQuestionStr,
+        totalMinutesStr, setTotalMinutesStr,
+        isUnlimitedTime, setIsUnlimitedTime
+    } = examSetup;
+    const examRecord = useExamRecord();
 
-    // Effect for loading setup settings from localStorage on initial mount
-    useEffect(() => {
-        const savedSetupJSON = localStorage.getItem('examSetup');
-        if (savedSetupJSON) {
-            const savedSetup = JSON.parse(savedSetupJSON);
-            setExamName(savedSetup.examName || '');
-            setStartQuestionStr(savedSetup.startQuestionStr || '1');
-            setEndQuestionStr(savedSetup.endQuestionStr || '45');
-            setTotalMinutesStr(savedSetup.totalMinutesStr || '70');
-            setIsUnlimitedTime(savedSetup.isUnlimitedTime || false);
+    const [restoredTimerState, setRestoredTimerState] = useState<TimerRestoreState | undefined>();
+    const handleFinishExam = useCallback(() => {
+        if (!isExamActive) return;
+        setShowReview(true);
+        // timer.stop() is implicitly called by onTimeUp in the hook
+    }, [isExamActive]);
+    
+    const timer = useTimer({
+        totalMinutes: parseInt(totalMinutesStr, 10) || 0,
+        isUnlimited: isUnlimitedTime,
+        onTimeUp: handleFinishExam,
+        restoreState: restoredTimerState,
+    });
+    
+    const examSession = useExamSession(timer, isExamActive);
+    const {
+        questions, questionNumbers, subjectiveInputs, lapCounter,
+        batchMode, batchSelectedQuestions, handleLap, reset: resetSession,
+        focusedQuestionNumber, setFocusedQuestionNumber,
+    } = examSession;
+
+    const review = useReview(questionNumbers);
+    const {
+        isGradingModalOpen, setIsGradingModalOpen,
+        submittedCorrectAnswers, setSubmittedCorrectAnswers,
+        grading,
+    } = review;
+
+    // --- Persistence ---
+    const restoreStateFromPersistence = useCallback((newState: Partial<PersistenceState>) => {
+        if (newState.isExamActive !== undefined) setIsExamActive(newState.isExamActive);
+        if (newState.showReview !== undefined) setShowReview(newState.showReview);
+        if (newState.focusedQuestionNumber !== undefined) setFocusedQuestionNumber(newState.focusedQuestionNumber);
+
+        // Pass restoration data to children hooks
+        if (newState.questions !== undefined) examSession.setQuestions(newState.questions);
+        if (newState.questionNumbers !== undefined) examSession.setQuestionNumbers(newState.questionNumbers);
+        if (newState.subjectiveInputs !== undefined) examSession.setSubjectiveInputs(newState.subjectiveInputs);
+        if (newState.lapCounter !== undefined) examSession.setLapCounter(newState.lapCounter);
+        if (newState.batchMode !== undefined) examSession.setBatchMode(newState.batchMode);
+        if (newState.batchSelectedQuestions !== undefined) examSession.setBatchSelectedQuestions(newState.batchSelectedQuestions);
+
+        // Restore grading state
+        if (newState.gradingAnswers !== undefined) grading.setAnswers(newState.gradingAnswers);
+        if (newState.gradingSubjective !== undefined) grading.setSubjectiveProblems(newState.gradingSubjective);
+
+        if (newState.totalElapsedTime !== undefined) {
+            setRestoredTimerState({
+                elapsedTime: newState.totalElapsedTime ?? 0,
+                currentProblemTime: newState.currentProblemTime ?? 0,
+                isPaused: newState.isPaused ?? true,
+                timeUp: newState.timeUp ?? false,
+            });
         }
-    }, []);
+    }, [examSession, setFocusedQuestionNumber, grading]);
 
-    // Effect for saving state to localStorage
-    useEffect(() => {
-        const isReviewing = !isExamActive && showReview;
-        if (isExamActive || isReviewing) {
-             const stateToSave = {
-                questions, questionNumbers, subjectiveInputs,
-                totalElapsedTime, overallTimeLeft, currentProblemTime,
-                lapCounter, timeUp, isPaused,
-                startTime, lastLapTimestamp, pauseTime,
-                focusedQuestionNumber, batchMode, batchSelectedQuestions: Array.from(batchSelectedQuestions),
-                examConfig: examConfigRef.current,
-                startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime,
-                submittedCorrectAnswers,
-                gradingModalInputs,
-                gradingModalSubjective: Array.from(gradingModalSubjective),
-                // Add flags to know where we are
-                isExamActive,
-                showReview,
-                examName, // 시험 설정값도 저장하여 복원 시 일관성 유지
-            };
-            localStorage.setItem('examState', JSON.stringify(stateToSave));
-        }
-        // Data is now cleared only on explicit reset
-    }, [
-        isExamActive, showReview, questions, questionNumbers, subjectiveInputs,
-        totalElapsedTime, overallTimeLeft, currentProblemTime,
-        lapCounter, timeUp, isPaused, startTime, lastLapTimestamp, pauseTime,
-        focusedQuestionNumber, batchMode, batchSelectedQuestions, submittedCorrectAnswers,
-        gradingModalInputs, gradingModalSubjective,
-        // 시험 설정값도 저장하여 복원 시 일관성 유지
-        examName, startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime 
-    ]);
-
-     // Effect for loading state from localStorage on initial mount
-    useEffect(() => {
-        const savedStateJSON = localStorage.getItem('examState');
-        if (savedStateJSON) {
-            if (window.confirm('이전 시험에 이어서 진행하시겠습니까?')) {
-                const savedState = JSON.parse(savedStateJSON);
-                
-                setQuestions(savedState.questions);
-                setQuestionNumbers(savedState.questionNumbers);
-                setSubjectiveInputs(savedState.subjectiveInputs);
-                setTotalElapsedTime(savedState.totalElapsedTime);
-                setOverallTimeLeft(savedState.overallTimeLeft);
-                setCurrentProblemTime(savedState.currentProblemTime);
-                setLapCounter(savedState.lapCounter);
-                setTimeUp(savedState.timeUp);
-                setIsPaused(true); // 항상 일시정지 상태로 복원
-
-                // 타이머 기준값을 현재 시각 기준으로 보정
-                const now = performance.now();
-                const startTimeOffset = now - (savedState.totalElapsedTime * 1000);
-                setStartTime(startTimeOffset);
-                setLastLapTimestamp(startTimeOffset + (savedState.lastLapTimestamp - savedState.startTime));
-                setPauseTime(now);
-
-                setFocusedQuestionNumber(savedState.focusedQuestionNumber);
-                setBatchMode(savedState.batchMode);
-                setBatchSelectedQuestions(new Set(savedState.batchSelectedQuestions));
-                examConfigRef.current = savedState.examConfig;
-                // 시험 설정값도 복원
-                setExamName(savedState.examName || '');
-                setStartQuestionStr(savedState.startQuestionStr);
-                setEndQuestionStr(savedState.endQuestionStr);
-                setTotalMinutesStr(savedState.totalMinutesStr);
-                setIsUnlimitedTime(savedState.isUnlimitedTime);
-                setSubmittedCorrectAnswers(savedState.submittedCorrectAnswers || {});
-                setGradingModalInputs(savedState.gradingModalInputs || {});
-                setGradingModalSubjective(new Set(savedState.gradingModalSubjective || []));
-
-                // Restore flags
-                setIsExamActive(savedState.isExamActive);
-                setShowReview(savedState.showReview);
-
-            } else {
-                localStorage.removeItem('examState');
-            }
-        }
-    }, []);
-
-
-    const setProblemRef = (qNum: number, el: HTMLDivElement | null) => {
-        problemRefs.current[qNum] = el;
-    };
-
+    useExamPersistence({
+        examSetup,
+        examSession,
+        timerState: timer,
+        examScreenState: {
+            isExamActive,
+            showReview,
+            focusedQuestionNumber: focusedQuestionNumber,
+        },
+        setState: restoreStateFromPersistence,
+        review: { ...review, setSubmittedCorrectAnswers }
+    });
+    
+    // --- Event Handlers ---
     const resetExamState = useCallback(() => {
         setIsExamActive(false);
         setShowReview(false);
-        setQuestions({});
-        setQuestionNumbers([]);
-        setSubjectiveInputs({});
-        setTotalElapsedTime(0);
-        setOverallTimeLeft(Infinity);
-        setCurrentProblemTime(0);
-        setFocusedQuestionNumber(null);
-        setBatchMode(false);
-        setBatchSelectedQuestions(new Set());
         setSetupError('');
-        setLapCounter(0);
-        setTimeUp(false);
-        setIsPaused(false);
         setIsGradingModalOpen(false);
         setSubmittedCorrectAnswers({});
-        setGradingModalInputs({});
-        setGradingModalSubjective(new Set());
-        if (typeof timerRef.current === 'number') {
-            cancelAnimationFrame(timerRef.current);
-            timerRef.current = undefined;
-        }
-        problemRefs.current = {};
-        localStorage.removeItem('examState');
-    }, []);
-
-    const handleFinishExam = useCallback(() => {
-        if (!isExamActive) return;
-        setIsExamActive(false);
-        setPauseTime(performance.now());
-        if (typeof timerRef.current === 'number') {
-            cancelAnimationFrame(timerRef.current);
-            timerRef.current = undefined;
-        }
-        if (overallTimeLeft <= 0 && !isUnlimitedTime) {
-            setTimeUp(true);
-        }
-        setShowReview(true);
-    }, [isExamActive, overallTimeLeft, isUnlimitedTime]);
-    
-    const handleTogglePause = useCallback(() => {
-        setIsPaused(prevPaused => {
-            if (prevPaused) { // Resuming
-                const pausedDuration = performance.now() - pauseTime;
-                setStartTime(prev => prev + pausedDuration);
-                setLastLapTimestamp(prev => prev + pausedDuration);
-            } else { // Pausing
-                setPauseTime(performance.now());
-            }
-            return !prevPaused;
-        });
-    }, [pauseTime]);
-
-    const handleJumpToQuestion = useCallback((questionNumber: number) => {
-        setFocusedQuestionNumber(questionNumber);
-        
-        const container = problemListContainerRef.current;
-        const targetElement = problemRefs.current[questionNumber];
-
-        if (container && targetElement) {
-            const containerRect = container.getBoundingClientRect();
-            const targetRect = targetElement.getBoundingClientRect();
-
-            const isVisible = targetRect.top >= containerRect.top && targetRect.bottom <= containerRect.bottom;
-            if(isVisible) return; // Don't scroll if already visible
-
-            const offset = targetElement.offsetTop - container.offsetTop;
-            container.scrollTo({
-                top: offset,
-                behavior: 'smooth',
-            });
-        }
-    }, []);
-
-    const findNextQuestion = useCallback((currentQNum: number): number | null => {
-        const currentIndex = questionNumbers.indexOf(currentQNum);
-        if (currentIndex > -1 && currentIndex < questionNumbers.length - 1) {
-            return questionNumbers[currentIndex + 1];
-        }
-        const firstUnanswered = questionNumbers.find(qNum => questions[qNum]?.attempts === 0 && qNum > currentQNum);
-        if(firstUnanswered) return firstUnanswered;
-        
-        const firstUnansweredFromStart = questionNumbers.find(qNum => questions[qNum]?.attempts === 0);
-        return firstUnansweredFromStart ?? null;
-    }, [questionNumbers, questions]);
+        grading.reset();
+        resetSession();
+        timer.reset();
+    }, [resetSession, timer, setIsGradingModalOpen, setSubmittedCorrectAnswers, grading]);
     
     const handleStartExam = useCallback(() => {
         const start = parseInt(startQuestionStr, 10);
@@ -275,10 +134,7 @@ const ExamScreen: React.FC = () => {
             return;
         }
         
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         resetExamState();
 
@@ -289,27 +145,16 @@ const ExamScreen: React.FC = () => {
             initialQuestions[i] = { number: i, solveTime: 0, answer: null, attempts: 0, solveEvents: [] };
         }
         
-        setQuestions(initialQuestions);
-        setQuestionNumbers(qNumbers);
-        
-        const firstQuestion = qNumbers[0];
-        setFocusedQuestionNumber(firstQuestion);
-        
-        examConfigRef.current = { totalMinutes, isUnlimited: isUnlimitedTime };
-        const totalSeconds = totalMinutes * 60;
-        setOverallTimeLeft(isUnlimitedTime ? Infinity : totalSeconds);
-        
-        const now = performance.now();
-        setStartTime(now);
-        setLastLapTimestamp(now);
-        setTimeUp(false);
+        examSession.setQuestions(initialQuestions);
+        examSession.setQuestionNumbers(qNumbers);
+        setFocusedQuestionNumber(qNumbers[0]);
 
         setIsExamActive(true);
-    }, [startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime, resetExamState]);
+        timer.start();
+    }, [startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime, resetExamState, timer, examSession, setFocusedQuestionNumber]);
     
     const handleContinueExam = useCallback(() => {
         setShowReview(false);
-        setIsExamActive(true);
     }, []);
     
     const handleRestartExam = useCallback(() => {
@@ -320,132 +165,26 @@ const ExamScreen: React.FC = () => {
         setShowRestartConfirm(false);
         setShowReview(false);
         resetExamState();
-        setShowShareModal(true);
     }, [resetExamState]);
 
-    const handleLap = useCallback((questionNumber: number, answer?: string) => {
-        if (!isExamActive) return;
-        
-        handleJumpToQuestion(questionNumber);
+    const handleLoadRecord = useCallback((record: ExamRecord) => {
+        const loadedQuestions = record.questions;
+        if (loadedQuestions.length === 0) return;
+        const firstQ = loadedQuestions[0];
+        const lastQ = loadedQuestions[loadedQuestions.length - 1];
+        setExamName(`(복원) ${record.name || '기록'}`);
+        setStartQuestionStr(String(firstQ.number));
+        setEndQuestionStr(String(lastQ.number));
+        const totalTimeInSeconds = loadedQuestions.reduce((acc, q) => acc + q.solveTime, 0);
+        setTotalMinutesStr(String(Math.round(totalTimeInSeconds / 60)));
+        alert('시험 기록을 설정창에 불러왔습니다. 내용을 확인하고 시험을 시작하세요.');
+    }, [setExamName, setStartQuestionStr, setEndQuestionStr, setTotalMinutesStr]);
 
-        if (batchMode) {
-            setBatchSelectedQuestions(prev => {
-                const newSet = new Set(prev);
-                if (newSet.has(questionNumber)) {
-                    newSet.delete(questionNumber);
-                } else {
-                    newSet.add(questionNumber);
-                }
-                return newSet;
-            });
-            if (answer !== undefined) {
-                 setQuestions(prev => ({
-                    ...prev,
-                    [questionNumber]: { ...prev[questionNumber], answer: answer === '' ? null : answer }
-                }));
-            }
-            return;
-        }
-        
-        const now = performance.now();
-        const timeToAdd = (now - lastLapTimestamp) / 1000;
-        const lapTimestamp = (now - startTime) / 1000;
-        const lapStartTime = lapTimestamp - timeToAdd;
-        
-        setQuestions(prevQuestions => {
-            const questionToUpdate = prevQuestions[questionNumber];
-            if (!questionToUpdate) return prevQuestions;
-
-            const newEvent: SolveEvent = { timestamp: lapTimestamp, duration: timeToAdd, answer };
-
-            return {
-                ...prevQuestions,
-                [questionNumber]: {
-                    ...questionToUpdate,
-                    solveTime: questionToUpdate.solveTime + timeToAdd,
-                    attempts: questionToUpdate.attempts + 1,
-                    answer: answer !== undefined ? (answer === '' ? null : answer) : questionToUpdate.answer,
-                    solveEvents: [...questionToUpdate.solveEvents, newEvent],
-                    startTime: lapStartTime
-                }
-            };
-        });
-        
-        setLastLapTimestamp(now);
-        setCurrentProblemTime(0);
-        setLapCounter(c => c + 1);
-        
-        const nextQuestionNumber = findNextQuestion(questionNumber);
-        if (nextQuestionNumber !== null) {
-            handleJumpToQuestion(nextQuestionNumber);
-        }
-
-    }, [isExamActive, batchMode, findNextQuestion, handleJumpToQuestion, lastLapTimestamp, startTime]);
-
-    const handleBatchRecord = useCallback(() => {
-        if (!isExamActive || batchSelectedQuestions.size === 0) return;
-
-        const now = performance.now();
-        const timeSinceLastLap = (now - lastLapTimestamp) / 1000;
-        const timePerQuestion = timeSinceLastLap / batchSelectedQuestions.size;
-        const lapTimestamp = (now - startTime) / 1000;
-        const lapStartTime = lapTimestamp - timeSinceLastLap;
-        
-        setQuestions(prev => {
-            const newQuestions = { ...prev };
-            const newEvent: Omit<SolveEvent, 'answer'> = { timestamp: lapTimestamp, duration: timePerQuestion };
-            batchSelectedQuestions.forEach(qNum => {
-                const existingQ = newQuestions[qNum];
-                if (existingQ) {
-                    newQuestions[qNum] = {
-                        ...existingQ,
-                        solveTime: existingQ.solveTime + timePerQuestion,
-                        attempts: existingQ.attempts + 1,
-                        solveEvents: [...existingQ.solveEvents, { ...newEvent, answer: existingQ.answer ?? undefined }],
-                        startTime: lapStartTime
-                    };
-                }
-            });
-            return newQuestions;
-        });
-
-        setLastLapTimestamp(now);
-        setCurrentProblemTime(0);
-        setBatchSelectedQuestions(new Set());
-        setBatchMode(false);
-        setLapCounter(c => c + 1);
-    }, [isExamActive, batchSelectedQuestions, lastLapTimestamp, startTime]);
-
-    const handleResetCurrentTime = useCallback(() => {
-        if (!isExamActive) return;
-        setLastLapTimestamp(performance.now());
-        setCurrentProblemTime(0);
-    }, [isExamActive]);
-    
-    const handleQuestionFocus = useCallback((questionNumber: number) => {
-        setFocusedQuestionNumber(questionNumber);
-    }, []);
-
-    const handleGradeSubmit = (submittedAnswers: Record<number, string>) => {
-        setSubmittedCorrectAnswers(submittedAnswers);
-        setIsGradingModalOpen(false);
-    };
-
-    const handleLoadBookmark = (bookmarkQuestions: Question[]) => {
-        // 즐겨찾기에서 불러온 데이터로 상태 복원
-        const questionNumbers = bookmarkQuestions.map(q => q.number);
-        setQuestions(bookmarkQuestions.reduce((acc, q) => ({ ...acc, [q.number]: q }), {}));
-        setQuestionNumbers(questionNumbers);
-        setFocusedQuestionNumber(questionNumbers[0]);
-        setIsExamActive(false);
-        setShowReview(true);
-    };
 
     const questionsWithGrading = React.useMemo(() => {
         if (Object.keys(submittedCorrectAnswers).length === 0) {
             return Object.values(questions);
         }
-
         return Object.values(questions).map(q => {
             const correctAnswer = submittedCorrectAnswers[q.number];
             let isCorrect: boolean | undefined = undefined;
@@ -458,51 +197,16 @@ const ExamScreen: React.FC = () => {
         });
     }, [questions, submittedCorrectAnswers]);
 
-
-    useEffect(() => {
-        if (!isExamActive || isPaused) {
-            if (timerRef.current) {
-                cancelAnimationFrame(timerRef.current);
-                timerRef.current = undefined;
-            }
-            return;
-        };
-
-        const tick = (timestamp: number) => {
-            const totalElapsed = (timestamp - startTime) / 1000;
-            const currentProblemElapsed = (timestamp - lastLapTimestamp) / 1000;
-
-            setTotalElapsedTime(totalElapsed);
-            setCurrentProblemTime(currentProblemElapsed);
-            
-            if (!examConfigRef.current.isUnlimited) {
-                const timeLeft = (examConfigRef.current.totalMinutes * 60) - totalElapsed;
-                setOverallTimeLeft(timeLeft);
-                if (timeLeft <= 0 && !timeUp) {
-                   handleFinishExam();
-                   return; // Stop the loop
-                }
-            }
-            timerRef.current = requestAnimationFrame(tick);
-        };
-
-        timerRef.current = requestAnimationFrame(tick);
-        return () => {
-            if (typeof timerRef.current === 'number') cancelAnimationFrame(timerRef.current);
-        };
-    }, [isExamActive, isPaused, handleFinishExam, timeUp, startTime, lastLapTimestamp]);
-
+    // Keyboard shortcut handler
     useEffect(() => {
         const handleGlobalKeyDown = (e: KeyboardEvent) => {
-            if (!isExamActive || isPaused || showReview || isGradingModalOpen) {
+            if (!isExamActive || timer.isPaused || showReview || isGradingModalOpen) {
                 return;
             }
-
             const target = e.target as HTMLElement;
             if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
                 return;
             }
-
             if (['1', '2', '3', '4', '5'].includes(e.key)) {
                 e.preventDefault();
                 if (focusedQuestionNumber) {
@@ -510,22 +214,18 @@ const ExamScreen: React.FC = () => {
                 }
             }
         };
-
         window.addEventListener('keydown', handleGlobalKeyDown);
-
         return () => {
             window.removeEventListener('keydown', handleGlobalKeyDown);
         };
-    }, [isExamActive, isPaused, showReview, isGradingModalOpen, focusedQuestionNumber, handleLap]);
-
-
-    const focusedQuestion = focusedQuestionNumber ? questions[focusedQuestionNumber] : null;
+    }, [isExamActive, timer.isPaused, showReview, isGradingModalOpen, focusedQuestionNumber, handleLap]);
 
     return (
         <>
             {showReview && <ReviewModal 
                 questions={questionsWithGrading} 
                 examName={examName}
+                onExamNameChange={setExamName}
                 onContinue={handleContinueExam} 
                 onRestart={handleRestartExam} 
                 onGradeRequest={() => setIsGradingModalOpen(true)}
@@ -534,13 +234,9 @@ const ExamScreen: React.FC = () => {
             <GradingModal
                 isOpen={isGradingModalOpen}
                 onClose={() => setIsGradingModalOpen(false)}
-                onSubmit={handleGradeSubmit}
                 startProblem={questionNumbers.length > 0 ? questionNumbers[0] : parseInt(startQuestionStr) || 1}
                 endProblem={questionNumbers.length > 0 ? questionNumbers[questionNumbers.length - 1] : parseInt(endQuestionStr) || 45}
-                answers={gradingModalInputs}
-                onAnswerChange={setGradingModalInputs}
-                subjectiveProblems={gradingModalSubjective}
-                onSubjectiveChange={setGradingModalSubjective}
+                grading={grading}
             />
 
             <StatusPanelModal
@@ -553,43 +249,53 @@ const ExamScreen: React.FC = () => {
                 lapCounter={lapCounter}
             />
 
-            <BookmarkModal
-                isOpen={isBookmarkModalOpen}
-                onClose={() => setIsBookmarkModalOpen(false)}
-                onLoadBookmark={handleLoadBookmark}
+            <RecordModal
+                isOpen={examRecord.isRecordModalOpen}
+                onClose={() => examRecord.setIsRecordModalOpen(false)}
+                onLoadRecord={handleLoadRecord}
             />
 
-            {/* 새로운 시험 시작 확인 모달 */}
-            {showRestartConfirm && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setShowRestartConfirm(false)}>
-                    <div className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6" onClick={e => e.stopPropagation()}>
-                        <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 mb-3 sm:mb-4">
-                            새로운 시험을 시작하시겠습니까?
-                        </h3>
-                        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mb-4 sm:mb-6">
-                            현재 시험 기록이 모두 삭제됩니다. 계속하시겠습니까?
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                            <Button 
-                                onClick={() => setShowRestartConfirm(false)} 
-                                variant="secondary" 
-                                className="flex-1"
-                            >
-                                취소
+            <ConfirmModal
+                isOpen={showRestartConfirm}
+                onClose={() => setShowRestartConfirm(false)}
+                onConfirm={handleConfirmRestart}
+                title="새로운 시험 시작"
+                message="현재 진행 중인 시험이 종료되고 모든 기록이 초기화됩니다. 정말 새로운 시험을 시작하시겠습니까?"
+            >
+                <div className="space-y-4">
+                    <hr className="border-slate-200 dark:border-slate-700" />
+                    <div className="flex flex-col gap-2">
+                        {canInstall && (
+                            <Button variant="outline" onClick={triggerInstallPrompt}>
+                                📲 홈 화면에 추가
                             </Button>
-                            <Button 
-                                onClick={handleConfirmRestart} 
-                                variant="primary" 
-                                className="flex-1"
-                            >
-                                새로운 시험 시작
-                            </Button>
-                        </div>
+                        )}
+                         <Button
+                            variant="outline"
+                            onClick={async () => {
+                                const shareText = `${siteConfig.title}\n\n${siteConfig.description}\n\n${siteConfig.domain}`;
+                                if (navigator.share) {
+                                    try {
+                                        await navigator.share({
+                                            title: siteConfig.title,
+                                            text: shareText,
+                                            url: siteConfig.domain,
+                                        });
+                                    } catch (error) {
+                                        /* User cancelled share */
+                                    }
+                                } else {
+                                    await navigator.clipboard.writeText(shareText);
+                                    alert('공유 텍스트가 클립보드에 복사되었습니다.');
+                                }
+                            }}
+                        >
+                            🔗 서비스 공유하기
+                        </Button>
                     </div>
                 </div>
-            )}
+            </ConfirmModal>
 
-             {/* Mobile: Toggle button - now outside the grid */}
             <div className="lg:hidden mb-8">
                 <Button 
                     variant="secondary" 
@@ -601,7 +307,6 @@ const ExamScreen: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-                {/* Desktop: Always visible on the left */}
                 <div className="hidden lg:block lg:col-span-2 sticky top-8">
                     <Card>
                         <LiveStatusPanel
@@ -615,129 +320,28 @@ const ExamScreen: React.FC = () => {
                 </div>
 
                 <div className="lg:col-span-3 space-y-8">
-                    {isExamActive && (
-                        <Card className="sticky top-8 z-10 bg-slate-900/80 dark:bg-slate-950/80 backdrop-blur-sm">
-                            <TimerDisplay 
-                                examName={examName}
-                                isUnlimited={isUnlimitedTime}
-                                timeLeft={overallTimeLeft}
-                                totalElapsed={totalElapsedTime}
-                                currentProblem={currentProblemTime}
-                                isExamActive={isExamActive}
-                                isPaused={isPaused}
-                                timeUp={timeUp}
-                                onTogglePause={handleTogglePause}
-                                onResetTime={handleResetCurrentTime}
-                                onFinish={handleFinishExam}
-                                startQuestion={startQuestionStr}
-                                endQuestion={endQuestionStr}
-                                totalMinutes={totalMinutesStr}
-                            />
-                        </Card>
-                    )}
-
-                    {!isExamActive && (
-                        <>
-                        <Card>
-                            <SetupPanel
-                                    examName={examName}
-                                    setExamName={setExamName}
-                                startQuestion={startQuestionStr}
-                                setStartQuestion={setStartQuestionStr}
-                                endQuestion={endQuestionStr}
-                                setEndQuestion={setEndQuestionStr}
-                                totalMinutes={totalMinutesStr}
-                                setTotalMinutes={setTotalMinutesStr}
-                                isUnlimited={isUnlimitedTime}
-                                setIsUnlimited={setIsUnlimitedTime}
-                                isExamActive={isExamActive}
+                    {!isExamActive ? (
+                        <ExamSetupView 
+                            examSetup={examSetup}
                                 onStart={handleStartExam}
+                            onShowRecords={() => examRecord.setIsRecordModalOpen(true)}
                                 error={setupError}
                             />
-                        </Card>
-                            
-                            <Card>
-                                <div className="p-6">
-                                    <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">
-                                        저장된 시험 기록
-                                    </h3>
-                                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                                        이전에 저장한 시험 기록을 확인할 수 있습니다.
-                                    </p>
-                                    <Button 
-                                        onClick={() => setIsBookmarkModalOpen(true)}
-                                        variant="secondary"
-                                        className="w-full"
-                                    >
-                                        시험 기록 목록 보기
-                                    </Button>
-                                </div>
-                            </Card>
-                        </>
-                    )}
-
-                    {isExamActive && focusedQuestion && (
-                         <Card>
-                           <DynamicMarkingWindow
-                               key={`focused-${focusedQuestion.number}`}
-                               isExamActive={isExamActive}
-                               question={focusedQuestion}
-                               batchSelected={batchSelectedQuestions.has(focusedQuestion.number)}
-                               onLap={handleLap}
-                               subjectiveInput={subjectiveInputs[focusedQuestion.number] ?? ''}
-                               onSubjectiveInputChange={(value) => setSubjectiveInputs(prev => ({...prev, [focusedQuestion.number]: value}))}
-                           />
-                         </Card>
-                    )}
-
-                    {isExamActive && (
-                        <QuickNav 
-                            questionNumbers={questionNumbers} 
-                            onJumpTo={handleJumpToQuestion}
-                            focusedQuestionNumber={focusedQuestionNumber}
+                    ) : (
+                        <ActiveExamView
+                            examName={examName}
+                            isUnlimitedTime={isUnlimitedTime}
+                            startQuestionStr={startQuestionStr}
+                            endQuestionStr={endQuestionStr}
+                            totalMinutesStr={totalMinutesStr}
+                            timer={timer}
+                            examSession={examSession}
+                            onFinishExam={handleFinishExam}
                         />
-                    )}
-
-                    <Card className="space-y-4">
-                        <ControlToolbar
-                            isExamActive={isExamActive}
-                            batchMode={batchMode}
-                            onBatchModeChange={(enabled) => {
-                                setBatchMode(enabled);
-                                if (!enabled) {
-                                    setBatchSelectedQuestions(new Set());
-                                }
-                            }}
-                            onBatchRecord={handleBatchRecord}
-                            isBatchRecordDisabled={!isExamActive || !batchMode || batchSelectedQuestions.size === 0}
-                        />
-                       
-                       <div className="border-t border-slate-700 pt-4">
-                           {isExamActive ? (
-                             <div>
-                               <h3 className="text-lg font-bold mb-3">전체 문제 목록</h3>
-                               <ProblemList
-                                    ref={problemListContainerRef}
-                                    isExamActive={isExamActive}
-                                    questionNumbers={questionNumbers}
-                                    questions={questions}
-                                    batchSelectedQuestions={batchSelectedQuestions}
-                                    subjectiveInputs={subjectiveInputs}
-                                    onLap={handleLap}
-                                    onSubjectiveInputChange={(qNum, val) => setSubjectiveInputs(prev => ({...prev, [qNum]: val}))}
-                                    setProblemRef={setProblemRef}
-                                    onQuestionFocus={handleQuestionFocus}
-                               />
-                             </div>
-                           ) : (
-                             <div className="text-center text-slate-500 p-8">시험을 설정하고 시작하세요.</div>
                            )}
-                       </div>
-                    </Card>
                 </div>
             </div>
             
-            {/* 공유 유도 섹션 */}
             {!isExamActive && (
                 <div className="mt-8">
                     <Card>

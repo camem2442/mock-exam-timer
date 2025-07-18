@@ -4,20 +4,20 @@ export const siteConfig = {
     domain: 'https://www.mocktimer.kr',
     
     // 사이트 메타 정보
-    title: '모의고사 타이머 & 분석기',
-    description: '수능, 공무원시험, LEET, CPA 등 다양한 시험을 위한 문제별 풀이 시간 측정 및 분석 도구입니다.',
-    keywords: '모의고사 타이머, 시험 타이머, 문제풀이 시간, 수능 타이머, 공무원시험 타이머, LEET 타이머, CPA 타이머, 학습 분석, 시간 관리, 시험 준비, 수험생 도구',
+    title: 'MockTimer | 모의고사 타이머 & 채점·분석기',
+    description: '모의고사 타이머 & 채점·분석기 : 시간 관리 능력을 극대화하여 최고의 성과를 만드세요.',
+    keywords: 'MockTimer, 목타이머, 모의고사 타이머, 시험 타이머, 문제풀이 시간, 수능 타이머, 공무원시험 타이머, LEET 타이머, CPA 타이머, 학습 분석, 시간 관리, 시험 준비, 수험생 도구',
     
     // 소셜 미디어 설정
     social: {
         twitter: {
             card: 'summary_large_image',
-            title: '모의고사 타이머 & 분석기',
-            description: '문제별 풀이 시간을 측정하고 분석하여 효율적인 시험 준비를 도와주는 도구입니다.'
+            title: 'MockTimer | 모의고사 타이머 & 채점·분석기',
+            description: '시간 관리 능력을 극대화하여 최고의 성과를 만드세요.'
         },
         og: {
-            title: '모의고사 타이머 & 분석기',
-            description: '수능, 공무원시험, LEET, CPA 등 다양한 시험을 위한 문제별 풀이 시간 측정 및 분석 도구입니다.',
+            title: 'MockTimer | 모의고사 타이머 & 채점·분석기',
+            description: '모의고사 타이머 & 채점·분석기 : 시간 관리 능력을 극대화하여 최고의 성과를 만드세요.',
             type: 'website',
             locale: 'ko_KR',
             image: 'https://www.mocktimer.kr/og-image.png',
@@ -27,7 +27,7 @@ export const siteConfig = {
     },
     
     // 공유 텍스트 템플릿
-    shareText: '모의고사 타이머 & 분석기 - 문제별 풀이 시간을 측정하고 분석하여 효율적인 시험 준비를 도와주는 도구입니다.',
+    shareText: 'MockTimer - 모의고사 타이머 & 채점·분석기 : 시간 관리 능력을 극대화하여 최고의 성과를 만드세요.',
     
     // 문의 정보
     contact: {
@@ -37,13 +37,13 @@ export const siteConfig = {
     // 카피라이트 정보
     copyright: {
         year: 2025,
-        name: '모의고사 타이머 & 분석기'
+        name: 'MockTimer'
     },
     
     // SEO 추가 정보
     seo: {
-        author: '모의고사 타이머 & 분석기',
-        publisher: '모의고사 타이머 & 분석기',
+        author: 'MockTimer',
+        publisher: 'MockTimer',
         datePublished: '2025-7-15',
         dateModified: '2025-07-17',
         version: '1.2.0',

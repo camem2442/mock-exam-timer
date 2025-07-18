@@ -2,30 +2,33 @@ import React, { type FC, useRef, useEffect } from 'react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { type useGrading } from '../../hooks/useGrading';
+
+type GradingHookReturn = ReturnType<typeof useGrading>;
 
 interface GradingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (answers: Record<number, string>) => void;
   startProblem: number;
   endProblem: number;
-  answers: Record<number, string>;
-  onAnswerChange: (answers: Record<number, string>) => void;
-  subjectiveProblems: Set<number>;
-  onSubjectiveChange: (subjectiveProblems: Set<number>) => void;
+  grading: GradingHookReturn;
 }
 
 export const GradingModal: FC<GradingModalProps> = ({
   isOpen,
   onClose,
-  onSubmit,
   startProblem,
   endProblem,
-  answers,
-  onAnswerChange,
-  subjectiveProblems,
-  onSubjectiveChange,
+  grading,
 }) => {
+  const { 
+    answers, 
+    subjectiveProblems, 
+    handleAnswerChange, 
+    handleToggleSubjective, 
+    handleSubmit 
+  } = grading;
+
   const inputRefs = useRef<Record<number, HTMLInputElement | null>>({});
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
@@ -34,42 +37,33 @@ export const GradingModal: FC<GradingModalProps> = ({
     (_, i) => startProblem + i
   );
 
-  const handleAnswerChange = (problemNumber: number, value: string) => {
-    if (!subjectiveProblems.has(problemNumber) && value.length > 1) {
-       onAnswerChange({ ...answers, [problemNumber]: value.slice(-1) });
-       return;
-    }
+  const focusNextInput = (currentProblemNumber: number) => {
+    const currentIndex = problemNumbers.indexOf(currentProblemNumber);
+    if (currentIndex === -1) return;
 
-    onAnswerChange({ ...answers, [problemNumber]: value });
-
-    if (!subjectiveProblems.has(problemNumber) && /^\d$/.test(value)) {
-        const currentIndex = problemNumbers.indexOf(problemNumber);
-        if (currentIndex === -1) return;
-
-        let nextIndex = currentIndex + 1;
-        while(nextIndex < problemNumbers.length) {
-            const nextProblemNumber = problemNumbers[nextIndex];
-            if (!subjectiveProblems.has(nextProblemNumber)) {
-                inputRefs.current[nextProblemNumber]?.focus();
-                return;
-            }
-            nextIndex++;
+    let nextIndex = currentIndex + 1;
+    while(nextIndex < problemNumbers.length) {
+        const nextProblemNumber = problemNumbers[nextIndex];
+        if (!subjectiveProblems.has(nextProblemNumber)) {
+            inputRefs.current[nextProblemNumber]?.focus();
+            return;
         }
+        nextIndex++;
     }
   };
 
-  const handleToggleSubjective = (problemNumber: number) => {
-    const newSet = new Set(subjectiveProblems);
-    if (newSet.has(problemNumber)) {
-      newSet.delete(problemNumber);
-    } else {
-      newSet.add(problemNumber);
-    }
-    onSubjectiveChange(newSet);
+  const handleLocalAnswerChange = (problemNumber: number, value: string) => {
+    handleAnswerChange(problemNumber, value, focusNextInput);
   };
 
-  const handleSubmit = () => {
-    onSubmit(answers);
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 150);
+  }
+
+  const handleModalSubmit = () => {
+    handleSubmit();
     onClose();
   };
 
@@ -82,10 +76,15 @@ export const GradingModal: FC<GradingModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="grading-modal-title"
+    >
       <div className={`bg-white dark:bg-slate-900 rounded-lg shadow-xl w-full max-h-[90vh] min-w-0 flex flex-col modal-container ${isDesktop ? 'max-w-7xl' : 'max-w-2xl'}`}>
         <div className="p-4 border-b dark:border-slate-700">
-          <h2 className="text-lg sm:text-xl font-bold">정답 입력</h2>
+          <h2 id="grading-modal-title" className="text-lg sm:text-xl font-bold">정답 입력</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
              객관식은 숫자만 입력하면 다음 문제로 자동 이동합니다. 주관식으로 체크한 문제는 건너뛰며, 직접 입력할 수 있습니다.
           </p>
@@ -127,10 +126,12 @@ export const GradingModal: FC<GradingModalProps> = ({
                         <Input
                           ref={el => { inputRefs.current[num] = el; }}
                           id={`answer-${num}`}
+                          aria-label={`${num}번 정답`}
                           type="tel"
                           inputMode="numeric"
                           value={answers[num] || ''}
-                          onChange={(e) => handleAnswerChange(num, e.target.value)}
+                          onChange={(e) => handleLocalAnswerChange(num, e.target.value)}
+                          onFocus={handleFocus}
                           className="w-full text-center text-base"
                         />
                       </td>
@@ -144,7 +145,7 @@ export const GradingModal: FC<GradingModalProps> = ({
         </div>
         <div className="p-4 border-t dark:border-slate-700 flex justify-end gap-2">
           <Button variant="secondary" onClick={onClose} className="text-sm px-3 py-2">취소</Button>
-          <Button onClick={handleSubmit} className="text-sm px-3 py-2">채점하기</Button>
+          <Button onClick={handleModalSubmit} className="text-sm px-3 py-2">채점하기</Button>
         </div>
       </div>
     </div>

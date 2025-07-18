@@ -19,7 +19,6 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
     const [showPreviewModal, setShowPreviewModal] = useState(false);
     
     // Share options state
-    const [shareExamName, setShareExamName] = useState(examName);
     const [includeGrading, setIncludeGrading] = useState(true);
     const [blurAnswer, setBlurAnswer] = useState(false);
 
@@ -88,7 +87,7 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     questions, 
-                    examName: shareExamName, 
+                    examName: examName, // Use prop directly
                     totalMinutes, 
                     includeGrading, 
                     blurAnswer 
@@ -124,8 +123,8 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
         try {
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [generatedImageFile] })) {
                 await navigator.share({
-                    title: `${shareExamName} 시험 결과 - ${siteConfig.title}`,
-                    text: `제 ${shareExamName} 시험 결과를 확인해보세요!`,
+                    title: `${examName} 시험 결과 - ${siteConfig.title}`,
+                    text: `${examName} 시험 결과 - ${siteConfig.title}`,
                     url: shareUrl,
                     files: [generatedImageFile],
                 });
@@ -133,7 +132,7 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                 const downloadUrl = window.URL.createObjectURL(generatedImageFile);
                 const a = document.createElement('a');
                 a.href = downloadUrl;
-                a.download = `mock-exam-result-${shareExamName || 'image'}.png`;
+                a.download = `mock-exam-result-${examName || 'image'}.png`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -166,7 +165,7 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                 <div ref={imageRef}>
                     <ResultImage
                         questions={questions}
-                        examName={shareExamName}
+                        examName={examName} // Use prop directly
                         totalMinutes={totalMinutes}
                         includeGrading={includeGrading}
                         blurAnswer={blurAnswer}
@@ -178,8 +177,6 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                 isOpen={showSettingsModal}
                 onClose={handleCloseSettings}
                 onPreview={handlePreview}
-                shareExamName={shareExamName}
-                setShareExamName={setShareExamName}
                 includeGrading={includeGrading}
                 setIncludeGrading={setIncludeGrading}
                 blurAnswer={blurAnswer}

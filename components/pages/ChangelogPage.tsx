@@ -21,6 +21,15 @@ export const ChangelogPage: React.FC = () => {
                             <div className="space-y-6">
                                 <div className="border-l-4 border-primary-500 pl-6">
                                     <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                        v1.3.0 (2025년 7월 19일)
+                                    </h3>
+                                    <ul className="list-disc space-y-2 pl-6 text-lg">
+                                        <li className="pl-2">PWA 지원 및 '홈 화면에 추가' 기능</li>
+                                        <li className="pl-2">결과 이미지/링크 공유 기능</li>
+                                    </ul>
+                                </div>
+                                <div className="border-l-4 border-slate-300 dark:border-slate-600 pl-6">
+                                    <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">
                                         v1.2.0 (2025년 7월 17일)
                                     </h3>
                                     <ul className="list-disc space-y-2 pl-6 text-lg">

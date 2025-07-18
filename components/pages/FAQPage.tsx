@@ -33,11 +33,11 @@ export const FAQPage: React.FC = () => {
                                 </p>
                             </div>
                             <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-                                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">
                                     Q. 시험 기록은 어떻게 저장되나요?
                                 </h3>
                                 <p className="text-lg">
-                                    A. 브라우저의 로컬 스토리지에 저장되며, CSV 형태로 내보내기할 수 있습니다. 언제든지 이전 기록을 확인하고 분석할 수 있습니다.
+                                    A. 시험 기록은 기본적으로 사용자의 브라우저(로컬 스토리지)에 저장됩니다. 또한, '결과 공유하기' 기능을 사용하면 해당 결과가 저희 데이터베이스에 익명으로 저장되어 영구적인 링크가 생성됩니다. 로컬 기록은 CSV 형태로 내보내기하여 백업할 수 있습니다.
                                 </p>
                             </div>
                             <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">

@@ -9,6 +9,7 @@ interface TimerDisplayProps {
     timeLeft: number;
     totalElapsed: number;
     currentProblem: number;
+    overtime: number;
     isExamActive: boolean;
     isPaused: boolean;
     timeUp: boolean;
@@ -20,8 +21,8 @@ interface TimerDisplayProps {
     totalMinutes: string;
 }
 
-const TimerDisplay: React.FC<TimerDisplayProps> = ({ examName, isUnlimited, timeLeft, totalElapsed, currentProblem, isExamActive, isPaused, timeUp, onTogglePause, onResetTime, onFinish, startQuestion, endQuestion, totalMinutes }) => {
-    const displayTime = timeUp ? Math.abs(timeLeft) : timeLeft;
+const TimerDisplay: React.FC<TimerDisplayProps> = ({ examName, isUnlimited, timeLeft, totalElapsed, currentProblem, overtime, isExamActive, isPaused, timeUp, onTogglePause, onResetTime, onFinish, startQuestion, endQuestion, totalMinutes }) => {
+    const displayTime = timeUp ? overtime : timeLeft;
 
     return (
         <div className="text-center space-y-4">

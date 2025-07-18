@@ -41,12 +41,15 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions }
     // 분 단위만 표시하는 포맷터
     const formatMinute = (sec: number) => `${Math.floor(sec / 60)}분`;
 
+    // 데이터 포인트 수에 따라 막대 너비를 동적으로 설정
+    const barSize = solveOrderData.length < 10 ? 40 : undefined;
+
     return (
         <div className="w-full h-64">
             <Recharts.ResponsiveContainer width="100%" height="100%">
                 <Recharts.ComposedChart
                     data={solveOrderData}
-                    margin={{ top: 10, right: 30, left: 0, bottom: 10 }}
+                    margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
                 >
                     <Recharts.CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                     <Recharts.XAxis 
@@ -86,6 +89,7 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions }
                         fill="#3b82f6" 
                         isAnimationActive={false} 
                         radius={[2, 2, 0, 0]}
+                        maxBarSize={barSize}
                     />
                     <Recharts.Line 
                         yAxisId="right" 

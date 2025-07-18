@@ -1,55 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { type Question } from '../types';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
 import { formatTime } from '../utils/formatters';
 import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../utils/exportUtils';
+import { useExamRecord, type ExamRecord } from '../hooks/useExamRecord';
 
-interface BookmarkData {
-    id: number;
-    name?: string; // 시험 이름 (선택적)
-    date: string;
-    questions: Question[];
-    summary: string;
-}
-
-interface BookmarkModalProps {
+interface RecordModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onLoadBookmark: (questions: Question[]) => void;
+    onLoadRecord: (record: ExamRecord) => void;
 }
 
-const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBookmark }) => {
-    const [bookmarks, setBookmarks] = useState<BookmarkData[]>([]);
+const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord }) => {
+    const { records, updateRecordName, deleteRecord } = useExamRecord();
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editingName, setEditingName] = useState<string>('');
 
-    useEffect(() => {
-        if (isOpen) {
-            const savedBookmarks = JSON.parse(localStorage.getItem('examBookmarks') || '[]');
-            setBookmarks(savedBookmarks);
-        }
-    }, [isOpen]);
-
-    const handleDeleteBookmark = (id: number) => {
-        const updatedBookmarks = bookmarks.filter(b => b.id !== id);
-        localStorage.setItem('examBookmarks', JSON.stringify(updatedBookmarks));
-        setBookmarks(updatedBookmarks);
-    };
-
-    const handleStartEdit = (bookmark: BookmarkData) => {
-        setEditingId(bookmark.id);
-        setEditingName(bookmark.name || '');
+    const handleStartEdit = (record: ExamRecord) => {
+        setEditingId(record.id);
+        setEditingName(record.name || '');
     };
 
     const handleSaveEdit = () => {
         if (!editingId) return;
-        
-        const updatedBookmarks = bookmarks.map(b => 
-            b.id === editingId ? { ...b, name: editingName.trim() } : b
-        );
-        localStorage.setItem('examBookmarks', JSON.stringify(updatedBookmarks));
-        setBookmarks(updatedBookmarks);
+        updateRecordName(editingId, editingName);
         setEditingId(null);
         setEditingName('');
     };
@@ -59,18 +34,18 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
         setEditingName('');
     };
 
-    const handleLoadBookmark = (bookmark: BookmarkData) => {
-        onLoadBookmark(bookmark.questions);
+    const handleLoadRecord = (record: ExamRecord) => {
+        onLoadRecord(record);
         onClose();
     };
 
-    const handleExportBookmark = async (bookmark: BookmarkData) => {
-        const totalTime = bookmark.questions.reduce((sum, q) => sum + q.solveTime, 0);
+    const handleExportRecord = async (record: ExamRecord) => {
+        const totalTime = record.questions.reduce((sum, q) => sum + q.solveTime, 0);
         const exportData: ExportData = {
-            questions: bookmark.questions,
+            questions: record.questions,
             totalTime,
-            totalQuestions: bookmark.questions.length,
-            date: new Date(bookmark.date).toLocaleString('ko-KR')
+            totalQuestions: record.questions.length,
+            date: new Date(record.date).toLocaleString('ko-KR')
         };
 
         const csvData = generateCSV(exportData);
@@ -83,21 +58,23 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
         }
     };
 
-    const handleDownloadBookmarkCSV = (bookmark: BookmarkData) => {
-        const totalTime = bookmark.questions.reduce((sum, q) => sum + q.solveTime, 0);
+    const handleDownloadRecordCSV = (record: ExamRecord) => {
+        const totalTime = record.questions.reduce((sum, q) => sum + q.solveTime, 0);
         const exportData: ExportData = {
-            questions: bookmark.questions,
+            questions: record.questions,
             totalTime,
-            totalQuestions: bookmark.questions.length,
-            date: new Date(bookmark.date).toLocaleString('ko-KR')
+            totalQuestions: record.questions.length,
+            date: new Date(record.date).toLocaleString('ko-KR')
         };
 
         const csvData = generateCSV(exportData);
-        const filename = `시험기록_${new Date(bookmark.date).toISOString().split('T')[0]}.csv`;
+        const filename = `시험기록_${new Date(record.date).toISOString().split('T')[0]}.csv`;
         downloadCSV(csvData, filename);
     };
 
     if (!isOpen) return null;
+
+    const recordList = Object.values(records);
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
@@ -113,16 +90,16 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                 </header>
                 
                 <main className="overflow-y-auto overflow-x-hidden p-4 sm:p-6 space-y-4">
-                    {bookmarks.length === 0 ? (
+                    {recordList.length === 0 ? (
                         <div className="text-center text-slate-500 p-8">
                             저장된 시험 기록이 없습니다.
                         </div>
                     ) : (
-                        bookmarks.map((bookmark) => (
-                            <Card key={bookmark.id} className="p-4">
+                        recordList.map((record) => (
+                            <Card key={record.id} className="p-4">
                                 <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                     <div className="flex-1 w-full">
-                                        {editingId === bookmark.id ? (
+                                        {editingId === record.id ? (
                                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2">
                                                 <input
                                                     type="text"
@@ -159,10 +136,10 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                         ) : (
                                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2">
                                                 <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base">
-                                                    {bookmark.name || '이름 없는 시험'}
+                                                    {record.name || '이름 없는 시험'}
                                                 </h3>
                                                 <button
-                                                    onClick={() => handleStartEdit(bookmark)}
+                                                    onClick={() => handleStartEdit(record)}
                                                     className="opacity-50 hover:opacity-100 transition-opacity p-1"
                                                     title="이름 변경"
                                                 >
@@ -173,16 +150,16 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                             </div>
                                         )}
                                         <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
-                                            {new Date(bookmark.date).toLocaleString('ko-KR')} • {bookmark.summary}
+                                            {new Date(record.date).toLocaleString('ko-KR')} • {record.summary}
                                         </p>
                                         <div className="text-xs text-slate-500">
-                                            총 소요시간: {formatTime(bookmark.questions.reduce((sum, q) => sum + q.solveTime, 0))}
+                                            총 소요시간: {formatTime(record.questions.reduce((sum, q) => sum + q.solveTime, 0))}
                                         </div>
                                     </div>
                                     <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                                         <div className="flex gap-2">
                                             <Button 
-                                                onClick={() => handleLoadBookmark(bookmark)}
+                                                onClick={() => handleLoadRecord(record)}
                                                 variant="primary"
                                                 size="sm"
                                                 className="flex-1 sm:flex-none text-xs sm:text-sm"
@@ -190,7 +167,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                                 불러오기
                                             </Button>
                                             <Button 
-                                                onClick={() => handleDeleteBookmark(bookmark.id)}
+                                                onClick={() => deleteRecord(record.id)}
                                                 variant="danger"
                                                 size="sm"
                                                 className="flex-1 sm:flex-none text-xs sm:text-sm"
@@ -200,7 +177,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                         </div>
                                         <div className="flex gap-2">
                                             <Button 
-                                                onClick={() => handleExportBookmark(bookmark)}
+                                                onClick={() => handleExportRecord(record)}
                                                 variant="secondary"
                                                 size="sm"
                                                 className="flex-1 sm:flex-none text-xs sm:text-sm"
@@ -208,7 +185,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
                                                 CSV 복사
                                             </Button>
                                             <Button 
-                                                onClick={() => handleDownloadBookmarkCSV(bookmark)}
+                                                onClick={() => handleDownloadRecordCSV(record)}
                                                 variant="secondary"
                                                 size="sm"
                                                 className="flex-1 sm:flex-none text-xs sm:text-sm"
@@ -233,4 +210,4 @@ const BookmarkModal: React.FC<BookmarkModalProps> = ({ isOpen, onClose, onLoadBo
     );
 };
 
-export default BookmarkModal; 
+export default RecordModal; 

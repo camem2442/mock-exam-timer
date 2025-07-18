@@ -5,9 +5,10 @@ import { type Question } from '../../types';
 interface FinalAnswerSheetProps {
     questions: Question[];
     blurAnswer?: boolean;
+    forceCols?: number;
 }
 
-const FinalAnswerSheet: React.FC<FinalAnswerSheetProps> = ({ questions, blurAnswer }) => {
+const FinalAnswerSheet: React.FC<FinalAnswerSheetProps> = ({ questions, blurAnswer, forceCols }) => {
     const sortedQuestions = useMemo(() => [...questions].sort((a, b) => a.number - b.number), [questions]);
 
     const getStyles = (q: Question): string => {
@@ -23,16 +24,29 @@ const FinalAnswerSheet: React.FC<FinalAnswerSheetProps> = ({ questions, blurAnsw
         return 'bg-slate-200 dark:bg-slate-800 border-transparent';
     };
 
+    const gridClasses = forceCols 
+        ? `grid-cols-${forceCols}` // This might not work with Tailwind JIT, let's use a map
+        : 'grid-cols-5 sm:grid-cols-10 lg:grid-cols-15';
+    
+    // Tailwind JIT requires full class names
+    const getGridClass = () => {
+        if (forceCols === 10) return 'grid-cols-10';
+        if (forceCols === 15) return 'grid-cols-15';
+        // Default responsive behavior
+        return 'grid-cols-5 sm:grid-cols-10 lg:grid-cols-15';
+    }
+
+
     return (
-        <div className="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-15 gap-2">
+        <div className={`grid ${getGridClass()} gap-2`}>
             {sortedQuestions.map(q => (
                 <div
                     key={`answer-grid-${q.number}`}
                     className={`p-1.5 rounded-md flex flex-col items-center justify-center text-center border transition-colors ${getStyles(q)}`}
                 >
-                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{q.number}</span>
+                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{q.number}</span>
                     <span
-                        className={`text-sm font-bold text-slate-800 dark:text-slate-200 truncate ${blurAnswer ? 'blur-sm select-none' : ''}`}
+                        className={`text-base font-bold text-slate-800 dark:text-slate-200 truncate ${blurAnswer ? 'blur-sm select-none' : ''}`}
                     >
                         {q.answer ?? '-'}
                     </span>

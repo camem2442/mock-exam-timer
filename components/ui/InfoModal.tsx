@@ -74,6 +74,12 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                             <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
                                 <strong>CSV 내보내기:</strong> 엑셀 활용을 위한 데이터 내보내기
                             </div>
+                            <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
+                                <strong>홈 화면에 추가:</strong> 앱처럼 설치하여 빠르게 접속
+                            </div>
+                            <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
+                                <strong>결과 공유:</strong> 분석 결과를 이미지/링크로 공유
+                            </div>
                         </div>
                     </section>
                     

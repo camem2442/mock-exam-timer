@@ -79,6 +79,30 @@ export const GuidePage: React.FC = () => {
                                 <li className="pl-2"><strong>주의사항:</strong> 브라우저를 바꾸거나 데이터를 삭제하면 저장된 기록이 사라질 수 있습니다. 모바일에서는 브라우저 설정에 따라 저장 용량이 제한될 수 있습니다.</li>
                             </ul>
                         </section>
+
+                        <section>
+                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">5. 결과 공유</h2>
+                            <p className="mb-4 text-lg">
+                                풀이 결과 분석 리포트나 공유된 링크 페이지에서 다른 사람에게 결과를 이미지와 링크로 공유할 수 있습니다.
+                            </p>
+                            <ul className="list-disc space-y-3 pl-6 text-lg">
+                                <li className="pl-2"><strong>공유하기:</strong> '결과 공유하기' 또는 '공유하기' 버튼을 누르면 이미지 미리보기와 함께 공유 모달이 나타납니다.</li>
+                                <li className="pl-2"><strong>이미지/링크 공유:</strong> 모달의 '이미지/링크 공유' 버튼을 누르면 운영체제의 기본 공유 창이 열리며, 카카오톡, 메시지 등으로 이미지와 링크를 함께 보낼 수 있습니다.</li>
+                                <li className="pl-2"><strong>링크 저장:</strong> 공유 시 생성된 링크는 영구적으로 저장되므로, 언제든지 다시 접속하여 결과를 확인할 수 있습니다.</li>
+                            </ul>
+                        </section>
+
+                        <section>
+                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">6. 홈 화면에 추가 (PWA)</h2>
+                            <p className="mb-4 text-lg">
+                                MockTimer를 스마트폰이나 PC에 앱처럼 설치하여 더 빠르고 편리하게 이용할 수 있습니다.
+                            </p>
+                            <ul className="list-disc space-y-3 pl-6 text-lg">
+                                <li className="pl-2"><strong>설치 방법:</strong> 우측 상단 햄버거 메뉴(☰)를 열고 '홈 화면에 추가' 버튼을 누르세요.</li>
+                                <li className="pl-2"><strong>지원 환경:</strong> Chrome, Safari 등 PWA를 지원하는 최신 브라우저에서 설치할 수 있습니다. 버튼이 보이지 않으면 해당 브라우저가 기능을 지원하지 않는 것입니다.</li>
+                                <li className="pl-2"><strong>장점:</strong> 전체 화면으로 더 넓게 보고, 앱 아이콘으로 한번에 접속하는 등 더 쾌적한 환경에서 집중할 수 있습니다.</li>
+                            </ul>
+                        </section>
                     </main>
 
                     <div className="my-8">

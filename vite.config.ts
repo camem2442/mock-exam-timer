@@ -7,6 +7,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  appType: 'spa',
   optimizeDeps: {
     include: ['html-to-image', 'recharts'],
   },
@@ -14,5 +15,8 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test-setup.ts'],
+    fakeTimers: {
+      toFake: ['Date', 'performance', 'setTimeout', 'setInterval'],
+    },
   },
 })

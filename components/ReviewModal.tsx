@@ -3,200 +3,44 @@ import React, { useState } from 'react';
 import { type Question } from '../types';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
-import { ExamNameModal } from './ui/ExamNameModal';
 import AdPlaceholder from './ads/AdPlaceholder';
 import SolveTimeChart from './charts/SolveTimeChart';
 import FinalAnswerSheet from './review/FinalAnswerSheet';
 import TimeManagementInsights from './review/TimeManagementInsights';
 import SolvingRecordTable from './review/SolvingRecordTable';
 import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../utils/exportUtils';
-import { SocialShareBadges } from './ui/SocialShareBadges';
 import ShareImageButton from './share/ShareImageButton';
-
-// 공유 기능을 위한 컴포넌트
-const ShareButton: React.FC<{ questions: Question[] }> = ({ questions }) => {
-    const [showCopyMessage, setShowCopyMessage] = useState(false);
-
-    const handleShare = async () => {
-        const shareText = `모의고사 타이머로 ${questions.length}문제를 풀었습니다. 총 소요시간: ${Math.floor(questions.reduce((sum, q) => sum + q.solveTime, 0) / 60)}분\n\nhttps://www.mocktimer.kr`;
-        
-        if (navigator.share) {
-            // 네이티브 공유 API 사용 (모바일)
-            try {
-                await navigator.share({
-                    title: '모의고사 타이머 & 분석기',
-                    text: shareText,
-                    url: 'https://www.mocktimer.kr'
-                });
-            } catch (error) {
-                console.log('공유가 취소되었습니다.');
-            }
-        } else {
-            // 클립보드 복사 (데스크톱)
-            try {
-                await navigator.clipboard.writeText(shareText);
-                setShowCopyMessage(true);
-                setTimeout(() => setShowCopyMessage(false), 3000);
-            } catch (error) {
-                // 폴백: 수동 복사
-                const textArea = document.createElement('textarea');
-                textArea.value = shareText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                setShowCopyMessage(true);
-                setTimeout(() => setShowCopyMessage(false), 3000);
-            }
-        }
-    };
-
-    return (
-        <>
-            <Button 
-                onClick={handleShare} 
-                variant="ghost" 
-                size="icon"
-                className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex-shrink-0"
-                aria-label="결과 공유"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                </svg>
-            </Button>
-            
-            {/* 클립보드 복사 성공 메시지 */}
-            {showCopyMessage && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[60] bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg shadow-lg p-4 max-w-sm">
-                    <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0">
-                            <svg className="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium text-blue-800 dark:text-blue-200 whitespace-nowrap">
-                                클립보드에 복사됨
-                            </h4>
-                            <p className="mt-1 text-xs sm:text-sm text-blue-700 dark:text-blue-300 whitespace-nowrap overflow-hidden text-ellipsis">
-                                공유 텍스트가 클립보드에 복사되었습니다!
-                            </p>
-                        </div>
-                        <button
-                            onClick={() => setShowCopyMessage(false)}
-                            className="flex-shrink-0 text-blue-400 hover:text-blue-600 dark:hover:text-blue-300"
-                        >
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            )}
-        </>
-    );
-};
-
-// 시험 기록 저장 기능을 위한 컴포넌트
-const SaveExamButton: React.FC<{ questions: Question[]; examName: string }> = ({ questions, examName }) => {
-    const [isExamNameModalOpen, setIsExamNameModalOpen] = useState(false);
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-    const [savedExamName, setSavedExamName] = useState('');
-
-    const handleSaveExamRecord = () => {
-        // 시험 이름이 이미 입력되어 있으면 바로 저장, 없으면 모달 열기
-        if (examName.trim()) {
-            handleSaveExamName(examName.trim());
-        } else {
-            setIsExamNameModalOpen(true);
-        }
-    };
-
-    const handleSaveExamName = (examNameToSave: string) => {
-        // 시험 기록 저장 (로컬 스토리지 사용)
-        const examRecords = JSON.parse(localStorage.getItem('examBookmarks') || '[]');
-        const recordData = {
-            id: Date.now(),
-            name: examNameToSave,
-            date: new Date().toISOString(),
-            questions: questions,
-            summary: `${questions.length}문제, 총 ${questions.reduce((sum, q) => sum + q.solveTime, 0)}초`
-        };
-        examRecords.push(recordData);
-        localStorage.setItem('examBookmarks', JSON.stringify(examRecords));
-        
-        // 성공 메시지 표시
-        setSavedExamName(examNameToSave);
-        setShowSuccessMessage(true);
-        
-        // 5초 후 메시지 자동 숨김
-        setTimeout(() => {
-            setShowSuccessMessage(false);
-        }, 5000);
-    };
-
-    return (
-        <>
-            <Button 
-                onClick={handleSaveExamRecord} 
-                variant="secondary"
-                size="md"
-                className="w-full sm:w-auto"
-            >
-                시험 기록 저장 (베타)
-            </Button>
-            <ExamNameModal
-                isOpen={isExamNameModalOpen}
-                onClose={() => setIsExamNameModalOpen(false)}
-                onSave={handleSaveExamName}
-            />
-            
-            {/* 성공 메시지 */}
-            {showSuccessMessage && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[60] bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-700 rounded-lg shadow-lg p-4 max-w-sm">
-                    <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0">
-                            <svg className="h-5 w-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium text-primary-800 dark:text-primary-200">
-                                시험 기록 저장 완료
-                            </h4>
-                            <p className="mt-1 text-xs sm:text-sm text-primary-700 dark:text-primary-300 break-words">
-                                "{savedExamName}" 시험 기록이 브라우저 저장소에 저장되었습니다.
-                            </p>
-                            <p className="mt-1 text-xs text-primary-600 dark:text-primary-400 break-words">
-                                ※ 브라우저를 바꾸거나 데이터를 삭제하면 기록이 사라질 수 있습니다.
-                            </p>
-                        </div>
-                        <button
-                            onClick={() => setShowSuccessMessage(false)}
-                            className="flex-shrink-0 text-primary-400 hover:text-primary-600 dark:hover:text-primary-300"
-                        >
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            )}
-        </>
-    );
-};
-
+import { Input } from './ui/Input';
+import SaveExamButton from './review/SaveExamButton';
+import ShareButton from './share/ShareButton';
 
 interface ReviewModalProps {
   questions: Question[];
   examName: string;
+  onExamNameChange: (newName: string) => void;
   onContinue: () => void;
   onRestart: () => void;
   onGradeRequest: () => void;
   totalMinutes?: number;
 }
 
-const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContinue, onRestart, onGradeRequest, totalMinutes }) => {
+const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onExamNameChange, onContinue, onRestart, onGradeRequest, totalMinutes }) => {
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [tempExamName, setTempExamName] = useState(examName);
+
+    const handleStartEdit = () => {
+        setTempExamName(examName);
+        setIsEditingName(true);
+    };
+
+    const handleSaveEdit = () => {
+        onExamNameChange(tempExamName);
+        setIsEditingName(false);
+    };
+
+    const handleCancelEdit = () => {
+        setIsEditingName(false);
+    };
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onContinue}>
@@ -227,6 +71,47 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContin
                 </header>
                 <main className="overflow-y-auto overflow-x-hidden p-4 sm:p-6 space-y-6 sm:space-y-8">
                     <Card>
+                        {isEditingName ? (
+                            <div className="flex w-full items-center justify-between gap-2">
+                                <Input
+                                    type="text"
+                                    value={tempExamName}
+                                    onChange={(e) => setTempExamName(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleSaveEdit();
+                                        if (e.key === 'Escape') handleCancelEdit();
+                                    }}
+                                    className="flex-1 px-2 py-1 text-lg font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                    placeholder="시험 이름을 입력하세요"
+                                    autoFocus
+                                />
+                                <div className="flex flex-shrink-0 gap-1">
+                                    <button onClick={handleSaveEdit} className="opacity-70 hover:opacity-100 transition-opacity p-1" title="저장">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </button>
+                                    <button onClick={handleCancelEdit} className="opacity-70 hover:opacity-100 transition-opacity p-1" title="취소">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex w-full items-center justify-between">
+                                <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-lg">
+                                    {examName || '이름 없는 시험'}
+                                </h3>
+                                <button onClick={handleStartEdit} className="opacity-50 hover:opacity-100 transition-opacity p-1" title="이름 변경">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        )}
+                    </Card>
+                    <Card>
                        <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200">최종 답안지</h3>
                             <Button onClick={onGradeRequest}>채점하기</Button>
@@ -247,16 +132,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContin
 
                     <Card>
                         <SolveTimeChart questions={questions} />
-                    </Card>
-                    
-                    {/* 공유 섹션 */}
-                    <Card>
-                        <div className="p-6">
-                            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200 text-center">
-                                이 타이머가 도움이 되었다면 공유해주세요! 🚀
-                            </h3>
-                            <SocialShareBadges />
-                        </div>
                     </Card>
                     
                     <AdPlaceholder />
