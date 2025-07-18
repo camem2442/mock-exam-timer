@@ -45,11 +45,11 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions }
     const barSize = solveOrderData.length < 10 ? 40 : undefined;
 
     return (
-        <div className="w-full h-64">
+        <div className="w-full h-48 sm:h-64">
             <Recharts.ResponsiveContainer width="100%" height="100%">
                 <Recharts.ComposedChart
                     data={solveOrderData}
-                    margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
+                    margin={{ top: 10, right: 20, left: 10, bottom: 10 }}
                 >
                     <Recharts.CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                     <Recharts.XAxis 
@@ -66,7 +66,7 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions }
                             angle: -90, 
                             position: 'insideLeft', 
                             fill: tickColor, 
-                            style: {textAnchor: 'middle', fontSize: 12} 
+                            style: {textAnchor: 'middle', fontSize: 10} 
                         }} 
                     />
                     <Recharts.YAxis 
@@ -78,7 +78,7 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions }
                             angle: 90, 
                             position: 'insideRight', 
                             fill: tickColor, 
-                            style: {textAnchor: 'middle', fontSize: 12} 
+                            style: {textAnchor: 'middle', fontSize: 10} 
                         }}
                         tickFormatter={formatMinute}
                     />

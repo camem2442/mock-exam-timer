@@ -27,35 +27,35 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
       // 세로형 이미지의 전체 크기와 스타일 지정
       <div 
         ref={ref} 
-        className="bg-slate-900 text-white p-6" 
-        style={{ width: 580, fontFamily: "'Noto Sans KR', sans-serif" }}
+        className="bg-slate-900 text-white p-4 sm:p-6 w-full max-w-full" 
+        style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
         data-testid="result-image-container"
       >
         
         <header className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-white">{examName}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">{examName}</h1>
         </header>
         
         {/* 2. 결과 요약 */}
         <section className="bg-slate-800/80 p-4 rounded-lg mb-6 border border-slate-700">
-          <h2 className="text-2xl font-semibold mb-3 text-center text-slate-200">결과 요약</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold mb-3 text-center text-slate-200">결과 요약</h2>
           <div className="grid grid-cols-2 gap-4 text-center">
             <div className="bg-slate-700/50 p-3 rounded-md">
-              <p className="text-slate-300 text-base">총 소요 시간</p>
-              <p className="text-3xl font-bold text-white">{formatTime(totalTime)}</p>
+              <p className="text-slate-300 text-sm sm:text-base">총 소요 시간</p>
+              <p className="text-2xl sm:text-3xl font-bold text-white">{formatTime(totalTime)}</p>
             </div>
             <div className="bg-slate-700/50 p-3 rounded-md">
               {includeGrading && gradedQuestions.length > 0 ? (
                 <>
-                  <p className="text-slate-300 text-base">채점 결과</p>
-                  <p className="text-3xl font-bold">
+                  <p className="text-slate-300 text-sm sm:text-base">채점 결과</p>
+                  <p className="text-2xl sm:text-3xl font-bold">
                     <span className="text-green-400">{correctCount}</span> / {gradedQuestions.length}
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="text-slate-300 text-base">시험 전체 시간</p>
-                  <p className="text-3xl font-bold">
+                  <p className="text-slate-300 text-sm sm:text-base">시험 전체 시간</p>
+                  <p className="text-2xl sm:text-3xl font-bold">
                     {totalMinutes ? `${totalMinutes}분` : '-'}
                   </p>
                 </>
@@ -84,7 +84,7 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
 
         {/* 4. 풀이 시간 그래프 */}
         <section className="mb-4 bg-slate-800/60 p-4 rounded-lg border border-slate-700">
-             <h2 className="text-2xl font-semibold mb-3 text-center text-slate-200">풀이 시간 그래프</h2>
+             <h2 className="text-xl sm:text-2xl font-semibold mb-3 text-center text-slate-200">풀이 시간 그래프</h2>
              <div style={{ height: 250 }}>
                 <SimpleSolveTimeChart questions={questions} />
              </div>
@@ -92,8 +92,8 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
 
         {/* 5. 브랜딩 */}
         <footer className="text-center mt-6 pt-4 border-t border-slate-700">
-          <p className="text-2xl font-bold text-blue-400">mocktimer.kr</p>
-          <p className="text-base text-slate-300">나만의 시험 분석 파트너</p>
+          <p className="text-xl sm:text-2xl font-bold text-blue-400">mocktimer.kr</p>
+          <p className="text-sm sm:text-base text-slate-300">나만의 시험 분석 파트너</p>
         </footer>
       </div>
     );

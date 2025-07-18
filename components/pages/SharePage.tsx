@@ -119,13 +119,13 @@ const SharePage: React.FC = () => {
     }, [id]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 py-10">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 py-10 px-4 overflow-x-hidden">
             <Helmet>
                 <title>{pageTitle} - {siteConfig.title}</title>
                 <meta name="description" content={`${pageTitle}를 확인하고 공유해보세요.`} />
             </Helmet>
 
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 w-full max-w-md">
                 <Link to="/" className="text-2xl font-bold text-primary-600 dark:text-primary-400 hover:underline">
                     {siteConfig.title}
                 </Link>
@@ -134,7 +134,7 @@ const SharePage: React.FC = () => {
 
             {loading && <Spinner />}
             {error && (
-                <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/20 p-6 rounded-lg">
+                <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/20 p-6 rounded-lg w-full max-w-md">
                     <h2 className="text-xl font-bold mb-2">오류</h2>
                     <p>{error}</p>
                     <Button onClick={() => window.location.href = '/'} className="mt-4">
@@ -143,7 +143,7 @@ const SharePage: React.FC = () => {
                 </div>
             )}
             {resultData && (
-                 <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800">
+                 <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 w-full max-w-full overflow-hidden">
                     <ResultImage
                         questions={resultData.questions}
                         examName={resultData.examName}
@@ -154,7 +154,7 @@ const SharePage: React.FC = () => {
                 </div>
             )}
 
-            <div className="mt-8 flex flex-col items-center gap-4">
+            <div className="mt-8 flex flex-col items-center gap-4 w-full px-4">
                 <div className="flex w-full max-w-sm gap-2">
                     <Button onClick={handleCopyLink} variant="outline" className="flex-1">
                         {isCopied ? '복사 완료!' : '링크 복사'}
