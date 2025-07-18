@@ -33,7 +33,7 @@ const ExamScreen: React.FC = () => {
 
     // --- Hooks ---
     const examSetup = useExamSetup();
-    const { canInstall, triggerInstallPrompt } = usePwaInstall();
+    const { canInstall, triggerInstallPrompt, isIOS, isStandalone } = usePwaInstall();
     const {
         examName, setExamName,
         startQuestionStr, setStartQuestionStr,
@@ -267,7 +267,7 @@ const ExamScreen: React.FC = () => {
                     <div className="flex flex-col gap-2">
                         {canInstall && (
                             <Button variant="outline" onClick={triggerInstallPrompt}>
-                                📲 홈 화면에 추가
+                                {isIOS ? '📱 홈 화면에 추가 (iOS)' : '📲 홈 화면에 추가'}
                             </Button>
                         )}
                          <Button
