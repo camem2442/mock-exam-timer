@@ -104,8 +104,11 @@
     }
 
     .mobile-share-page {
+      transform: scale(0.8);
+      transform-origin: top center;
+      width: 125vw;
       overflow-x: hidden;
-      width: 100vw;
+      margin-left: calc((100vw - 125vw * 0.8) / 2);
     }
   }
 } 
