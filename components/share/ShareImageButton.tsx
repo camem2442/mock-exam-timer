@@ -98,7 +98,7 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                 return response.json();
             })
             .then(data => {
-                const newShareUrl = `${window.location.origin}/share/${data.id}`;
+                const newShareUrl = `${siteConfig.domain}/share/${data.id}`;
                 setShareUrl(newShareUrl);
             })
             .catch(err => {

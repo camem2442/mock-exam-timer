@@ -137,7 +137,7 @@ const SharePage: React.FC = () => {
                 <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/20 p-6 rounded-lg">
                     <h2 className="text-xl font-bold mb-2">오류</h2>
                     <p>{error}</p>
-                    <Button onClick={() => window.location.href = '/'} className="mt-4">
+                    <Button onClick={() => window.location.href = siteConfig.domain} className="mt-4">
                         홈으로 돌아가기
                     </Button>
                 </div>

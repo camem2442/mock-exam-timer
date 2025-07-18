@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { type Question } from '../../types';
 import { Button } from '../ui/Button';
+import { siteConfig } from '../../config/site';
 
 interface ShareButtonProps {
     questions: Question[];
@@ -10,15 +11,15 @@ const ShareButton: React.FC<ShareButtonProps> = ({ questions }) => {
     const [showCopyMessage, setShowCopyMessage] = useState(false);
 
     const handleShare = async () => {
-        const shareText = `모의고사 타이머로 ${questions.length}문제를 풀었습니다. 총 소요시간: ${Math.floor(questions.reduce((sum, q) => sum + q.solveTime, 0) / 60)}분\n\nhttps://www.mocktimer.kr`;
+        const shareText = `모의고사 타이머로 ${questions.length}문제를 풀었습니다. 총 소요시간: ${Math.floor(questions.reduce((sum, q) => sum + q.solveTime, 0) / 60)}분\n\n${siteConfig.domain}`;
         
         if (navigator.share) {
             // 네이티브 공유 API 사용 (모바일)
             try {
                 await navigator.share({
-                    title: '모의고사 타이머 & 분석기',
+                    title: siteConfig.title,
                     text: shareText,
-                    url: 'https://www.mocktimer.kr'
+                    url: siteConfig.domain
                 });
             } catch (error) {
                 console.log('공유가 취소되었습니다.');
