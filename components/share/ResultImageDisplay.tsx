@@ -52,7 +52,7 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
     return (
       <div 
         ref={ref} 
-        className="bg-slate-900 text-white p-6 result-image-display" 
+        className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 overflow-hidden" 
         style={{ 
           fontFamily: "'Noto Sans KR', sans-serif",
           width: containerWidth,
@@ -61,6 +61,7 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
         }}
         data-testid="result-image-display-container"
       >
+        <div className="bg-slate-900 text-white p-6 result-image-display">
         
         <header className="text-center mb-6">
           <h1 className="text-3xl font-bold text-white">{examName}</h1>
@@ -125,6 +126,7 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
           <p className="text-2xl font-bold text-blue-400">{siteConfig.domain.replace('https://', '')}</p>
           <p className="text-base text-slate-300">나만의 시험 분석 파트너</p>
         </footer>
+        </div>
       </div>
     );
   }
