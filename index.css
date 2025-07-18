@@ -104,10 +104,8 @@
     }
 
     .mobile-share-page {
-      transform: scale(0.9);
-      transform-origin: top center;
-      width: 100vw;
       overflow-x: hidden;
+      width: 100vw;
     }
   }
 } 
