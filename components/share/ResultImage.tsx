@@ -84,9 +84,9 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
         )}
 
         {/* 4. 풀이 시간 그래프 */}
-        <section className="mb-4 bg-slate-800/60 p-4 rounded-lg border border-slate-700">
+        <section className="mb-4 bg-slate-800/60 p-4 rounded-lg border border-slate-700 overflow-hidden">
              <h2 className="text-2xl font-semibold mb-3 text-center text-slate-200">풀이 시간 그래프</h2>
-             <div style={{ height: 250 }}>
+             <div style={{ height: 250 }} className="overflow-hidden">
                 <SimpleSolveTimeChart questions={questions} />
              </div>
         </section>
