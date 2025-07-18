@@ -147,7 +147,7 @@ const SharePage: React.FC = () => {
             )}
             {resultData && (
                 <div className="flex justify-center px-4">
-                    <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 overflow-hidden share-page-container">
+                    <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 overflow-hidden">
                         <ResultImageDisplay
                             questions={resultData.questions}
                             examName={resultData.examName}

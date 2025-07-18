@@ -92,73 +92,11 @@
     -webkit-transform: translateZ(0);
   }
 
-  /* ResultImageDisplay 반응형 스타일 */
-  .result-image-display {
-    width: 100% !important;
-    max-width: 580px !important;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
-
-  @media (max-width: 640px) {
-    .result-image-display {
-      width: 100% !important;
-      max-width: 100% !important;
-      transform: scale(0.9) !important;
-      transform-origin: top center !important;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .result-image-display {
-      width: 100% !important;
-      max-width: 100% !important;
-      transform: scale(0.85) !important;
-      transform-origin: top center !important;
-    }
-  }
-
-  @media (max-width: 360px) {
-    .result-image-display {
-      width: 100% !important;
-      max-width: 100% !important;
-      transform: scale(0.8) !important;
-      transform-origin: top center !important;
-    }
-  }
-
   /* ResultImage 고정 크기 (이미지 생성용) */
   .result-image-fixed {
     width: 580px !important;
     max-width: 580px !important;
     min-width: 580px !important;
-  }
-
-  /* SharePage 전용 컨테이너 스타일 */
-  .share-page-container {
-    width: 100%;
-    max-width: 580px;
-  }
-
-  @media (max-width: 640px) {
-    .share-page-container {
-      width: calc(100vw - 32px);
-      max-width: calc(100vw - 32px);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .share-page-container {
-      width: calc(100vw - 24px);
-      max-width: calc(100vw - 24px);
-    }
-  }
-
-  @media (max-width: 360px) {
-    .share-page-container {
-      width: calc(100vw - 16px);
-      max-width: calc(100vw - 16px);
-    }
   }
 
   /* ===== 모바일 최적화 (기본 기능만) ===== */

@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { Question } from '../../types';
 import SimpleSolveTimeChart from './SimpleSolveTimeChart';
 import FinalAnswerSheet from '../review/FinalAnswerSheet';
@@ -15,6 +15,31 @@ interface ResultImageDisplayProps {
 
 export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayProps>(
   ({ questions, examName, includeGrading, blurAnswer, totalMinutes }, ref) => {
+    const [scale, setScale] = useState(1);
+    
+    // 화면 크기에 따른 스케일 계산
+    useEffect(() => {
+      const updateScale = () => {
+        const width = window.innerWidth;
+        let newScale = 1;
+        
+        if (width <= 360) {
+          newScale = 0.75;
+        } else if (width <= 480) {
+          newScale = 0.8;
+        } else if (width <= 640) {
+          newScale = 0.85;
+        } else if (width <= 768) {
+          newScale = 0.9;
+        }
+        
+        setScale(newScale);
+      };
+      
+      updateScale();
+      window.addEventListener('resize', updateScale);
+      return () => window.removeEventListener('resize', updateScale);
+    }, []);
     
     // 채점된 문제 수 계산
     const gradedQuestions = questions.filter(q => q.isCorrect !== undefined);
@@ -25,11 +50,16 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
     const displayQuestions = includeGrading ? questions : questions.map(q => ({ ...q, isCorrect: undefined }));
 
     return (
-      // 반응형 이미지의 전체 크기와 스타일 지정
       <div 
         ref={ref} 
         className="bg-slate-900 text-white p-6 result-image-display" 
-        style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+        style={{ 
+          fontFamily: "'Noto Sans KR', sans-serif",
+          width: 580,
+          transform: `scale(${scale})`,
+          transformOrigin: 'top center',
+          margin: '0 auto'
+        }}
         data-testid="result-image-display-container"
       >
         
