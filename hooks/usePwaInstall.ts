@@ -14,6 +14,7 @@ export const usePwaInstall = () => {
   const [canInstall, setCanInstall] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [showIOSGuide, setShowIOSGuide] = useState(false);
 
   useEffect(() => {
     // iOS 감지
@@ -44,8 +45,7 @@ export const usePwaInstall = () => {
   const triggerInstallPrompt = useCallback(async () => {
     // 이미 PWA로 실행 중인 경우
     if (isStandalone) {
-      alert('이미 앱으로 실행 중입니다!');
-      return;
+      return { type: 'already-installed' as const };
     }
 
     // iOS Safari인 경우 수동 설치 가이드 표시
@@ -53,25 +53,16 @@ export const usePwaInstall = () => {
       const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
       
       if (isSafari) {
-        const message = `📱 홈 화면에 추가하는 방법:
-
-1️⃣ Safari 브라우저 하단의 공유 버튼(□↑)을 탭하세요
-2️⃣ "홈 화면에 추가"를 선택하세요
-3️⃣ "추가"를 탭하여 설치를 완료하세요
-
-설치 후에는 앱 아이콘을 탭하여 실행할 수 있습니다!`;
-        
-        alert(message);
+        setShowIOSGuide(true);
+        return { type: 'ios-guide' as const };
       } else {
-        alert('iOS에서는 Safari 브라우저를 사용하여 홈 화면에 추가할 수 있습니다.');
+        return { type: 'ios-unsupported' as const };
       }
-      return;
     }
 
     // Android/Chrome 등에서 자동 설치
     if (!installPromptEvent) {
-      alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
-      return;
+      return { type: 'not-supported' as const };
     }
 
     installPromptEvent.prompt();
@@ -79,13 +70,20 @@ export const usePwaInstall = () => {
     
     if (outcome === 'accepted') {
       console.log('User accepted the PWA installation');
+      setInstallPromptEvent(null);
+      setCanInstall(false);
+      return { type: 'accepted' as const };
     } else {
       console.log('User dismissed the PWA installation');
+      setInstallPromptEvent(null);
+      setCanInstall(false);
+      return { type: 'dismissed' as const };
     }
-
-    setInstallPromptEvent(null);
-    setCanInstall(false);
   }, [installPromptEvent, isIOS, isStandalone]);
+
+  const closeIOSGuide = useCallback(() => {
+    setShowIOSGuide(false);
+  }, []);
 
   // iOS에서는 설치 버튼을 항상 표시 (수동 가이드용)
   const shouldShowInstallButton = canInstall || (isIOS && !isStandalone);
@@ -94,6 +92,8 @@ export const usePwaInstall = () => {
     canInstall: shouldShowInstallButton, 
     triggerInstallPrompt,
     isIOS,
-    isStandalone 
+    isStandalone,
+    showIOSGuide,
+    closeIOSGuide
   };
 }; 

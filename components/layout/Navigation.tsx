@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { InfoModal } from '../ui/InfoModal';
+import { IOSInstallGuideModal } from '../ui/IOSInstallGuideModal';
 import { Button } from '../ui/Button';
 import { siteConfig } from '../../config/site';
 import { usePwaInstall } from '../../hooks/usePwaInstall';
@@ -15,7 +16,7 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-    const { canInstall, triggerInstallPrompt, isIOS, isStandalone } = usePwaInstall();
+    const { canInstall, triggerInstallPrompt, isIOS, isStandalone, showIOSGuide, closeIOSGuide } = usePwaInstall();
 
     const handleScaleChange = (direction: 'increase' | 'decrease') => {
       setScale(prevScale => {
@@ -154,9 +155,18 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
                 <div className="py-2">
                   {canInstall && (
                     <button
-                      onClick={() => {
-                        triggerInstallPrompt();
+                      onClick={async () => {
+                        const result = await triggerInstallPrompt();
                         setShowMenu(false);
+                        
+                        // 결과에 따른 처리
+                        if (result?.type === 'already-installed') {
+                          alert('이미 앱으로 실행 중입니다!');
+                        } else if (result?.type === 'not-supported') {
+                          alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
+                        } else if (result?.type === 'ios-unsupported') {
+                          alert('iOS에서는 Safari 브라우저를 사용하여 홈 화면에 추가할 수 있습니다.');
+                        }
                       }}
                       className="w-full text-left block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                     >
@@ -197,6 +207,7 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
           </div>
         </div>
         <InfoModal isOpen={showInfoModal} onClose={() => setShowInfoModal(false)} />
+        <IOSInstallGuideModal isOpen={showIOSGuide} onClose={closeIOSGuide} />
       </div>
     );
   }; 
