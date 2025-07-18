@@ -110,5 +110,12 @@
       transform-origin: top center;
       margin-left: calc((100vw - 580px * 0.85) / 2);
     }
+
+    .mobile-share-page {
+      transform: scale(0.9);
+      transform-origin: top center;
+      width: 100vw;
+      overflow-x: hidden;
+    }
   }
 } 

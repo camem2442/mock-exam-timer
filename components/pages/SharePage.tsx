@@ -121,7 +121,7 @@ const SharePage: React.FC = () => {
     }, [id]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 py-10">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 py-10 mobile-share-page">
             <Helmet>
                 <title>{pageTitle} - {siteConfig.title}</title>
                 <meta name="description" content={`${pageTitle}를 확인하고 공유해보세요.`} />
