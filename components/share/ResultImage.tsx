@@ -28,7 +28,7 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
       // 세로형 이미지의 전체 크기와 스타일 지정
       <div 
         ref={ref} 
-        className="bg-slate-900 text-white p-6 mobile-result-image" 
+        className="bg-slate-900 text-white p-6" 
         style={{ width: 580, fontFamily: "'Noto Sans KR', sans-serif" }}
         data-testid="result-image-container"
       >
