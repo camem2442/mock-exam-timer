@@ -119,6 +119,21 @@
       border-radius: 12px; /* 더 부드러운 모서리 */
     }
 
+    /* 📱 키보드 확대 방지 */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="search"],
+    textarea,
+    select {
+      font-size: 16px !important; /* iOS 자동 확대 방지 */
+      -webkit-text-size-adjust: 100%; /* 텍스트 크기 자동 조정 방지 */
+      -ms-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
     /* ✨ 터치 피드백 애니메이션 */
     button:not(.toggle-switch-button):active,
     [role="button"]:not(.toggle-switch-button):active,
@@ -203,17 +218,23 @@
     input[type="number"],
     input[type="email"],
     input[type="password"],
+    input[type="tel"],
+    input[type="search"],
     textarea,
     select {
       border-radius: 8px;
       transition: all 0.2s ease;
       font-size: 16px; /* iOS 자동 확대 방지 */
+      -webkit-appearance: none; /* iOS 기본 스타일 제거 */
+      appearance: none;
     }
 
     input[type="text"]:focus,
     input[type="number"]:focus,
     input[type="email"]:focus,
     input[type="password"]:focus,
+    input[type="tel"]:focus,
+    input[type="search"]:focus,
     textarea:focus,
     select:focus {
       border-color: #3b82f6;
