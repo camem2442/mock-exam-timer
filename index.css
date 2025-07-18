@@ -103,4 +103,73 @@
       width: calc(100vw - 32px);
     }
   }
+
+  /* 모바일 터치 최적화 */
+  @media (max-width: 768px) {
+    /* 터치 영역 최소 44px 보장 */
+    button, 
+    [role="button"],
+    .btn,
+    .toggle-switch,
+    input[type="checkbox"],
+    input[type="radio"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* 터치 피드백 개선 */
+    button:active,
+    [role="button"]:active,
+    .btn:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+
+    /* 스크롤 성능 최적화 */
+    .overflow-y-auto,
+    .overflow-x-auto {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+
+    /* 텍스트 선택 방지 (버튼 등) */
+    button,
+    [role="button"],
+    .btn {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* 모바일에서 더 큰 폰트 */
+    body {
+      font-size: 16px; /* iOS에서 자동 확대 방지 */
+    }
+
+    /* 모바일에서 더 넓은 간격 */
+    .space-y-4 > * + * {
+      margin-top: 1.5rem;
+    }
+
+    .space-y-6 > * + * {
+      margin-top: 2rem;
+    }
+  }
+
+  /* 매우 작은 화면 최적화 */
+  @media (max-width: 480px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    /* 더 큰 터치 영역 */
+    button, 
+    [role="button"],
+    .btn {
+      min-height: 48px;
+      min-width: 48px;
+    }
+  }
 } 
