@@ -123,18 +123,8 @@
     button:not(.toggle-switch-button):active,
     [role="button"]:not(.toggle-switch-button):active,
     .btn:active {
-      transform: scale(0.96);
-      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    /* 🎨 버튼 호버 효과 (터치 디바이스에서도) */
-    button:not(.toggle-switch-button):hover,
-    [role="button"]:not(.toggle-switch-button):hover,
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
     }
 
     /* 📱 스크롤 성능 최적화 */
@@ -199,16 +189,13 @@
     /* 🎨 카드 스타일 개선 */
     .bg-white,
     .dark .bg-slate-900 {
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      backdrop-filter: blur(10px);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
     }
 
     .dark .bg-slate-900 {
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(51, 65, 85, 0.8);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     /* 🎯 입력 필드 개선 */
@@ -218,9 +205,8 @@
     input[type="password"],
     textarea,
     select {
-      border-radius: 12px;
-      border: 2px solid rgba(226, 232, 240, 0.8);
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 8px;
+      transition: all 0.2s ease;
       font-size: 16px; /* iOS 자동 확대 방지 */
     }
 
@@ -231,51 +217,25 @@
     textarea:focus,
     select:focus {
       border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-      transform: translateY(-1px);
-    }
-
-    /* 🌙 다크모드 입력 필드 */
-    .dark input[type="text"],
-    .dark input[type="number"],
-    .dark input[type="email"],
-    .dark input[type="password"],
-    .dark textarea,
-    .dark select {
-      border-color: rgba(51, 65, 85, 0.8);
-      background-color: rgba(30, 41, 59, 0.8);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
     }
 
     /* 🎨 모달 개선 */
     .modal-container {
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
     /* 📊 테이블 개선 */
     table {
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    th {
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-      font-weight: 600;
-      letter-spacing: 0.025em;
-    }
-
-    .dark th {
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     }
 
     /* 🎯 포커스 표시 개선 */
     *:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-      border-radius: 8px;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
 
     /* 🌟 로딩 애니메이션 */
@@ -292,14 +252,7 @@
       }
     }
 
-    /* 🎨 그라데이션 배경 */
-    .gradient-bg {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
 
-    .gradient-bg-dark {
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    }
   }
 
   /* ===== 작은 화면 최적화 (480px 이하) ===== */
