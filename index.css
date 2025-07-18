@@ -95,11 +95,11 @@
   /* 모바일에서 결과 공유 페이지 축소 */
   @media (max-width: 640px) {
     .mobile-result-container {
-      transform: scale(0.85);
+      transform: scale(0.7);
       transform-origin: top center;
-      width: 117.65vw;
+      width: 142.86vw;
       overflow: hidden;
-      margin-left: calc((100vw - 117.65vw * 0.85) / 2);
+      margin-left: calc((100vw - 142.86vw * 0.7) / 2);
     }
   }
 } 
