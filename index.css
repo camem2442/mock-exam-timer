@@ -96,12 +96,41 @@
   .result-image-display {
     width: 100%;
     max-width: 580px;
+    margin: 0 auto;
   }
 
   @media (max-width: 640px) {
     .result-image-display {
       width: calc(100vw - 32px);
+      max-width: calc(100vw - 32px);
+      transform: scale(0.9);
+      transform-origin: top center;
     }
+  }
+
+  @media (max-width: 480px) {
+    .result-image-display {
+      width: calc(100vw - 24px);
+      max-width: calc(100vw - 24px);
+      transform: scale(0.85);
+      transform-origin: top center;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .result-image-display {
+      width: calc(100vw - 16px);
+      max-width: calc(100vw - 16px);
+      transform: scale(0.8);
+      transform-origin: top center;
+    }
+  }
+
+  /* ResultImage 고정 크기 (이미지 생성용) */
+  .result-image-fixed {
+    width: 580px !important;
+    max-width: 580px !important;
+    min-width: 580px !important;
   }
 
   /* ===== 모바일 최적화 (기본 기능만) ===== */
