@@ -122,7 +122,7 @@ const SharePage: React.FC = () => {
     }, [id]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 py-10">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-10">
             <Helmet>
                 <title>{pageTitle} - {siteConfig.title}</title>
                 <meta name="description" content={`${pageTitle}를 확인하고 공유해보세요.`} />
@@ -135,9 +135,9 @@ const SharePage: React.FC = () => {
                 <p className="text-slate-500 dark:text-slate-400">나만의 시험 분석 파트너</p>
             </div>
 
-            {loading && <Spinner />}
+            {loading && <div className="flex justify-center"><Spinner /></div>}
             {error && (
-                <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/20 p-6 rounded-lg">
+                <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/20 p-6 rounded-lg mx-4">
                     <h2 className="text-xl font-bold mb-2">오류</h2>
                     <p>{error}</p>
                     <Button onClick={() => window.location.href = siteConfig.domain} className="mt-4">
@@ -146,8 +146,8 @@ const SharePage: React.FC = () => {
                 </div>
             )}
             {resultData && (
-                <div className="w-full max-w-2xl mx-auto px-4">
-                    <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div className="flex justify-center px-4">
+                    <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 overflow-hidden share-page-container">
                         <ResultImageDisplay
                             questions={resultData.questions}
                             examName={resultData.examName}
