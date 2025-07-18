@@ -56,20 +56,6 @@ export const siteConfig = {
 // URL 생성 헬퍼 함수들
 export const getShareUrl = (path: string = '') => `${siteConfig.domain}${path}`;
 
-// 환경에 따른 동적 도메인 결정 (개발 환경에서는 현재 도메인, 프로덕션에서는 설정된 도메인)
-export const getCurrentDomain = () => {
-    if (typeof window !== 'undefined') {
-        // 개발 환경에서는 현재 도메인 사용 (localhost, 개발 서버 등)
-        if (window.location.hostname === 'localhost' || 
-            window.location.hostname.includes('dev') || 
-            window.location.hostname.includes('staging')) {
-            return window.location.origin;
-        }
-    }
-    // 프로덕션 환경에서는 설정된 도메인 사용
-    return siteConfig.domain;
-};
-
 export const getTwitterShareUrl = (text?: string, url?: string) => {
     const shareText = text || siteConfig.shareText;
     const shareUrl = url || siteConfig.domain;
