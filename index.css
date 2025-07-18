@@ -91,14 +91,4 @@
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
   }
-
-  /* 모바일에서 결과 공유 페이지 축소 */
-  @media (max-width: 640px) {
-    .mobile-result-container {
-      transform: scale(calc((100vw - 48px) / 700px));
-      transform-origin: top center;
-      width: 100vw;
-      overflow: hidden;
-    }
-  }
 } 
