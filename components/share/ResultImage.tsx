@@ -1,8 +1,9 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Question } from '../../types';
 import SimpleSolveTimeChart from './SimpleSolveTimeChart';
 import FinalAnswerSheet from '../review/FinalAnswerSheet';
 import { formatTime } from '../../utils/formatters';
+import { siteConfig } from '../../config/site';
 
 interface ResultImageProps {
   questions: Question[];
@@ -92,7 +93,7 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
 
         {/* 5. 브랜딩 */}
         <footer className="text-center mt-6 pt-4 border-t border-slate-700">
-          <p className="text-2xl font-bold text-blue-400">mocktimer.kr</p>
+          <p className="text-2xl font-bold text-blue-400">{siteConfig.domain.replace('https://', '')}</p>
           <p className="text-base text-slate-300">나만의 시험 분석 파트너</p>
         </footer>
       </div>
