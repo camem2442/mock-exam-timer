@@ -121,7 +121,7 @@ const SharePage: React.FC = () => {
     }, [id]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 py-10 mobile-share-page">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 py-10">
             <Helmet>
                 <title>{pageTitle} - {siteConfig.title}</title>
                 <meta name="description" content={`${pageTitle}를 확인하고 공유해보세요.`} />
@@ -145,7 +145,7 @@ const SharePage: React.FC = () => {
                 </div>
             )}
             {resultData && (
-                 <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 mobile-scale-wrapper">
+                 <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 mobile-result-container">
                     <ResultImage
                         questions={resultData.questions}
                         examName={resultData.examName}
