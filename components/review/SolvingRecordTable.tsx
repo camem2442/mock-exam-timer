@@ -73,65 +73,67 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                 </h3>
                 <ToggleSwitch label="풀이 순서로 보기" enabled={sortBySolveOrder} onChange={setSortBySolveOrder} />
             </div>
-            <div className="max-h-[500px] overflow-y-auto">
-                <table className="w-full text-left">
-                    <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800">
-                        {sortBySolveOrder ? (
-                            <tr>
-                                <th className="p-3 text-sm whitespace-nowrap">순서</th>
-                                <th className="p-3 text-sm whitespace-nowrap">문제 번호</th>
-                                <th className="p-3 text-sm whitespace-nowrap">소요 시간</th>
-                                <th className="p-3 text-sm whitespace-nowrap">누적 시간</th>
-                                <th className="p-3 text-sm whitespace-nowrap">제출 답안</th>
-                                <th className="p-3 text-sm whitespace-nowrap text-center">정답 여부</th>
-                            </tr>
-                        ) : (
-                            <tr>
-                                <th className="p-3 text-sm whitespace-nowrap">문제 번호</th>
-                                <th className="p-3 text-sm whitespace-nowrap">총 소요 시간</th>
-                                <th className="p-3 text-sm whitespace-nowrap">시도 횟수</th>
-                                <th className="p-3 text-sm whitespace-nowrap">최종 답안</th>
-                                <th className="p-3 text-sm whitespace-nowrap text-center">정답 여부</th>
-                            </tr>
-                        )}
-                    </thead>
-                    <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-                        {sortBySolveOrder ? (
-                            solveHistory.length > 0 ? solveHistory.map((event, index) => {
-                                const question = questionsByNumber[event.questionNumber];
-                                return (
-                                <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <td className="p-3 text-sm font-medium whitespace-nowrap">{String(index + 1).padStart(2, '0')}</td>
-                                    <td className="p-3 text-sm font-medium whitespace-nowrap">{event.questionNumber}</td>
-                                    <td className="p-3 text-sm tabular-nums text-primary-600 dark:text-primary-400 font-semibold whitespace-nowrap">{formatTime(event.duration)}</td>
-                                    <td className="p-3 text-sm tabular-nums whitespace-nowrap">{formatTime(event.timestamp)}</td>
-                                    <td className="p-3 text-sm whitespace-nowrap">{event.answer ?? '미입력'}</td>
-                                    <td className="p-3 text-sm text-center whitespace-nowrap">{correctnessIndicator(question?.isCorrect)}</td>
-                                </tr>
-                                )
-                            }) : (
+            <div className="max-h-[500px] overflow-y-auto overflow-x-auto">
+                <div className="min-w-full">
+                    <table className="w-full text-left">
+                        <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800">
+                            {sortBySolveOrder ? (
                                 <tr>
-                                    <td colSpan={6} className="text-center p-8 text-slate-500">풀이 기록이 없습니다.</td>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">순서</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">번호</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">소요시간</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">누적시간</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">답안</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap text-center">정답</th>
                                 </tr>
-                            )
-                        ) : (
-                             sortedQuestions.map((q) => (
-                                <tr key={q.number} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <td className="p-3 text-sm font-bold whitespace-nowrap">{q.number}</td>
-                                    <td className="p-3 text-sm tabular-nums text-primary-600 dark:text-primary-400 font-semibold whitespace-nowrap">{formatTime(q.solveTime)}</td>
-                                    <td className="p-3 text-sm tabular-nums whitespace-nowrap">{q.attempts > 0 ? `${q.attempts}회` : '-'}</td>
-                                    <td className="p-3 text-sm whitespace-nowrap">{q.answer ?? '미입력'}</td>
-                                    <td className="p-3 text-sm text-center whitespace-nowrap">{correctnessIndicator(q.isCorrect)}</td>
+                            ) : (
+                                <tr>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">번호</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">소요시간</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">시도</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap">답안</th>
+                                    <th className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap text-center">정답</th>
                                 </tr>
-                            ))
-                        )}
-                         {( !sortBySolveOrder && sortedQuestions.every(q => q.attempts === 0)) && (
-                            <tr>
-                                <td colSpan={5} className="text-center p-8 text-slate-500">풀이 기록이 없습니다.</td>
-                            </tr>
-                         )}
-                    </tbody>
-                </table>
+                            )}
+                        </thead>
+                        <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+                            {sortBySolveOrder ? (
+                                solveHistory.length > 0 ? solveHistory.map((event, index) => {
+                                    const question = questionsByNumber[event.questionNumber];
+                                    return (
+                                    <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm font-medium whitespace-nowrap">{String(index + 1).padStart(2, '0')}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm font-medium whitespace-nowrap">{event.questionNumber}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm tabular-nums text-primary-600 dark:text-primary-400 font-semibold whitespace-nowrap">{formatTime(event.duration)}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm tabular-nums whitespace-nowrap">{formatTime(event.timestamp)}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap max-w-[60px] sm:max-w-none truncate" title={event.answer ?? '미입력'}>{event.answer ?? '미입력'}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm text-center whitespace-nowrap">{correctnessIndicator(question?.isCorrect)}</td>
+                                    </tr>
+                                    )
+                                }) : (
+                                    <tr>
+                                        <td colSpan={6} className="text-center p-8 text-slate-500 text-sm">풀이 기록이 없습니다.</td>
+                                    </tr>
+                                )
+                            ) : (
+                                 sortedQuestions.map((q) => (
+                                    <tr key={q.number} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm font-bold whitespace-nowrap">{q.number}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm tabular-nums text-primary-600 dark:text-primary-400 font-semibold whitespace-nowrap">{formatTime(q.solveTime)}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm tabular-nums whitespace-nowrap">{q.attempts > 0 ? `${q.attempts}회` : '-'}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm whitespace-nowrap max-w-[60px] sm:max-w-none truncate" title={q.answer ?? '미입력'}>{q.answer ?? '미입력'}</td>
+                                        <td className="p-2 sm:p-3 text-xs sm:text-sm text-center whitespace-nowrap">{correctnessIndicator(q.isCorrect)}</td>
+                                    </tr>
+                                ))
+                            )}
+                             {( !sortBySolveOrder && sortedQuestions.every(q => q.attempts === 0)) && (
+                                <tr>
+                                    <td colSpan={5} className="text-center p-8 text-slate-500 text-sm">풀이 기록이 없습니다.</td>
+                                </tr>
+                             )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div className="flex justify-end mt-4 gap-2">
                 <Button 
