@@ -78,7 +78,7 @@
   }
   @media (max-width: 640px) {
     html {
-      font-size: 14px;
+      font-size: 16px; /* iOS 자동 확대 방지 */
     }
   }
 
@@ -118,13 +118,17 @@
       min-width: 44px;
     }
 
-    /* 📱 키보드 확대 방지 */
+    /* 📱 키보드 확대 방지 - 모든 입력 요소 */
     input[type="text"],
     input[type="number"],
     input[type="email"],
     input[type="password"],
     input[type="tel"],
     input[type="search"],
+    input[type="url"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
     textarea,
     select {
       font-size: 16px !important; /* iOS 자동 확대 방지 */
@@ -161,6 +165,9 @@
     /* 📝 폰트 최적화 */
     body {
       font-size: 16px; /* iOS 자동 확대 방지 */
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     /* 🎨 카드 스타일 (기존 스타일 유지) */
@@ -182,6 +189,10 @@
     input[type="password"],
     input[type="tel"],
     input[type="search"],
+    input[type="url"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
     textarea,
     select {
       border-radius: 8px;
@@ -195,6 +206,10 @@
     input[type="password"]:focus,
     input[type="tel"]:focus,
     input[type="search"]:focus,
+    input[type="url"]:focus,
+    input[type="date"]:focus,
+    input[type="time"]:focus,
+    input[type="datetime-local"]:focus,
     textarea:focus,
     select:focus {
       border-color: #3b82f6;

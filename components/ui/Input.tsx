@@ -17,6 +17,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, id, clas
     autoCorrect: props.autoCorrect || 'off',
     autoCapitalize: props.autoCapitalize || 'off',
     spellCheck: props.spellCheck || false,
+    style: {
+      fontSize: '16px', // iOS 자동 확대 방지
+      ...props.style
+    },
     ...props
   };
   
