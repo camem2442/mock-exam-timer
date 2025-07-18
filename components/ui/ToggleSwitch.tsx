@@ -17,7 +17,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ label, enabled, onCh
       <button
         type="button"
         disabled={disabled}
-        className={`${
+        className={`toggle-switch-button ${
           enabled ? 'bg-primary-600' : 'bg-slate-300 dark:bg-slate-600'
         } relative inline-flex h-6 w-11 flex-shrink-0 rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 ${
           disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'

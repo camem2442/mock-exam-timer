@@ -106,20 +106,19 @@
 
   /* 모바일 터치 최적화 */
   @media (max-width: 768px) {
-    /* 터치 영역 최소 44px 보장 */
-    button, 
-    [role="button"],
+    /* 터치 영역 최소 44px 보장 (토글 스위치 제외) */
+    button:not(.toggle-switch-button), 
+    [role="button"]:not(.toggle-switch-button),
     .btn,
-    .toggle-switch,
     input[type="checkbox"],
     input[type="radio"] {
       min-height: 44px;
       min-width: 44px;
     }
 
-    /* 터치 피드백 개선 */
-    button:active,
-    [role="button"]:active,
+    /* 터치 피드백 개선 (토글 스위치 제외) */
+    button:not(.toggle-switch-button):active,
+    [role="button"]:not(.toggle-switch-button):active,
     .btn:active {
       transform: scale(0.95);
       transition: transform 0.1s ease;
@@ -132,9 +131,9 @@
       scroll-behavior: smooth;
     }
 
-    /* 텍스트 선택 방지 (버튼 등) */
-    button,
-    [role="button"],
+    /* 텍스트 선택 방지 (버튼 등, 토글 스위치 제외) */
+    button:not(.toggle-switch-button),
+    [role="button"]:not(.toggle-switch-button),
     .btn {
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -164,9 +163,9 @@
       padding-right: 1rem;
     }
 
-    /* 더 큰 터치 영역 */
-    button, 
-    [role="button"],
+    /* 더 큰 터치 영역 (토글 스위치 제외) */
+    button:not(.toggle-switch-button), 
+    [role="button"]:not(.toggle-switch-button),
     .btn {
       min-height: 48px;
       min-width: 48px;
