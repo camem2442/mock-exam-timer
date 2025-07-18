@@ -24,30 +24,29 @@ const FinalAnswerSheet: React.FC<FinalAnswerSheetProps> = ({ questions, blurAnsw
         return 'bg-slate-200 dark:bg-slate-800 border-transparent';
     };
 
-    // 5열 배수로 반응형 그리드 클래스 계산
+    const gridClasses = forceCols 
+        ? `grid-cols-${forceCols}` // This might not work with Tailwind JIT, let's use a map
+        : 'grid-cols-5 sm:grid-cols-10 lg:grid-cols-15';
+    
+    // Tailwind JIT requires full class names
     const getGridClass = () => {
-        if (forceCols === 10) {
-            // 모바일에서는 5열, 태블릿에서는 10열
-            return 'grid-cols-5 sm:grid-cols-10';
-        }
-        if (forceCols === 15) {
-            // 모바일에서는 5열, 태블릿에서는 10열, 데스크톱에서는 15열
-            return 'grid-cols-5 sm:grid-cols-10 lg:grid-cols-15';
-        }
-        // 기본 반응형 동작: 5열 배수
+        if (forceCols === 10) return 'grid-cols-10';
+        if (forceCols === 15) return 'grid-cols-15';
+        // Default responsive behavior
         return 'grid-cols-5 sm:grid-cols-10 lg:grid-cols-15';
-    };
+    }
+
 
     return (
-        <div className={`grid ${getGridClass()} gap-1 sm:gap-2`}>
+        <div className={`grid ${getGridClass()} gap-2`}>
             {sortedQuestions.map(q => (
                 <div
                     key={`answer-grid-${q.number}`}
-                    className={`p-1 sm:p-1.5 rounded-md flex flex-col items-center justify-center text-center border transition-colors ${getStyles(q)}`}
+                    className={`p-1.5 rounded-md flex flex-col items-center justify-center text-center border transition-colors ${getStyles(q)}`}
                 >
-                    <span className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">{q.number}</span>
+                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{q.number}</span>
                     <span
-                        className={`text-xs sm:text-base font-bold text-slate-800 dark:text-slate-200 truncate ${blurAnswer ? 'blur-sm select-none' : ''}`}
+                        className={`text-base font-bold text-slate-800 dark:text-slate-200 truncate ${blurAnswer ? 'blur-sm select-none' : ''}`}
                     >
                         {q.answer ?? '-'}
                     </span>
