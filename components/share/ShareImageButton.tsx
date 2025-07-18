@@ -121,14 +121,32 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
         }
         setIsSharing(true);
         try {
+            const shareText = `${examName} 시험 결과 - ${siteConfig.title}\n\n${shareUrl}`;
+            
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [generatedImageFile] })) {
                 await navigator.share({
                     title: `${examName} 시험 결과 - ${siteConfig.title}`,
-                    text: `${examName} 시험 결과 - ${siteConfig.title}`,
+                    text: shareText,
                     url: shareUrl,
                     files: [generatedImageFile],
                 });
             } else {
+                // 폴백: 클립보드에 텍스트와 링크 복사 후 이미지 다운로드
+                try {
+                    await navigator.clipboard.writeText(shareText);
+                    alert('공유 텍스트와 링크가 클립보드에 복사되었습니다!');
+                } catch (error) {
+                    // 폴백: 수동 복사
+                    const textArea = document.createElement('textarea');
+                    textArea.value = shareText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    alert('공유 텍스트와 링크가 클립보드에 복사되었습니다!');
+                }
+                
+                // 이미지 다운로드
                 const downloadUrl = window.URL.createObjectURL(generatedImageFile);
                 const a = document.createElement('a');
                 a.href = downloadUrl;

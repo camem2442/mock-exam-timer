@@ -75,9 +75,11 @@ const SharePage: React.FC = () => {
             const blob = await response.blob();
             const file = new File([blob], `${pageTitle}.png`, { type: blob.type });
 
+            const shareText = `${pageTitle} - ${siteConfig.title}\n\n${shareUrl}`;
+
             await navigator.share({
                 title: pageTitle,
-                text: `${pageTitle} - ${siteConfig.title}`,
+                text: shareText,
                 url: shareUrl,
                 files: [file],
             });
