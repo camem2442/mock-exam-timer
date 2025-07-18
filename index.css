@@ -133,6 +133,14 @@
       text-size-adjust: 100%;
     }
 
+    /* ✨ 터치 피드백 애니메이션 */
+    button:not(.toggle-switch-button):active,
+    [role="button"]:not(.toggle-switch-button):active,
+    .btn:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+
     /* 📱 스크롤 성능 최적화 */
     .overflow-y-auto,
     .overflow-x-auto {
@@ -153,6 +161,62 @@
     /* 📝 폰트 최적화 */
     body {
       font-size: 16px; /* iOS 자동 확대 방지 */
+    }
+
+    /* 🎨 카드 스타일 (기존 스타일 유지) */
+    .bg-white,
+    .dark .bg-slate-900 {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .dark .bg-slate-900 {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 🎯 입력 필드 개선 */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="search"],
+    textarea,
+    select {
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-size: 16px; /* iOS 자동 확대 방지 */
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="tel"]:focus,
+    input[type="search"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    /* 🎨 모달 개선 */
+    .modal-container {
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 📊 테이블 개선 */
+    table {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* 🎯 포커스 표시 개선 */
+    *:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
   }
 
