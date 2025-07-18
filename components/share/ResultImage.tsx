@@ -79,7 +79,7 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
             <section className="mb-6 bg-slate-800/60 p-4 rounded-lg border border-slate-700">
                 {/* Spacing div to match the height of h2 titles in other sections */}
                 <div className="h-7" />
-                <FinalAnswerSheet questions={displayQuestions} blurAnswer={blurAnswer} />
+                <FinalAnswerSheet questions={displayQuestions} blurAnswer={blurAnswer} forceCols={10} />
             </section>
         )}
 
