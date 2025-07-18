@@ -29,7 +29,12 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
       <div 
         ref={ref} 
         className="bg-slate-900 text-white p-6 result-image-fixed" 
-        style={{ fontFamily: "'Noto Sans KR', sans-serif" }}
+        style={{ 
+          fontFamily: "'Noto Sans KR', sans-serif",
+          width: 580,
+          maxWidth: 580,
+          minWidth: 580
+        }}
         data-testid="result-image-container"
       >
         
