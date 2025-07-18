@@ -95,7 +95,7 @@
   /* 모바일에서 메인 결과 영역 축소 */
   @media (max-width: 640px) {
     .mobile-result-area {
-      transform: scale(calc(100vw / 628px));
+      transform: scale(calc((100vw - 32px) / 628px));
       transform-origin: top center;
       width: 100vw;
       overflow: hidden;
