@@ -92,28 +92,15 @@
     -webkit-transform: translateZ(0);
   }
 
-  /* 모바일에서 SharePage 전체 축소 */
-  @media (max-width: 640px) {
-    body {
-      overflow-x: hidden;
-    }
-    
-    .mobile-result-image-wrapper {
-      transform: scale(calc((100vw - 32px) / 628px)) !important;
-      transform-origin: top center !important;
-      width: 100vw !important;
-      overflow: hidden !important;
-      max-width: 100vw !important;
-    }
+  /* ResultImageDisplay 반응형 스타일 */
+  .result-image-display {
+    width: 100%;
+    max-width: 580px;
   }
 
-  /* 더 작은 화면에서 강제 축소 */
-  @media (max-width: 480px) {
-    .mobile-result-image-wrapper {
-      transform: scale(0.6) !important;
-      transform-origin: top center !important;
-      width: 100vw !important;
-      overflow: hidden !important;
+  @media (max-width: 640px) {
+    .result-image-display {
+      width: calc(100vw - 32px);
     }
   }
 } 
