@@ -68,7 +68,7 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
     return (
         <>
             <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200">
+                <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 whitespace-nowrap">
                     {sortBySolveOrder ? '풀이 기록표 (시간순)' : '풀이 기록표 (문제 번호순)'}
                 </h3>
                 <ToggleSwitch label="풀이 순서로 보기" enabled={sortBySolveOrder} onChange={setSortBySolveOrder} />
