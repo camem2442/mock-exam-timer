@@ -92,13 +92,12 @@
     -webkit-transform: translateZ(0);
   }
 
-  /* ResultImage 기본 스타일 */
-  .result-image-content {
-    width: 580px;
-  }
-
-  /* 모바일에서 메인 결과 영역 축소 */
+  /* 모바일에서 SharePage 전체 축소 */
   @media (max-width: 640px) {
+    body {
+      overflow-x: hidden;
+    }
+    
     .mobile-result-area {
       transform: scale(calc((100vw - 32px) / 628px)) !important;
       transform-origin: top center !important;
