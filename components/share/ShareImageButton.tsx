@@ -4,7 +4,7 @@ import { type Question } from '../../types';
 import { Button } from '../ui/Button';
 import ShareSettingsModal from './ShareSettingsModal';
 import SharePreviewModal from './SharePreviewModal';
-import { siteConfig } from '../../config/site';
+import { siteConfig, getCurrentDomain } from '../../config/site';
 import { ResultImage } from '../share/ResultImage'; // ResultImage를 직접 사용하기 위해 import
 
 interface ShareImageButtonProps {
@@ -98,7 +98,7 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                 return response.json();
             })
             .then(data => {
-                const newShareUrl = `${siteConfig.domain}/share/${data.id}`;
+                const newShareUrl = `${getCurrentDomain()}/share/${data.id}`;
                 setShareUrl(newShareUrl);
             })
             .catch(err => {
