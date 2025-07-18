@@ -141,6 +141,7 @@ const SaveExamButton: React.FC<{ questions: Question[]; examName: string }> = ({
                 onClick={handleSaveExamRecord} 
                 variant="secondary"
                 size="md"
+                className="w-full sm:w-auto"
             >
                 시험 기록 저장 (베타)
             </Button>
@@ -208,15 +209,19 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onContin
                         <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">풀이 과정 분석 리포트</h2>
                         <ShareButton questions={questions} />
                     </div>
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
-                        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 sm:mt-0 mt-2">
-                            아래 데이터를 해설지와 함께 보며 자신의 풀이 습관을 복기해보세요.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
+                    <div className="flex flex-col justify-between items-start gap-4 mt-2">
+                        <div className="w-full pb-4 border-b border-slate-200 dark:border-slate-700">
+                            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+                                아래 데이터를 해설지와 함께 보며 자신의 풀이 습관을 복기해보세요.
+                            </p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto sm:self-end">
                             <SaveExamButton questions={questions} examName={examName} />
                             <ShareImageButton questions={questions} examName={examName} totalMinutes={totalMinutes} />
-                            <Button onClick={onContinue} variant="secondary" className="w-full">이어서 진행</Button>
-                            <Button onClick={onRestart} variant="primary" className="w-full">새로운 시험 시작</Button>
+                            <div className="flex w-full sm:w-auto gap-2">
+                                <Button onClick={onContinue} variant="secondary" className="flex-1 sm:w-auto">이어서 진행</Button>
+                                <Button onClick={onRestart} variant="primary" className="flex-1 sm:w-auto">새로운 시험 시작</Button>
+                            </div>
                         </div>
                     </div>
                 </header>

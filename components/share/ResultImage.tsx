@@ -25,7 +25,12 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
 
     return (
       // 세로형 이미지의 전체 크기와 스타일 지정
-      <div ref={ref} className="bg-slate-900 text-white p-6" style={{ width: 420, fontFamily: "'Noto Sans KR', sans-serif" }}>
+      <div 
+        ref={ref} 
+        className="bg-slate-900 text-white p-6" 
+        style={{ width: 420, fontFamily: "'Noto Sans KR', sans-serif" }}
+        data-testid="result-image-container" // Puppeteer가 기다릴 선택자 추가
+      >
         
         {/* 1. 시험 제목 */}
         {examName?.trim() && (

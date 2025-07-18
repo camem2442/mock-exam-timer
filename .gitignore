@@ -47,3 +47,4 @@ __tests__/
 # 개발 도구 (이미지 최적화 등)
 scripts/
 *.cjs
+.vercel

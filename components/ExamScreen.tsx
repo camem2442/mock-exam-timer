@@ -66,6 +66,31 @@ const ExamScreen: React.FC = () => {
     const problemRefs = useRef<Record<number, HTMLDivElement | null>>({});
     const problemListContainerRef = useRef<HTMLDivElement | null>(null);
 
+    // Effect for saving setup settings to localStorage
+    useEffect(() => {
+        const setupSettings = {
+            examName,
+            startQuestionStr,
+            endQuestionStr,
+            totalMinutesStr,
+            isUnlimitedTime,
+        };
+        localStorage.setItem('examSetup', JSON.stringify(setupSettings));
+    }, [examName, startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime]);
+
+    // Effect for loading setup settings from localStorage on initial mount
+    useEffect(() => {
+        const savedSetupJSON = localStorage.getItem('examSetup');
+        if (savedSetupJSON) {
+            const savedSetup = JSON.parse(savedSetupJSON);
+            setExamName(savedSetup.examName || '');
+            setStartQuestionStr(savedSetup.startQuestionStr || '1');
+            setEndQuestionStr(savedSetup.endQuestionStr || '45');
+            setTotalMinutesStr(savedSetup.totalMinutesStr || '70');
+            setIsUnlimitedTime(savedSetup.isUnlimitedTime || false);
+        }
+    }, []);
+
     // Effect for saving state to localStorage
     useEffect(() => {
         const isReviewing = !isExamActive && showReview;
@@ -84,6 +109,7 @@ const ExamScreen: React.FC = () => {
                 // Add flags to know where we are
                 isExamActive,
                 showReview,
+                examName, // 시험 설정값도 저장하여 복원 시 일관성 유지
             };
             localStorage.setItem('examState', JSON.stringify(stateToSave));
         }
@@ -93,7 +119,9 @@ const ExamScreen: React.FC = () => {
         totalElapsedTime, overallTimeLeft, currentProblemTime,
         lapCounter, timeUp, isPaused, startTime, lastLapTimestamp, pauseTime,
         focusedQuestionNumber, batchMode, batchSelectedQuestions, submittedCorrectAnswers,
-        gradingModalInputs, gradingModalSubjective
+        gradingModalInputs, gradingModalSubjective,
+        // 시험 설정값도 저장하여 복원 시 일관성 유지
+        examName, startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime 
     ]);
 
      // Effect for loading state from localStorage on initial mount
@@ -124,6 +152,8 @@ const ExamScreen: React.FC = () => {
                 setBatchMode(savedState.batchMode);
                 setBatchSelectedQuestions(new Set(savedState.batchSelectedQuestions));
                 examConfigRef.current = savedState.examConfig;
+                // 시험 설정값도 복원
+                setExamName(savedState.examName || '');
                 setStartQuestionStr(savedState.startQuestionStr);
                 setEndQuestionStr(savedState.endQuestionStr);
                 setTotalMinutesStr(savedState.totalMinutesStr);

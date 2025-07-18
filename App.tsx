@@ -11,6 +11,7 @@ import { GuidePage } from './components/pages/GuidePage';
 import { ChangelogPage } from './components/pages/ChangelogPage';
 import { ContactPage } from './components/pages/ContactPage';
 import { FAQPage } from './components/pages/FAQPage';
+import SharePage from './components/pages/SharePage';
 
 // 네비게이션 컴포넌트
 const Navigation: React.FC = () => {
@@ -249,6 +250,7 @@ const App: React.FC = () => {
           <Route path="/changelog" element={<ChangelogPageWrapper />} />
           <Route path="/contact" element={<ContactPageWrapper />} />
           <Route path="/faq" element={<FAQPage />} />
+          <Route path="/share/:id" element={<SharePage />} />
         </Routes>
       </main>
       <Analytics />

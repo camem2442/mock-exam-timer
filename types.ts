@@ -19,6 +19,7 @@ export interface Question {
   attempts: number;
   solveEvents: SolveEvent[];
   startTime?: number; // totalElapsedTime when the latest lap for this question began
+  endTime?: number; // totalElapsedTime when the question was finally solved
   isCorrect?: boolean;
 }
 
