@@ -61,7 +61,7 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
         }}
         data-testid="result-image-display-container"
       >
-        <div className="bg-slate-900 text-white p-6 result-image-display">
+        <div className="bg-slate-900 text-white p-6 rounded-lg">
         
         <header className="text-center mb-6">
           <h1 className="text-3xl font-bold text-white">{examName}</h1>

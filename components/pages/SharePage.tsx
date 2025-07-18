@@ -147,15 +147,13 @@ const SharePage: React.FC = () => {
             )}
             {resultData && (
                 <div className="flex justify-center px-4">
-                    <div className="w-full max-w-2xl">
-                        <ResultImageDisplay
-                            questions={resultData.questions}
-                            examName={resultData.examName}
-                            totalMinutes={resultData.totalMinutes}
-                            includeGrading={resultData.includeGrading}
-                            blurAnswer={resultData.blurAnswer}
-                        />
-                    </div>
+                    <ResultImageDisplay
+                        questions={resultData.questions}
+                        examName={resultData.examName}
+                        totalMinutes={resultData.totalMinutes}
+                        includeGrading={resultData.includeGrading}
+                        blurAnswer={resultData.blurAnswer}
+                    />
                 </div>
             )}
 
