@@ -15,30 +15,30 @@ interface ResultImageDisplayProps {
 
 export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayProps>(
   ({ questions, examName, includeGrading, blurAnswer, totalMinutes }, ref) => {
-    const [scale, setScale] = useState(1);
+    const [containerWidth, setContainerWidth] = useState(580);
     
-    // 화면 크기에 따른 스케일 계산
+    // 화면 크기에 따른 너비 계산
     useEffect(() => {
-      const updateScale = () => {
+      const updateWidth = () => {
         const width = window.innerWidth;
-        let newScale = 1;
+        let newWidth = 580;
         
         if (width <= 360) {
-          newScale = 0.75;
+          newWidth = Math.min(width - 32, 320);
         } else if (width <= 480) {
-          newScale = 0.8;
+          newWidth = Math.min(width - 24, 400);
         } else if (width <= 640) {
-          newScale = 0.85;
+          newWidth = Math.min(width - 32, 500);
         } else if (width <= 768) {
-          newScale = 0.9;
+          newWidth = Math.min(width - 32, 550);
         }
         
-        setScale(newScale);
+        setContainerWidth(newWidth);
       };
       
-      updateScale();
-      window.addEventListener('resize', updateScale);
-      return () => window.removeEventListener('resize', updateScale);
+      updateWidth();
+      window.addEventListener('resize', updateWidth);
+      return () => window.removeEventListener('resize', updateWidth);
     }, []);
     
     // 채점된 문제 수 계산
@@ -55,10 +55,9 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
         className="bg-slate-900 text-white p-6 result-image-display" 
         style={{ 
           fontFamily: "'Noto Sans KR', sans-serif",
-          width: 580,
-          transform: `scale(${scale})`,
-          transformOrigin: 'top center',
-          margin: '0 auto'
+          width: containerWidth,
+          margin: '0 auto',
+          boxSizing: 'border-box'
         }}
         data-testid="result-image-display-container"
       >
