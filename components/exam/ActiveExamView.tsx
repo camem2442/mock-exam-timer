@@ -69,18 +69,41 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [visibleRange, setVisibleRange] = useState({ start: 1, end: Math.min(5, questions.length || 1) });
 
-  // 스크롤 감지
+  // 스크롤 감지 (throttled with hysteresis)
   useEffect(() => {
+    let ticking = false;
+    const SCROLL_UP_THRESHOLD = 80;   // 위로 스크롤할 때 normal 모드로 전환하는 임계값
+    const SCROLL_DOWN_THRESHOLD = 120; // 아래로 스크롤할 때 compact 모드로 전환하는 임계값
+    
     const handleScroll = () => {
-      const scrollY = window.scrollY || window.pageYOffset;
-      setIsScrolled(scrollY > 50); // 50px 이상 스크롤하면 compact 모드
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY || window.pageYOffset;
+          
+          // 하이스테리시스 적용: 현재 상태에 따라 다른 임계값 사용
+          if (isScrolled) {
+            // compact 모드일 때는 더 작은 값에서 normal 모드로 전환
+            if (scrollY < SCROLL_UP_THRESHOLD) {
+              setIsScrolled(false);
+            }
+          } else {
+            // normal 모드일 때는 더 큰 값에서 compact 모드로 전환
+            if (scrollY > SCROLL_DOWN_THRESHOLD) {
+              setIsScrolled(true);
+            }
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // 초기 상태 확인
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isScrolled]);
 
   const setProblemRef = useCallback((num: number, el: HTMLDivElement | null) => {
     if(problemRefs.current) {
