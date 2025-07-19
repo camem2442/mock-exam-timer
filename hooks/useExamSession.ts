@@ -52,7 +52,14 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
     if (batchMode && answer !== undefined) {
         setBatchSelectedQuestions(prev => {
             const newSet = new Set(prev);
-            newSet.add(questionNumber);
+            const currentAnswer = questions[questionNumber]?.answer;
+            
+            // 같은 답안을 다시 클릭하면 선택 해제, 다른 답안이면 선택 유지
+            if (currentAnswer === answer && newSet.has(questionNumber)) {
+                newSet.delete(questionNumber);
+            } else {
+                newSet.add(questionNumber);
+            }
             return newSet;
         });
     }
