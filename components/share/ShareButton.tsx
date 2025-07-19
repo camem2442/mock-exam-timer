@@ -60,7 +60,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ questions }) => {
             
             {/* 클립보드 복사 성공 메시지 */}
             {showCopyMessage && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[60] bg-info border border-border rounded-lg shadow-lg p-4 max-w-sm">
+                <div className="absolute top-full right-0 mt-2 z-[60] bg-info border border-border rounded-lg shadow-lg p-3 w-72 max-w-[90vw]">
                     <div className="flex items-start gap-3">
                         <div className="flex-shrink-0">
                             <svg className="h-5 w-5 text-info-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">

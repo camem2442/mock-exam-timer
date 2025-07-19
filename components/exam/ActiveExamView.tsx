@@ -3,8 +3,9 @@ import { Card } from '../ui/Card';
 import TimerDisplay from './TimerDisplay';
 import QuickNav from './QuickNav';
 import DynamicMarkingWindow from './DynamicMarkingWindow';
-import ControlToolbar from './ControlToolbar';
 import ProblemList from './ProblemList';
+import ProblemListHeader from './ProblemListHeader';
+import FloatingControls from './FloatingControls';
 import { type Question } from '../../types';
 
 interface ActiveExamViewProps {
@@ -64,6 +65,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   totalMinutesStr,
 }) => {
 
+
   const problemListContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setProblemRef = (qNum: number, el: HTMLDivElement | null) => {
@@ -87,6 +89,32 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         container.scrollTo({ top: offset, behavior: 'smooth' });
     }
   }, [setFocusedQuestionNumber, problemRefs]);
+
+  // 스크롤 네비게이션 로직 (5개씩 이동)
+  const handleScrollUp = useCallback(() => {
+    if (!focusedQuestionNumber) return;
+    const currentIndex = questions.findIndex(q => q.number === focusedQuestionNumber);
+    if (currentIndex > 0) {
+      const targetIndex = Math.max(0, currentIndex - 5);
+      const targetQuestion = questions[targetIndex];
+      handleJumpToQuestion(targetQuestion.number);
+    }
+  }, [focusedQuestionNumber, questions, handleJumpToQuestion]);
+
+  const handleScrollDown = useCallback(() => {
+    if (!focusedQuestionNumber) return;
+    const currentIndex = questions.findIndex(q => q.number === focusedQuestionNumber);
+    if (currentIndex < questions.length - 1) {
+      const targetIndex = Math.min(questions.length - 1, currentIndex + 5);
+      const targetQuestion = questions[targetIndex];
+      handleJumpToQuestion(targetQuestion.number);
+    }
+  }, [focusedQuestionNumber, questions, handleJumpToQuestion]);
+
+  // 현재 문제 인덱스 계산
+  const currentQuestionIndex = focusedQuestionNumber 
+    ? questions.findIndex(q => q.number === focusedQuestionNumber) + 1 
+    : 1;
 
   const focusedQuestionObj = focusedQuestionNumber ? questions.find(q => q.number === focusedQuestionNumber) : null;
   const questionMap = React.useMemo(() => Object.fromEntries(questions.map(q => [q.number, q])), [questions]);
@@ -135,20 +163,15 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
       />
 
       <Card className="space-y-4">
-        <ControlToolbar
-          isExamActive={isExamActive}
-          batchMode={batchMode}
-          onBatchModeChange={onBatchModeChange}
-          onBatchRecord={onBatchRecord}
-          isBatchRecordDisabled={!batchMode || batchSelectedQuestions.size === 0}
-          isMarkingMode={isMarkingMode}
-          onMarkingModeChange={onMarkingModeChange}
+        <ProblemListHeader
+          currentQuestionIndex={currentQuestionIndex}
+          totalQuestions={questions.length}
+          onScrollUp={handleScrollUp}
+          onScrollDown={handleScrollDown}
         />
-
-        <div className="border-t border-border pt-4">
-          <div>
-            <h3 className="text-lg font-bold mb-3">전체 문제 목록</h3>
-            <ProblemList
+        
+        <div className="pt-4">
+          <ProblemList
               ref={problemListContainerRef}
               isExamActive={isExamActive}
               questionNumbers={questions.map(q => q.number)}
@@ -161,8 +184,17 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
               setProblemRef={setProblemRef}
             />
           </div>
-        </div>
       </Card>
+
+      <FloatingControls
+        isExamActive={isExamActive}
+        batchMode={batchMode}
+        onBatchModeChange={onBatchModeChange}
+        onBatchRecord={onBatchRecord}
+        isBatchRecordDisabled={!batchMode || batchSelectedQuestions.size === 0}
+        isMarkingMode={isMarkingMode}
+        onMarkingModeChange={onMarkingModeChange}
+      />
     </div>
   );
 }; 

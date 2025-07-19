@@ -51,6 +51,11 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
                 [questionNumber]: { ...prev[questionNumber], answer: answer === '' ? null : answer }
             }));
         }
+        // 일괄 모드에서도 다음 문제로 이동
+        const nextQuestionNumber = findNextQuestion(questionNumber);
+        if (nextQuestionNumber !== null) {
+            setFocusedQuestionNumber(nextQuestionNumber);
+        }
         return;
     }
 
@@ -130,7 +135,6 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
 
     setBatchSelectedQuestions(new Set());
     setBatchMode(false);
-    setIsMarkingMode(false);
     setLapCounter(c => c + 1);
     timer.recordLap();
   }, [isExamActive, batchSelectedQuestions, timer]);

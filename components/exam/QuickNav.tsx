@@ -23,10 +23,10 @@ const QuickNav: React.FC<QuickNavProps> = ({ questionNumbers, questions, onJumpT
                     return (
                         <Button
                             key={qNum}
-                            variant={qNum === focusedQuestionNumber ? 'default' : (hasAnswer ? 'outline' : 'secondary')}
+                            variant={qNum === focusedQuestionNumber ? 'default' : (hasAnswer ? 'secondary' : 'muted')}
                             size="sm"
                             onClick={() => onJumpTo(qNum)}
-                            className="!px-2 !py-1 justify-center" // Ensure padding is consistent
+                            className="!px-2 !py-1 justify-center"
                         >
                             {qNum}
                         </Button>
