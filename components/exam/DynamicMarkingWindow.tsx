@@ -38,7 +38,7 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
             <Button
                 variant="default"
                 className="w-24 flex-shrink-0"
-                onClick={(e) => handleAction(e, () => setFocusedQuestionNumber(qNum))}
+                onClick={(e) => handleAction(e, () => onLap(qNum))}
                 disabled={!isExamActive}
             >
                 {qNum}번
