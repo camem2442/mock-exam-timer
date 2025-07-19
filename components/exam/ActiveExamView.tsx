@@ -66,7 +66,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
   const problemListContainerRef = useRef<HTMLDivElement | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [visibleRange, setVisibleRange] = useState({ start: 1, end: 5 });
+  const [visibleRange, setVisibleRange] = useState({ start: 1, end: Math.min(5, questions.length || 1) });
 
   // 스크롤 감지
   useEffect(() => {
@@ -123,6 +123,9 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
   // 스크롤 위치에 따른 범위 업데이트
   useEffect(() => {
+    // questions가 없으면 실행하지 않음
+    if (questions.length === 0) return;
+    
     let cleanup: (() => void) | undefined;
 
     const setupScrollListener = () => {
@@ -167,7 +170,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   }, [questions.length]);
 
   const canScrollUp = visibleRange.start > 1;
-  const canScrollDown = visibleRange.end < questions.length;
+  const canScrollDown = questions.length > 0 && visibleRange.end < questions.length;
 
   return (
     <div className="space-y-8">
@@ -244,7 +247,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
                   </svg>
                 </Button>
                 <span className="text-sm text-muted-foreground px-2 min-w-[80px] text-center">
-                  {visibleRange.start}-{visibleRange.end} / {questions.length}
+                  {questions.length > 0 ? `${visibleRange.start}-${visibleRange.end} / ${questions.length}` : '0 / 0'}
                 </span>
                 <Button
                   size="icon"
