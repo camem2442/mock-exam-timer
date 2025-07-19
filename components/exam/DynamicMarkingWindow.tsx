@@ -52,7 +52,7 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
                             key={ans}
                             onClick={(e) => handleAction(e, () => onLap(qNum, ans.toString()))}
                             disabled={!isExamActive}
-                            variant={question.answer === ans.toString() ? 'default' : 'ghost'}
+                            variant={question.answer === ans.toString() ? 'default' : 'outline'}
                             size="icon"
                             className="w-8 h-8 rounded-md"
                         >
