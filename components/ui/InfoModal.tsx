@@ -30,7 +30,12 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                     <div className="border-t border-border my-6"></div>
                     
                     <section>
-                        <h3 className="text-lg font-semibold text-primary mb-3">🚀 빠른 시작</h3>
+                        <h3 className="text-lg font-semibold text-primary mb-3 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            <span>빠른 시작</span>
+                        </h3>
                         <div className="space-y-3 text-sm">
                             <div className="flex items-start gap-3">
                                 <span className="bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</span>
@@ -61,7 +66,12 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                     </section>
                     
                      <section>
-                        <h3 className="text-lg font-semibold text-primary mb-3">⚡ 핵심 기능</h3>
+                        <h3 className="text-lg font-semibold text-primary mb-3 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                            <span>핵심 기능</span>
+                        </h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                             <div className="bg-muted p-3 rounded-lg">
                                 <strong>키보드 단축키:</strong> 숫자 키 1~5로 빠른 답안 입력
@@ -87,7 +97,12 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                     <div className="border-t border-border my-6"></div>
                     
                     <section className="text-center space-y-4">
-                        <h3 className="text-lg font-semibold text-primary">📚 더 자세한 정보가 필요하신가요?</h3>
+                        <h3 className="text-lg font-semibold text-primary mb-3 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>더 자세한 정보가 필요하신가요?</span>
+                        </h3>
                         <div className="flex flex-wrap justify-center gap-3">
                             <Button asChild>
                                 <Link to="/guide" onClick={onClose}>
@@ -128,7 +143,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                     
                     <section className="text-center">
                         <p className="text-sm text-muted-foreground">
-                            문의 : {siteConfig.contact.email} | © 2025 모의고사 타이머 & 분석기
+                            문의 : {siteConfig.contact.email} | © {siteConfig.copyright.year} {siteConfig.copyright.name}
                         </p>
                     </section>
                 </main>
