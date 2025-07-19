@@ -79,7 +79,28 @@ self.addEventListener('fetch', (event) => {
   // 정적 리소스는 캐시 우선
   if (STATIC_ASSETS.includes(url.pathname) || 
       request.destination === 'image' ||
-      request.destination === 'font') {
+      request.destination === 'font' ||
+      request.destination === 'style' ||
+      url.pathname.endsWith('.css')) {
+    // CSS 파일에 대해 CORS 헤더 추가
+    if (url.pathname.endsWith('.css') || request.destination === 'style') {
+      event.respondWith(
+        cacheFirst(request).then(response => {
+          if (response && response.status === 200) {
+            const headers = new Headers(response.headers);
+            headers.set('Access-Control-Allow-Origin', '*');
+            headers.set('Cache-Control', 'public, max-age=31536000');
+            return new Response(response.body, {
+              status: response.status,
+              statusText: response.statusText,
+              headers: headers
+            });
+          }
+          return response;
+        })
+      );
+      return;
+    }
     event.respondWith(cacheFirst(request));
     return;
   }

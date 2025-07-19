@@ -12,6 +12,26 @@ export default defineConfig({
   optimizeDeps: {
     include: ['html-to-image', 'recharts'],
   },
+  css: {
+    devSourcemap: true,
+    modules: {
+      generateScopedName: '[name]__[local]___[hash:base64:5]',
+    }
+  },
+  build: {
+    sourcemap: true,
+    cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'assets/[name]-[hash][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

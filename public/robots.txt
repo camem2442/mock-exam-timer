@@ -1,6 +1,11 @@
 User-agent: *
 Allow: /
 
+# Microsoft Clarity Bot 허용
+User-agent: Clarity-Bot
+Allow: /
+Crawl-delay: 0
+
 Sitemap: https://www.mocktimer.kr/sitemap.xml
 
 # 크롤링 지연 (선택사항)
