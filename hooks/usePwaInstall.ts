@@ -15,6 +15,7 @@ export const usePwaInstall = () => {
   const [isIOS, setIsIOS] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
   const [showIOSGuide, setShowIOSGuide] = useState(false);
+  const [showDesktopGuide, setShowDesktopGuide] = useState(false);
 
   useEffect(() => {
     // iOS 감지
@@ -56,7 +57,7 @@ export const usePwaInstall = () => {
 
     // Android/Chrome 등에서 자동 설치
     if (!installPromptEvent) {
-      alert('현재 사용 중인 브라우저에서는 자동 설치를 지원하지 않습니다.\nChrome 브라우저를 사용하면 앱처럼 설치하여 더 편리하게 이용할 수 있습니다.');
+      setShowDesktopGuide(true);
       return { type: 'not-supported' as const };
     }
 
@@ -80,6 +81,10 @@ export const usePwaInstall = () => {
     setShowIOSGuide(false);
   }, []);
 
+  const closeDesktopGuide = useCallback(() => {
+    setShowDesktopGuide(false);
+  }, []);
+
   // 설치 버튼은 이미 설치된 상태가 아니라면 항상 표시
   const shouldShowInstallButton = !isStandalone;
 
@@ -89,6 +94,8 @@ export const usePwaInstall = () => {
     isIOS,
     isStandalone,
     showIOSGuide,
-    closeIOSGuide
+    closeIOSGuide,
+    showDesktopGuide,
+    closeDesktopGuide
   };
 }; 

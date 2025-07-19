@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { InfoModal } from '../ui/InfoModal';
 import { IOSInstallGuideModal } from '../ui/IOSInstallGuideModal';
+import { DesktopInstallGuideModal } from '../ui/DesktopInstallGuideModal';
 import { Button } from '../ui/Button';
 import { siteConfig } from '../../config/site';
 import { usePwaInstall } from '../../hooks/usePwaInstall';
@@ -18,7 +19,7 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-    const { canInstall, triggerInstallPrompt, isIOS, showIOSGuide, closeIOSGuide } = usePwaInstall();
+    const { canInstall, triggerInstallPrompt, isIOS, showIOSGuide, closeIOSGuide, showDesktopGuide, closeDesktopGuide } = usePwaInstall();
     const { theme, toggleTheme } = useTheme();
 
     const handleScaleChange = (direction: 'increase' | 'decrease') => {
@@ -213,6 +214,7 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
         </div>
         <InfoModal isOpen={showInfoModal} onClose={() => setShowInfoModal(false)} />
         <IOSInstallGuideModal isOpen={showIOSGuide} onClose={closeIOSGuide} />
+        <DesktopInstallGuideModal isOpen={showDesktopGuide} onClose={closeDesktopGuide} />
       </div>
     );
   }; 
