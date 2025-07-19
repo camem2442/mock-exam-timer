@@ -11,11 +11,17 @@ interface ControlToolbarProps {
     isBatchRecordDisabled: boolean;
     isMarkingMode: boolean;
     onMarkingModeChange: () => void;
+    // 스크롤 네비게이션 관련
+    currentQuestionIndex: number;
+    totalQuestions: number;
+    onScrollUp: () => void;
+    onScrollDown: () => void;
 }
 
 const ControlToolbar: React.FC<ControlToolbarProps> = ({
     isExamActive, batchMode, onBatchModeChange, onBatchRecord, isBatchRecordDisabled,
-    isMarkingMode, onMarkingModeChange
+    isMarkingMode, onMarkingModeChange,
+    currentQuestionIndex, totalQuestions, onScrollUp, onScrollDown
 }) => {
     return (
         <div className="flex items-center justify-between flex-wrap gap-4">
