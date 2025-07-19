@@ -40,11 +40,11 @@ const HomePage: React.FC = () => {
           <Link to="/changelog" className="text-primary hover:underline">
             업데이트 기록
           </Link>
-          <Link to="/contact" className="text-primary hover:underline">
-            문의
-          </Link>
           <Link to="/faq" className="text-primary hover:underline">
             자주 묻는 질문
+          </Link>
+          <Link to="/contact" className="text-primary hover:underline">
+            문의
           </Link>
           <Link to="/privacy" className="text-primary hover:underline">
             개인정보 처리방침
