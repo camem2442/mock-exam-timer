@@ -31,12 +31,12 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
     return (
         <div
             className={`p-3 flex items-center justify-between gap-2 md:gap-4 transition-all border rounded-lg ${
-                batchSelected ? 'bg-primary-600/20 dark:bg-primary-900/50 border-primary-500' : 'border-transparent'
+                batchSelected ? 'bg-primary/20 border-primary' : 'border-transparent'
             }`}
         >
             {/* Left: Question Number Button */}
             <Button
-                variant="primary"
+                variant="default"
                 className="w-24 flex-shrink-0"
                 onClick={(e) => handleAction(e, () => onLap(qNum))}
                 disabled={!isExamActive}
@@ -46,18 +46,18 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
 
             {/* Right: All other controls */}
             <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-                <div className="flex items-center gap-2 sm:gap-3 text-slate-400">
+                <div className="flex items-center gap-2 sm:gap-3">
                     {[1, 2, 3, 4, 5].map((ans) => (
-                        <button
+                        <Button
                             key={ans}
                             onClick={(e) => handleAction(e, () => onLap(qNum, ans.toString()))}
                             disabled={!isExamActive}
-                            className={`w-8 h-8 flex items-center justify-center rounded-md transition-colors disabled:opacity-50 text-base ${
-                                question.answer === ans.toString() ? 'bg-primary-600 text-white font-bold' : 'hover:bg-slate-200 dark:hover:bg-slate-700'
-                            }`}
+                            variant={question.answer === ans.toString() ? 'default' : 'ghost'}
+                            size="icon"
+                            className="w-8 h-8 rounded-md"
                         >
                             {ans}
-                        </button>
+                        </Button>
                     ))}
                 </div>
 
@@ -66,7 +66,7 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
                         type="tel"
                         inputMode="numeric"
                         placeholder="주관식 답안"
-                        className="bg-slate-100 dark:bg-slate-700/50 border-slate-300 dark:border-slate-600 !w-28"
+                        className="!w-28 h-auto"
                         value={subjectiveInput}
                         onChange={(e) => onSubjectiveInputChange(e.target.value)}
                         onKeyDown={(e) => {

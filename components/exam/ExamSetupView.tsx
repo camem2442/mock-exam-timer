@@ -50,10 +50,10 @@ export const ExamSetupView: React.FC<ExamSetupViewProps> = ({
 
       <Card>
         <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">
+          <h3 className="text-lg font-semibold mb-4 text-foreground">
             저장된 시험 기록
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             이전에 저장한 시험 기록을 확인할 수 있습니다.
           </p>
           <Button 

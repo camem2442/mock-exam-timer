@@ -62,11 +62,6 @@ export const GradingModal: FC<GradingModalProps> = ({
     }, 150);
   }
 
-  const handleModalSubmit = () => {
-    handleSubmit();
-    onClose();
-  };
-
   if (!isOpen) return null;
 
   const CHUNK_SIZE = isDesktop ? 10 : 5;
@@ -82,10 +77,10 @@ export const GradingModal: FC<GradingModalProps> = ({
       aria-modal="true"
       aria-labelledby="grading-modal-title"
     >
-      <div className={`bg-white dark:bg-slate-900 rounded-lg shadow-xl w-full max-h-[90vh] min-w-0 flex flex-col modal-container ${isDesktop ? 'max-w-7xl' : 'max-w-2xl'}`}>
-        <div className="p-4 border-b dark:border-slate-700">
+      <div className={`bg-background dark:bg-card rounded-lg shadow-xl w-full max-h-[90vh] min-w-0 flex flex-col modal-container ${isDesktop ? 'max-w-7xl' : 'max-w-2xl'}`}>
+        <div className="p-4 border-b border-border">
           <h2 id="grading-modal-title" className="text-lg sm:text-xl font-bold">정답 입력</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
              객관식은 숫자만 입력하면 다음 문제로 자동 이동합니다. 주관식으로 체크한 문제는 건너뛰며, 직접 입력할 수 있습니다.
           </p>
         </div>
@@ -97,15 +92,15 @@ export const GradingModal: FC<GradingModalProps> = ({
                   {chunkIndex > 0 && (
                     <tr><td colSpan={CHUNK_SIZE + 1} className="h-6"></td></tr>
                   )}
-                  <tr className="bg-slate-50 dark:bg-slate-800/50">
-                    <th className="p-2 text-sm font-semibold text-slate-500 dark:text-slate-400 w-24"></th>
+                  <tr className="bg-muted">
+                    <th className="p-2 text-sm font-semibold text-muted-foreground w-24"></th>
                     {chunk.map(num => (
                       <th key={num} className="p-2 text-base font-bold text-center">{num}</th>
                     ))}
                     {Array(CHUNK_SIZE - chunk.length).fill(0).map((_, i) => <th key={`h-e-${i}`} className="p-2"></th>)}
                   </tr>
                   <tr>
-                    <td className="p-2 text-sm font-semibold text-slate-500 dark:text-slate-400 text-right pr-4">주관식</td>
+                    <td className="p-2 text-sm font-semibold text-muted-foreground text-right pr-4">주관식</td>
                     {chunk.map(num => (
                       <td key={num} className="p-2 text-center align-middle">
                         <input
@@ -113,7 +108,7 @@ export const GradingModal: FC<GradingModalProps> = ({
                           id={`subjective-${num}`}
                           checked={subjectiveProblems.has(num)}
                           onChange={() => handleToggleSubjective(num)}
-                          className="h-5 w-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                          className="h-5 w-5 rounded border-input text-primary focus:ring-ring cursor-pointer"
                           autoComplete="off"
                           autoCorrect="off"
                           autoCapitalize="off"
@@ -124,7 +119,7 @@ export const GradingModal: FC<GradingModalProps> = ({
                     {Array(CHUNK_SIZE - chunk.length).fill(0).map((_, i) => <td key={`c-e-${i}`}></td>)}
                   </tr>
                   <tr>
-                    <td className="p-2 text-sm font-semibold text-slate-500 dark:text-slate-400 text-right pr-4">답</td>
+                    <td className="p-2 text-sm font-semibold text-muted-foreground text-right pr-4">답</td>
                     {chunk.map(num => (
                       <td key={num} className="p-1">
                         <Input
@@ -147,9 +142,9 @@ export const GradingModal: FC<GradingModalProps> = ({
             </tbody>
           </table>
         </div>
-        <div className="p-4 border-t dark:border-slate-700 flex justify-end gap-2">
+        <div className="p-4 border-t border-border flex justify-end gap-2">
           <Button variant="secondary" onClick={onClose} className="text-sm px-3 py-2">취소</Button>
-          <Button onClick={handleModalSubmit} className="text-sm px-3 py-2">채점하기</Button>
+          <Button onClick={handleSubmit} className="text-sm px-3 py-2">채점하기</Button>
         </div>
       </div>
     </div>

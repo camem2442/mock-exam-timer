@@ -85,15 +85,15 @@ const SetupPanel: FC<SetupPanelProps> = ({
     };
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">시험 설정</h2>
+        <div>
+            <div className="p-4 border-b border-border">
+                <h2 className="text-xl font-bold text-foreground">시험 설정</h2>
             </div>
             <div className="p-6">
                 <div className="space-y-6">
                     <div>
-                        <h3 className="text-lg font-semibold mb-2">시험 이름 (선택)</h3>
-                        <p className="text-sm text-gray-500 mb-4">시험을 구분하기 위한 이름을 입력하세요.</p>
+                        <h3 className="text-lg font-semibold mb-2 text-foreground">시험 이름 (선택)</h3>
+                        <p className="text-sm text-muted-foreground mb-4">시험을 구분하기 위한 이름을 입력하세요.</p>
                         <Input 
                             type="text" 
                             value={examName} 
@@ -103,15 +103,15 @@ const SetupPanel: FC<SetupPanelProps> = ({
                         />
                     </div>
 
-                    <div className="border-t border-slate-200 dark:border-slate-700 my-4"></div>
+                    <div className="border-t border-border my-4"></div>
 
                     <div>
-                        <h3 className="text-lg font-semibold mb-2">프리셋</h3>
-                        <p className="text-sm text-gray-500 mb-4">자주 사용하는 시험 설정을 선택하세요.</p>
+                        <h3 className="text-lg font-semibold mb-2 text-foreground">프리셋</h3>
+                        <p className="text-sm text-muted-foreground mb-4">자주 사용하는 시험 설정을 선택하세요.</p>
                         <div className="space-y-4">
                             {presetCategories.map(({ category, presets }) => (
                                 <div key={category}>
-                                    <h4 className="text-sm font-semibold mb-2 text-gray-600">{category}</h4>
+                                    <h4 className="text-sm font-semibold mb-2 text-muted-foreground">{category}</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {presets.map((preset) => (
                                             <Button
@@ -131,7 +131,7 @@ const SetupPanel: FC<SetupPanelProps> = ({
                         </div>
                     </div>
 
-                    <div className="border-t border-slate-200 dark:border-slate-700 my-4"></div>
+                    <div className="border-t border-border my-4"></div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <Input label="시작 번호" type="number" value={startQuestion} onChange={e => setStartQuestion(e.target.value)} disabled={isExamActive}/>
@@ -139,7 +139,7 @@ const SetupPanel: FC<SetupPanelProps> = ({
                     </div>
                     <Input label="총 시험 시간 (분)" type="number" value={totalMinutes} onChange={e => setTotalMinutes(e.target.value)} disabled={isUnlimited || isExamActive}/>
                     <ToggleSwitch label="무제한 모드" enabled={isUnlimited} onChange={setIsUnlimited} disabled={isExamActive}/>
-                    {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                    {error && <p className="text-destructive text-sm text-center">{error}</p>}
                     <Button onClick={onStart} size="lg" className="w-full" disabled={isExamActive}>
                         {isExamActive ? '시험 진행 중' : '시험 시작'}
                     </Button>

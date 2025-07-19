@@ -32,6 +32,22 @@ const SharePage: React.FC = () => {
     const shareUrl = window.location.href;
     const pageTitle = resultData ? `${resultData.examName} 시험 결과` : '시험 결과';
 
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = () => {
+            if (mediaQuery.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        };
+        handleChange();
+        mediaQuery.addEventListener('change', handleChange);
+        return () => {
+            mediaQuery.removeEventListener('change', handleChange);
+        };
+    }, []);
+
     const handleCopyLink = () => {
         navigator.clipboard.writeText(shareUrl).then(() => {
             setIsCopied(true);
@@ -122,22 +138,22 @@ const SharePage: React.FC = () => {
     }, [id]);
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-10">
+        <div className="min-h-screen bg-background py-10">
             <Helmet>
                 <title>{pageTitle} - {siteConfig.title}</title>
                 <meta name="description" content={`${pageTitle}를 확인하고 공유해보세요.`} />
             </Helmet>
 
             <div className="text-center mb-8">
-                <Link to="/" className="text-2xl font-bold text-primary-600 dark:text-primary-400 hover:underline">
+                <Link to="/" className="text-2xl font-bold text-primary hover:underline">
                     {siteConfig.title}
                 </Link>
-                <p className="text-slate-500 dark:text-slate-400">나만의 시험 분석 파트너</p>
+                <p className="text-muted-foreground">나만의 시험 분석 파트너</p>
             </div>
 
             {loading && <div className="flex justify-center"><Spinner /></div>}
             {error && (
-                <div className="text-center text-red-500 bg-red-100 dark:bg-red-900/20 p-6 rounded-lg mx-4">
+                <div className="text-center text-destructive bg-destructive/10 p-6 rounded-lg mx-4">
                     <h2 className="text-xl font-bold mb-2">오류</h2>
                     <p>{error}</p>
                     <Button onClick={() => window.location.href = siteConfig.domain} className="mt-4">
@@ -166,7 +182,7 @@ const SharePage: React.FC = () => {
                         {isSharing ? <Spinner /> : '공유하기'}
                     </Button>
                 </div>
-                <Link to="/" className="text-sm text-slate-500 hover:text-primary-500 hover:underline">
+                <Link to="/" className="text-sm text-muted-foreground hover:text-primary hover:underline">
                     새로운 시험 시작하기
                 </Link>
             </div>

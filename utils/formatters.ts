@@ -25,7 +25,7 @@ export const formatMinSec = (seconds: number): string => {
     const secs = totalSeconds % 60;
 
     if (minutes > 0) {
-        return `${minutes}분 ${secs.toString().padStart(2, '0')}초`;
+        return `${minutes}분`;
     }
     return `${secs}초`;
 };

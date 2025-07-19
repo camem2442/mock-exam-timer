@@ -79,19 +79,19 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
             <div 
-                className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] min-w-0 overflow-hidden flex flex-col modal-container" 
+                className="bg-card dark:bg-card/95 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] min-w-0 overflow-hidden flex flex-col modal-container" 
                 onClick={e => e.stopPropagation()}
             >
-                <header className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
-                    <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-200">시험 기록 목록</h2>
-                    <p className="mt-2 text-slate-600 dark:text-slate-400">
+                <header className="p-4 sm:p-6 border-b border-border flex-shrink-0">
+                    <h2 className="text-xl sm:text-2xl font-bold text-foreground">시험 기록 목록</h2>
+                    <p className="mt-2 text-muted-foreground">
                         저장된 시험 기록을 확인하고 불러올 수 있습니다.
                     </p>
                 </header>
                 
                 <main className="overflow-y-auto overflow-x-hidden p-4 sm:p-6 space-y-4">
                     {recordList.length === 0 ? (
-                        <div className="text-center text-slate-500 p-8">
+                        <div className="text-center text-muted-foreground p-8">
                             저장된 시험 기록이 없습니다.
                         </div>
                     ) : (
@@ -109,7 +109,7 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                                                         if (e.key === 'Enter') handleSaveEdit();
                                                         if (e.key === 'Escape') handleCancelEdit();
                                                     }}
-                                                    className="flex-1 px-2 py-1 text-sm font-semibold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 text-base"
+                                                    className="flex-1 px-2 py-1 text-sm font-semibold bg-background border border-input rounded focus:outline-none focus:ring-2 focus:ring-ring text-base"
                                                     autoFocus
                                                 />
                                                 <div className="flex gap-1">
@@ -118,7 +118,7 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                                                         className="opacity-70 hover:opacity-100 transition-opacity p-1"
                                                         title="저장"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                                         </svg>
                                                     </button>
@@ -127,7 +127,7 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                                                         className="opacity-70 hover:opacity-100 transition-opacity p-1"
                                                         title="취소"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                                         </svg>
                                                     </button>
@@ -135,7 +135,7 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                                             </div>
                                         ) : (
                                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2">
-                                                <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-sm sm:text-base">
+                                                <h3 className="font-semibold text-foreground text-sm sm:text-base">
                                                     {record.name || '이름 없는 시험'}
                                                 </h3>
                                                 <button
@@ -143,16 +143,16 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                                                     className="opacity-50 hover:opacity-100 transition-opacity p-1"
                                                     title="이름 변경"
                                                 >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                     </svg>
                                                 </button>
                                             </div>
                                         )}
-                                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+                                        <p className="text-sm text-muted-foreground mb-2">
                                             {new Date(record.date).toLocaleString('ko-KR')} • {record.summary}
                                         </p>
-                                        <div className="text-xs text-slate-500">
+                                        <div className="text-xs text-muted-foreground">
                                             총 소요시간: {formatTime(record.questions.reduce((sum, q) => sum + q.solveTime, 0))}
                                         </div>
                                     </div>
@@ -160,7 +160,7 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                                         <div className="flex gap-2">
                                             <Button 
                                                 onClick={() => handleLoadRecord(record)}
-                                                variant="primary"
+                                                variant="default"
                                                 size="sm"
                                                 className="flex-1 sm:flex-none text-xs sm:text-sm"
                                             >
@@ -168,7 +168,7 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                                             </Button>
                                             <Button 
                                                 onClick={() => deleteRecord(record.id)}
-                                                variant="danger"
+                                                variant="destructive"
                                                 size="sm"
                                                 className="flex-1 sm:flex-none text-xs sm:text-sm"
                                             >
@@ -200,7 +200,7 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                     )}
                 </main>
                 
-                <footer className="p-4 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+                <footer className="p-4 border-t border-border flex justify-end">
                     <Button onClick={onClose} variant="secondary" className="text-sm px-3 py-2">
                         닫기
                     </Button>

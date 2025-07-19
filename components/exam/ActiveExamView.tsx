@@ -76,7 +76,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   
   return (
     <div className="lg:col-span-3 space-y-8">
-      <Card className="sticky top-8 z-10 bg-slate-900/80 dark:bg-slate-950/80 backdrop-blur-sm">
+      <Card className="sticky top-8 z-10 bg-transparent shadow-none backdrop-blur-sm">
         <TimerDisplay 
           examName={examName}
           isUnlimited={isUnlimitedTime}
@@ -112,6 +112,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
       <QuickNav 
         questionNumbers={questionNumbers} 
+        questions={questions}
         onJumpTo={handleJumpToQuestion}
         focusedQuestionNumber={focusedQuestionNumber}
       />
@@ -130,7 +131,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
           isBatchRecordDisabled={!batchMode || batchSelectedQuestions.size === 0}
         />
         
-        <div className="border-t border-slate-700 pt-4">
+        <div className="border-t border-border pt-4">
           <div>
             <h3 className="text-lg font-bold mb-3">전체 문제 목록</h3>
             <ProblemList

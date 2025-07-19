@@ -30,13 +30,13 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
       onClick={onClose}
     >
       <div 
-        className="bg-slate-50 dark:bg-slate-900/95 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6" 
+        className="bg-card dark:bg-card/95 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-4 sm:p-6" 
         onClick={e => e.stopPropagation()}
       >
-        <h3 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 mb-3 sm:mb-4">
+        <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3 sm:mb-4">
           {title}
         </h3>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mb-4 sm:mb-6 whitespace-pre-wrap">
+        <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 whitespace-pre-wrap">
           {message}
         </p>
         
@@ -50,7 +50,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           <Button onClick={onClose} variant="secondary" className="flex-1">
             {cancelText}
           </Button>
-          <Button onClick={onConfirm} variant="primary" className="flex-1">
+          <Button onClick={onConfirm} variant="default" className="flex-1">
             {confirmText}
           </Button>
         </div>

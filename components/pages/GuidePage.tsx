@@ -4,19 +4,19 @@ import { SocialShareBadges } from '../ui/SocialShareBadges';
 
 export const GuidePage: React.FC = () => {
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 py-8 px-4">
+        <div className="min-h-screen bg-background py-8 px-4">
             <div className="max-w-4xl mx-auto">
                 <Card className="p-6 sm:p-8">
                     <header className="mb-8">
-                        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-slate-200 mb-4">
+                        <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                             사용 방법 안내
                         </h1>
-                        <div className="border-b border-slate-200 dark:border-slate-700 mb-6"></div>
+                        <div className="border-b border-border mb-6"></div>
                     </header>
                     
-                    <main className="space-y-8 text-slate-700 dark:text-slate-300">
+                    <main className="space-y-8 text-muted-foreground">
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">1. 시험 설정</h2>
+                            <h2 className="text-2xl font-semibold text-primary mb-4">1. 시험 설정</h2>
                             <p className="mb-4 text-lg">
                                 시작하기 전에 풀이할 시험을 설정합니다.
                             </p>
@@ -28,7 +28,7 @@ export const GuidePage: React.FC = () => {
                         </section>
                         
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">2. 시험 진행</h2>
+                            <h2 className="text-2xl font-semibold text-primary mb-4">2. 시험 진행</h2>
                             <p className="mb-4 text-lg">
                                 '시험 시작' 버튼을 누르면 타이머가 작동하며 문제 풀이를 기록할 수 있습니다.
                             </p>
@@ -36,7 +36,7 @@ export const GuidePage: React.FC = () => {
                                 <li className="pl-2">
                                     <strong>답안 마킹:</strong>
                                     <ul className="list-['\2013'] space-y-3 pl-6 mt-3">
-                                        <li className="pl-2"><strong>클릭:</strong> 문제 번호(예: <span className="font-mono bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">13번</span>) 또는 객관식 번호(1~5)를 클릭하여 답안을 기록합니다.</li>
+                                        <li className="pl-2"><strong>클릭:</strong> 문제 번호(예: <span className="font-mono bg-muted px-2 py-1 rounded">13번</span>) 또는 객관식 번호(1~5)를 클릭하여 답안을 기록합니다.</li>
                                         <li className="pl-2"><strong>키보드 단축키:</strong> 키보드의 숫자 키 (1, 2, 3, 4, 5)를 누르면 현재 포커스된 문제의 답이 바로 마킹되고 다음 문제로 넘어갑니다. (가장 빠른 방법)</li>
                                         <li className="pl-2"><strong>주관식:</strong> 답안 입력 후 '저장' 버튼을 누르거나 Enter 키를 쳐서 기록합니다.</li>
                                     </ul>
@@ -54,7 +54,7 @@ export const GuidePage: React.FC = () => {
                         </section>
                         
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">3. 시험 종료 및 분석</h2>
+                            <h2 className="text-2xl font-semibold text-primary mb-4">3. 시험 종료 및 분석</h2>
                             <p className="mb-4 text-lg">
                                 '시험 종료' 버튼을 누르면 풀이가 중단되고 '풀이 과정 분석 리포트'가 나타납니다.
                             </p>
@@ -66,7 +66,7 @@ export const GuidePage: React.FC = () => {
                         </section>
                         
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">4. 시험 기록 저장 및 관리</h2>
+                            <h2 className="text-2xl font-semibold text-primary mb-4">4. 시험 기록 저장 및 관리</h2>
                             <p className="mb-4 text-lg">
                                 풀이 과정 분석 리포트에서 시험 결과를 저장하고 관리할 수 있습니다.
                             </p>
@@ -81,7 +81,7 @@ export const GuidePage: React.FC = () => {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">5. 결과 공유</h2>
+                            <h2 className="text-2xl font-semibold text-primary mb-4">5. 결과 공유</h2>
                             <p className="mb-4 text-lg">
                                 풀이 결과 분석 리포트나 공유된 링크 페이지에서 다른 사람에게 결과를 이미지와 링크로 공유할 수 있습니다.
                             </p>
@@ -93,7 +93,7 @@ export const GuidePage: React.FC = () => {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">6. 홈 화면에 추가 (PWA)</h2>
+                            <h2 className="text-2xl font-semibold text-primary mb-4">6. 홈 화면에 추가 (PWA)</h2>
                             <p className="mb-4 text-lg">
                                 MockTimer를 스마트폰이나 PC에 앱처럼 설치하여 더 빠르고 편리하게 이용할 수 있습니다.
                             </p>
@@ -109,11 +109,11 @@ export const GuidePage: React.FC = () => {
                         <SocialShareBadges />
                     </div>
                     
-                    <footer className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
+                    <footer className="mt-12 pt-8 border-t border-border">
                         <div className="text-center">
                             <a 
                                 href="/" 
-                                className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                                className="inline-flex items-center gap-2 text-primary hover:text-primary/90 transition-colors"
                             >
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

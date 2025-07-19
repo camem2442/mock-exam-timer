@@ -1,29 +1,36 @@
 import React from 'react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { Question } from '../../types';
 
 interface QuickNavProps {
     questionNumbers: number[];
+    questions: Record<number, Question>;
     onJumpTo: (questionNumber: number) => void;
     focusedQuestionNumber: number | null;
 }
 
-const QuickNav: React.FC<QuickNavProps> = ({ questionNumbers, onJumpTo, focusedQuestionNumber }) => {
+const QuickNav: React.FC<QuickNavProps> = ({ questionNumbers, questions, onJumpTo, focusedQuestionNumber }) => {
     return (
         <Card>
-            <h3 className="text-lg font-bold mb-3">빠른 이동</h3>
+            <h3 className="text-lg font-bold mb-3 text-foreground">빠른 이동</h3>
             <div className="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-15 gap-2">
-                {questionNumbers.map(qNum => (
-                    <Button
-                        key={qNum}
-                        variant={qNum === focusedQuestionNumber ? 'primary' : 'secondary'}
-                        size="sm"
-                        onClick={() => onJumpTo(qNum)}
-                        className="!px-2 !py-1 justify-center" // Ensure padding is consistent
-                    >
-                        {qNum}
-                    </Button>
-                ))}
+                {questionNumbers.map(qNum => {
+                    const question = questions[qNum];
+                    const hasAnswer = question && question.answer;
+
+                    return (
+                        <Button
+                            key={qNum}
+                            variant={qNum === focusedQuestionNumber ? 'default' : (hasAnswer ? 'outline' : 'secondary')}
+                            size="sm"
+                            onClick={() => onJumpTo(qNum)}
+                            className="!px-2 !py-1 justify-center" // Ensure padding is consistent
+                        >
+                            {qNum}
+                        </Button>
+                    )
+                })}
             </div>
         </Card>
     );

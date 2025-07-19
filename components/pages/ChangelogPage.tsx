@@ -5,22 +5,22 @@ import { siteConfig } from '../../config/site';
 
 export const ChangelogPage: React.FC = () => {
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 py-8 px-4">
+        <div className="min-h-screen bg-background py-8 px-4">
             <div className="max-w-4xl mx-auto">
                 <Card className="p-6 sm:p-8">
                     <header className="mb-8">
-                        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-slate-200 mb-4">
+                        <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                             업데이트 기록
                         </h1>
-                        <div className="border-b border-slate-200 dark:border-slate-700 mb-6"></div>
+                        <div className="border-b border-border mb-6"></div>
                     </header>
                     
-                    <main className="space-y-8 text-slate-700 dark:text-slate-300">
+                    <main className="space-y-8 text-muted-foreground">
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">최신 업데이트</h2>
+                            <h2 className="text-2xl font-semibold text-primary mb-4">최신 업데이트</h2>
                             <div className="space-y-6">
-                                <div className="border-l-4 border-primary-500 pl-6">
-                                    <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                <div className="border-l-4 border-primary pl-6">
+                                    <h3 className="text-xl font-semibold text-foreground mb-2">
                                         v1.3.0 (2025년 7월 19일)
                                     </h3>
                                     <ul className="list-disc space-y-2 pl-6 text-lg">
@@ -28,8 +28,8 @@ export const ChangelogPage: React.FC = () => {
                                         <li className="pl-2">결과 이미지/링크 공유 기능</li>
                                     </ul>
                                 </div>
-                                <div className="border-l-4 border-slate-300 dark:border-slate-600 pl-6">
-                                    <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                <div className="border-l-4 border-border pl-6">
+                                    <h3 className="text-xl font-semibold text-foreground mb-2">
                                         v1.2.0 (2025년 7월 17일)
                                     </h3>
                                     <ul className="list-disc space-y-2 pl-6 text-lg">
@@ -39,8 +39,8 @@ export const ChangelogPage: React.FC = () => {
                                     </ul>
                                 </div>
                                 
-                                <div className="border-l-4 border-slate-300 dark:border-slate-600 pl-6">
-                                    <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                <div className="border-l-4 border-border pl-6">
+                                    <h3 className="text-xl font-semibold text-foreground mb-2">
                                         v1.1.0 (2025년 7월 17일)
                                     </h3>
                                     <ul className="list-disc space-y-2 pl-6 text-lg">
@@ -51,8 +51,8 @@ export const ChangelogPage: React.FC = () => {
                                     </ul>
                                 </div>
                                 
-                                <div className="border-l-4 border-slate-300 dark:border-slate-600 pl-6">
-                                    <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                                <div className="border-l-4 border-border pl-6">
+                                    <h3 className="text-xl font-semibold text-foreground mb-2">
                                         v1.0.0 (2025년 7월 15일)
                                     </h3>
                                     <ul className="list-disc space-y-2 pl-6 text-lg">
@@ -68,13 +68,13 @@ export const ChangelogPage: React.FC = () => {
                         
 
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary-600 dark:text-primary-400 mb-4">피드백 및 제안</h2>
+                            <h2 className="text-2xl font-semibold text-primary mb-4">피드백 및 제안</h2>
                             <p className="text-lg mb-4">
                                 새로운 기능 제안이나 버그 리포트가 있으시면 언제든지 문의해주세요.
                             </p>
-                            <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                            <div className="bg-primary/10 p-4 rounded-lg">
                                 <p className="text-lg">
-                                    <strong>문의:</strong> <a href={`mailto:${siteConfig.contact.email}`} className="text-primary-600 dark:text-primary-400 hover:underline">{siteConfig.contact.email}</a>
+                                    <strong>문의:</strong> <a href={`mailto:${siteConfig.contact.email}`} className="text-primary hover:underline">{siteConfig.contact.email}</a>
                                 </p>
                             </div>
                         </section>
@@ -84,11 +84,11 @@ export const ChangelogPage: React.FC = () => {
                         <SocialShareBadges />
                     </div>
                     
-                    <footer className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
+                    <footer className="mt-12 pt-8 border-t border-border">
                         <div className="text-center">
                             <a 
                                 href="/" 
-                                className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                                className="inline-flex items-center gap-2 text-primary hover:text-primary/90 transition-colors"
                             >
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

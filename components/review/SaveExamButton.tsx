@@ -74,7 +74,7 @@ const SaveExamButton: React.FC<SaveExamButtonProps> = ({ questions, examName }) 
             
             {saveState === 'SUCCESS' && (
                 <div 
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-xs p-3 bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-800 text-xs font-semibold rounded-lg shadow-lg z-10"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-xs p-3 bg-popover text-popover-foreground text-xs font-semibold rounded-lg shadow-lg z-10"
                     role="alert"
                 >
                     <p>브라우저를 바꾸거나 데이터를 삭제하면 저장된 기록이 사라질 수 있습니다. 모바일에서는 브라우저 설정에 따라 저장 용량이 제한될 수 있습니다.</p>

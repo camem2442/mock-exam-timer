@@ -50,7 +50,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ questions }) => {
                 onClick={handleShare} 
                 variant="ghost" 
                 size="icon"
-                className="text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 flex-shrink-0"
+                className="text-muted-foreground hover:text-foreground flex-shrink-0"
                 aria-label="결과 공유"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,24 +60,24 @@ const ShareButton: React.FC<ShareButtonProps> = ({ questions }) => {
             
             {/* 클립보드 복사 성공 메시지 */}
             {showCopyMessage && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[60] bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg shadow-lg p-4 max-w-sm">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[60] bg-info border border-border rounded-lg shadow-lg p-4 max-w-sm">
                     <div className="flex items-start gap-3">
                         <div className="flex-shrink-0">
-                            <svg className="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="h-5 w-5 text-info-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                             </svg>
                         </div>
                         <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium text-blue-800 dark:text-blue-200 whitespace-nowrap">
+                            <h4 className="text-sm font-medium text-info-foreground whitespace-nowrap">
                                 클립보드에 복사됨
                             </h4>
-                            <p className="mt-1 text-xs sm:text-sm text-blue-700 dark:text-blue-300 whitespace-nowrap overflow-hidden text-ellipsis">
+                            <p className="mt-1 text-xs sm:text-sm text-info-foreground/80 whitespace-nowrap overflow-hidden text-ellipsis">
                                 공유 텍스트가 클립보드에 복사되었습니다!
                             </p>
                         </div>
                         <button
                             onClick={() => setShowCopyMessage(false)}
-                            className="flex-shrink-0 text-blue-400 hover:text-blue-600 dark:hover:text-blue-300"
+                            className="flex-shrink-0 text-info-foreground/60 hover:text-info-foreground"
                         >
                             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

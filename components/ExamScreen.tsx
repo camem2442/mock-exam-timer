@@ -183,10 +183,14 @@ const ExamScreen: React.FC = () => {
 
 
     const questionsWithGrading = React.useMemo(() => {
+        const questionsArray = Object.values(questions);
         if (Object.keys(submittedCorrectAnswers).length === 0) {
-            return Object.values(questions);
+            // 채점 전, isCorrect를 undefined로 명시적으로 추가
+            return questionsArray.map(q => ({ ...q, isCorrect: undefined }));
         }
-        return Object.values(questions).map(q => {
+        
+        // 채점 후
+        return questionsArray.map(q => {
             const correctAnswer = submittedCorrectAnswers[q.number];
             let isCorrect: boolean | undefined = undefined;
             if (correctAnswer !== undefined && correctAnswer !== null) {
@@ -224,6 +228,7 @@ const ExamScreen: React.FC = () => {
     return (
         <>
             {showReview && <ReviewModal 
+                key={JSON.stringify(submittedCorrectAnswers)}
                 questions={questionsWithGrading} 
                 examName={examName}
                 onExamNameChange={setExamName}
@@ -264,7 +269,7 @@ const ExamScreen: React.FC = () => {
                 message="현재 진행 중인 시험이 종료되고 모든 기록이 초기화됩니다. 정말 새로운 시험을 시작하시겠습니까?"
             >
                 <div className="space-y-4">
-                    <hr className="border-slate-200 dark:border-slate-700" />
+                    <hr className="border-border" />
                     <div className="flex flex-col gap-2">
                                                   {canInstall && (
                               <Button variant="outline" onClick={async () => {

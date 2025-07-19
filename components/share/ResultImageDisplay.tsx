@@ -52,7 +52,7 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
     return (
       <div 
         ref={ref} 
-        className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 overflow-hidden" 
+        className="bg-card text-card-foreground p-4 sm:p-6 rounded-xl shadow-lg border overflow-hidden" 
         style={{ 
           fontFamily: "'Noto Sans KR', sans-serif",
           width: containerWidth,
@@ -61,31 +61,31 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
         }}
         data-testid="result-image-display-container"
       >
-        <div className="bg-slate-900 text-white p-6 rounded-lg">
+        <div className="bg-muted dark:bg-background text-foreground p-6 rounded-lg">
         
         <header className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-white">{examName}</h1>
+          <h1 className="text-3xl font-bold">{examName}</h1>
         </header>
         
         {/* 2. 결과 요약 */}
-        <section className="bg-slate-800/80 p-4 rounded-lg mb-6 border border-slate-700">
-          <h2 className="text-2xl font-semibold mb-3 text-center text-slate-200">결과 요약</h2>
+        <section className="bg-background dark:bg-card p-4 rounded-lg mb-6 border border-border">
+          <h2 className="text-2xl font-semibold mb-3 text-center">결과 요약</h2>
           <div className="grid grid-cols-2 gap-4 text-center">
-            <div className="bg-slate-700/50 p-3 rounded-md">
-              <p className="text-slate-300 text-base">총 소요 시간</p>
-              <p className="text-3xl font-bold text-white">{formatTime(totalTime)}</p>
+            <div className="bg-muted dark:bg-muted p-3 rounded-md">
+              <p className="text-muted-foreground text-base">총 소요 시간</p>
+              <p className="text-3xl font-bold">{formatTime(totalTime)}</p>
             </div>
-            <div className="bg-slate-700/50 p-3 rounded-md">
+            <div className="bg-muted dark:bg-muted p-3 rounded-md">
               {includeGrading && gradedQuestions.length > 0 ? (
                 <>
-                  <p className="text-slate-300 text-base">채점 결과</p>
+                  <p className="text-muted-foreground text-base">채점 결과</p>
                   <p className="text-3xl font-bold">
-                    <span className="text-green-400">{correctCount}</span> / {gradedQuestions.length}
+                    <span className="text-success">{correctCount}</span> / {gradedQuestions.length}
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="text-slate-300 text-base">시험 전체 시간</p>
+                  <p className="text-muted-foreground text-base">시험 전체 시간</p>
                   <p className="text-3xl font-bold">
                     {totalMinutes ? `${totalMinutes}분` : '-'}
                   </p>
@@ -93,7 +93,7 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
               )}
             </div>
           </div>
-          <div className="text-center text-sm text-slate-400 mt-4">
+          <div className="text-center text-sm text-muted-foreground mt-4">
             {new Date().toLocaleString('ko-KR', { 
               year: 'numeric', 
               month: 'long', 
@@ -106,7 +106,7 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
 
         {/* 3. 최종 답안지 (채점 포함 시에만 표시) */}
         {includeGrading && gradedQuestions.length > 0 && (
-            <section className="mb-6 bg-slate-800/60 p-4 rounded-lg border border-slate-700">
+            <section className="mb-6 bg-background dark:bg-card p-4 rounded-lg border border-border">
                 {/* Spacing div to match the height of h2 titles in other sections */}
                 <div className="h-7" />
                 <FinalAnswerSheet questions={displayQuestions} blurAnswer={blurAnswer} forceCols={10} />
@@ -114,24 +114,24 @@ export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayP
         )}
 
         {/* 4. 풀이 시간 그래프 */}
-        <section className="mb-4 bg-slate-800/60 p-4 rounded-lg border border-slate-700 overflow-hidden">
-             <h2 className="text-2xl font-semibold mb-3 text-center text-slate-200">풀이 시간 그래프</h2>
+        <section className="mb-4 bg-background dark:bg-card p-4 rounded-lg border border-border overflow-hidden">
+             <h2 className="text-2xl font-semibold mb-3 text-center">풀이 시간 그래프</h2>
              <div style={{ height: 250 }} className="overflow-hidden">
                 <SimpleSolveTimeChart questions={questions} />
              </div>
         </section>
 
         {/* 5. 브랜딩 */}
-        <footer className="text-center mt-6 pt-4 border-t border-slate-700">
+        <footer className="text-center mt-6 pt-4 border-t border-border">
           <a 
             href={siteConfig.domain} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-2xl font-bold text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity"
           >
             mocktimer.kr
           </a>
-          <p className="text-base text-slate-300">나만의 시험 분석 파트너</p>
+          <p className="text-base text-muted-foreground">나만의 시험 분석 파트너</p>
         </footer>
         </div>
       </div>

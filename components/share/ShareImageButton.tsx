@@ -93,9 +93,13 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                     blurAnswer 
                 }),
             })
-            .then(response => {
-                if (!response.ok) throw new Error('공유 링크 생성에 실패했습니다.');
-                return response.json();
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) {
+                    // 서버가 보낸 구체적인 에러 메시지가 있으면 사용, 없으면 일반 메시지
+                    throw new Error(data.error || '공유 링크 생성에 실패했습니다.');
+                }
+                return data;
             })
             .then(data => {
                 const newShareUrl = `${siteConfig.domain}/share/${data.id}`;

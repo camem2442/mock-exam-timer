@@ -1,37 +1,28 @@
 
 import React, { forwardRef, useId } from 'react';
+import { cn } from '@/utils/cn';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, id, className, ...props }, ref) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, id, className, style, ...props }, ref) => {
   const generatedId = useId();
   const inputId = id || generatedId;
   
-  const baseClasses = "w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500";
+  const baseClasses = "w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none";
   
-  // 모바일에서 키보드 확대 방지를 위한 기본 속성들
-  const mobileOptimizedProps = {
-    autoComplete: props.autoComplete || 'off',
-    autoCorrect: props.autoCorrect || 'off',
-    autoCapitalize: props.autoCapitalize || 'off',
-    spellCheck: props.spellCheck || false,
-    style: {
-      fontSize: '16px', // iOS 자동 확대 방지
-      ...props.style
-    },
-    ...props
-  };
+  const colorClasses = "bg-background border-input placeholder:text-muted-foreground focus:ring-ring focus:border-ring";
   
   return (
     <div>
-      {label && <label htmlFor={inputId} className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{label}</label>}
+      {label && <label htmlFor={inputId} className="block text-sm font-medium text-foreground mb-1">{label}</label>}
       <input
         ref={ref}
         id={inputId}
-        className={`${baseClasses} ${className || ''}`.trim()}
-        {...mobileOptimizedProps}
+        className={cn(baseClasses, colorClasses, className)}
+        style={{ fontSize: '16px', ...style }} // iOS 자동 확대 방지
+        {...props}
       />
     </div>
   );

@@ -11,6 +11,7 @@ import { ContactPage } from './components/pages/ContactPage';
 import { FAQPage } from './components/pages/FAQPage';
 import SharePage from './components/pages/SharePage';
 import { Navigation } from './components/layout/Navigation';
+import { useTheme } from './hooks/useTheme';
 
 // 메인 페이지 컴포넌트
 const HomePage: React.FC = () => {
@@ -30,18 +31,18 @@ const HomePage: React.FC = () => {
       </Helmet>
         <ExamScreen />
         <AdPlaceholder />
-        <footer className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400">
+        <footer className="text-center mt-8 text-sm text-muted-foreground">
         <div className="flex flex-wrap justify-center gap-4 mb-4">
-          <Link to="/guide" className="text-primary-600 dark:text-primary-400 hover:underline">
+          <Link to="/guide" className="text-primary hover:underline">
             사용 방법
           </Link>
-          <Link to="/changelog" className="text-primary-600 dark:text-primary-400 hover:underline">
+          <Link to="/changelog" className="text-primary hover:underline">
             업데이트 기록
           </Link>
-          <Link to="/contact" className="text-primary-600 dark:text-primary-400 hover:underline">
+          <Link to="/contact" className="text-primary hover:underline">
             문의
           </Link>
-          <Link to="/faq" className="text-primary-600 dark:text-primary-400 hover:underline">
+          <Link to="/faq" className="text-primary hover:underline">
             자주 묻는 질문
           </Link>
         </div>
@@ -121,6 +122,7 @@ const AppContent: React.FC = () => {
   const [scale, setScale] = useState(100);
   const location = useLocation();
   const isSharePage = location.pathname.startsWith('/share/');
+  useTheme();
 
   useEffect(() => {
     document.documentElement.style.fontSize = `${scale}%`;
