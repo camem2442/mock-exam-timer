@@ -24,8 +24,13 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
+    // 시험이 종료되면 플로팅 컨트롤을 숨김
+    if (!isExamActive) {
+        return null;
+    }
+
     return (
-        <div className="fixed bottom-4 right-4 z-50">
+        <div className="fixed bottom-4 right-4 z-30">
             <div className="bg-background/70 backdrop-blur-md border border-border/40 rounded-lg shadow-lg">
                 {isExpanded ? (
                     <div className="p-3 space-y-3 min-w-[200px]">
