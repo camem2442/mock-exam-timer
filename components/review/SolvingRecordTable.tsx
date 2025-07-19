@@ -82,7 +82,12 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
             case 'copying':
                 return <span className="flex items-center justify-center gap-2"><Spinner size="sm" /><span className="hidden sm:inline">복사 중...</span></span>;
             case 'success':
-                return <span className="flex items-center gap-1">✔<span className="hidden sm:inline"> 복사 완료!</span></span>;
+                return <span className="flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="hidden sm:inline"> 복사 완료!</span>
+                </span>;
             case 'error':
                 return <span className="flex items-center gap-1">✗<span className="hidden sm:inline"> 복사 실패</span></span>;
             default:
