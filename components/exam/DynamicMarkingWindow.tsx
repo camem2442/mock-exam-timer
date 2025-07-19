@@ -47,18 +47,21 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
             {/* Right: All other controls */}
             <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
                 <div className="flex items-center gap-2 sm:gap-3">
-                    {[1, 2, 3, 4, 5].map((ans) => (
-                        <Button
-                            key={ans}
-                            onClick={(e) => handleAction(e, () => onLap(qNum, ans.toString()))}
-                            disabled={!isExamActive}
-                            variant={question.answer === ans.toString() ? 'default' : 'outline'}
-                            size="icon"
-                            className="w-8 h-8 rounded-md"
-                        >
-                            {ans}
-                        </Button>
-                    ))}
+                    {[1, 2, 3, 4, 5].map((ans) => {
+                        const isSelected = question.answer === ans.toString();
+                        return (
+                            <Button
+                                key={ans}
+                                onClick={(e) => handleAction(e, () => onLap(qNum, ans.toString()))}
+                                disabled={!isExamActive}
+                                variant={isSelected ? 'default' : 'outline'}
+                                size="icon"
+                                className={`w-8 h-8 rounded-md answer-button ${isSelected ? 'selected' : ''}`}
+                            >
+                                {ans}
+                            </Button>
+                        );
+                    })}
                 </div>
 
                 <div className="flex items-stretch gap-2" onClick={e => e.stopPropagation()}>
