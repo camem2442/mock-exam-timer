@@ -50,11 +50,11 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
                 ...prev,
                 [questionNumber]: { ...prev[questionNumber], answer: answer === '' ? null : answer }
             }));
-            // 답안을 마킹한 경우 다음 문제로 이동
-            const nextQuestionNumber = findNextQuestion(questionNumber);
-            if (nextQuestionNumber !== null) {
-                setFocusedQuestionNumber(nextQuestionNumber);
-            }
+        }
+        // 일괄 모드에서도 다음 문제로 이동
+        const nextQuestionNumber = findNextQuestion(questionNumber);
+        if (nextQuestionNumber !== null) {
+            setFocusedQuestionNumber(nextQuestionNumber);
         }
         return;
     }
