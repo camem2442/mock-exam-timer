@@ -14,9 +14,7 @@ export default defineConfig({
   },
   css: {
     devSourcemap: true,
-    modules: {
-      generateScopedName: '[name]__[local]___[hash:base64:5]',
-    }
+    // CSS 모듈 설정 제거 - Tailwind CSS와 충돌 방지
   },
   build: {
     sourcemap: true,
