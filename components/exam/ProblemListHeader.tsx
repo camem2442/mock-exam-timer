@@ -15,7 +15,7 @@ const ProblemListHeader: React.FC<ProblemListHeaderProps> = ({
     onScrollDown
 }) => {
     return (
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between pb-4 border-b border-border">
             <h3 className="text-lg font-bold text-foreground">전체 문제 목록</h3>
             <div className="flex items-center gap-2">
                 <Button 

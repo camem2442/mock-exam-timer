@@ -3,7 +3,6 @@ import { Card } from '../ui/Card';
 import TimerDisplay from './TimerDisplay';
 import QuickNav from './QuickNav';
 import DynamicMarkingWindow from './DynamicMarkingWindow';
-import ControlToolbar from './ControlToolbar';
 import ProblemList from './ProblemList';
 import ProblemListHeader from './ProblemListHeader';
 import FloatingControls from './FloatingControls';
@@ -162,19 +161,15 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
       />
 
       <Card className="space-y-4">
-        <ControlToolbar
-          isExamActive={isExamActive}
+        <ProblemListHeader
+          currentQuestionIndex={currentQuestionIndex}
+          totalQuestions={questions.length}
+          onScrollUp={handleScrollUp}
+          onScrollDown={handleScrollDown}
         />
-
-        <div className="border-t border-border pt-4">
-          <div>
-            <ProblemListHeader
-              currentQuestionIndex={currentQuestionIndex}
-              totalQuestions={questions.length}
-              onScrollUp={handleScrollUp}
-              onScrollDown={handleScrollDown}
-            />
-            <ProblemList
+        
+        <div className="pt-4">
+          <ProblemList
               ref={problemListContainerRef}
               isExamActive={isExamActive}
               questionNumbers={questions.map(q => q.number)}
@@ -187,7 +182,6 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
               setProblemRef={setProblemRef}
             />
           </div>
-        </div>
       </Card>
 
       <FloatingControls
