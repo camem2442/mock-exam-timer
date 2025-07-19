@@ -54,7 +54,7 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
                                 key={`${qNum}-${ans}`}
                                 onClick={(e) => handleAction(e, () => onLap(qNum, ans.toString()))}
                                 disabled={!isExamActive}
-                                variant={isSelected ? 'brand' : 'secondary'}
+                                variant={isSelected ? 'default' : 'secondary'}
                                 size="icon"
                                 className="w-8 h-8 rounded-md"
                                 data-selected={isSelected}
