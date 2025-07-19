@@ -65,6 +65,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   endQuestionStr,
   totalMinutesStr,
 }) => {
+  console.log('ActiveExamView rendering:', { isExamActive, questions: questions.length });
 
   const problemListContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -189,6 +190,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         </div>
       </Card>
 
+{/* FloatingControls 임시 주석 처리
       <FloatingControls
         isExamActive={isExamActive}
         batchMode={batchMode}
@@ -198,6 +200,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         isMarkingMode={isMarkingMode}
         onMarkingModeChange={onMarkingModeChange}
       />
+      */}
     </div>
   );
 }; 
