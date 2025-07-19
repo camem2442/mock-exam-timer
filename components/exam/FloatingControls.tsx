@@ -26,7 +26,7 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
 
     return (
         <div className="fixed bottom-4 right-4 z-50">
-            <div className="bg-background/80 backdrop-blur-md border border-border/50 rounded-lg shadow-lg">
+            <div className="bg-background/70 backdrop-blur-md border border-border/40 rounded-lg shadow-lg">
                 {isExpanded ? (
                     <div className="p-3 space-y-3 min-w-[200px]">
                         {/* 헤더 */}
@@ -107,10 +107,10 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
                     </div>
                 ) : (
                     <div 
-                        className="p-3 hover:bg-accent/20 rounded-lg cursor-pointer transition-colors"
+                        className="px-4 py-3 hover:bg-accent/20 rounded-lg cursor-pointer transition-colors"
                         onClick={() => setIsExpanded(true)}
                     >
-                        <span className="text-sm font-medium text-foreground">
+                        <span className="text-base font-medium text-foreground">
                             모드 설정
                         </span>
                     </div>

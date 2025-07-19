@@ -90,13 +90,14 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
     }
   }, [setFocusedQuestionNumber, problemRefs]);
 
-  // 스크롤 네비게이션 로직
+  // 스크롤 네비게이션 로직 (5개씩 이동)
   const handleScrollUp = useCallback(() => {
     if (!focusedQuestionNumber) return;
     const currentIndex = questions.findIndex(q => q.number === focusedQuestionNumber);
     if (currentIndex > 0) {
-      const prevQuestion = questions[currentIndex - 1];
-      handleJumpToQuestion(prevQuestion.number);
+      const targetIndex = Math.max(0, currentIndex - 5);
+      const targetQuestion = questions[targetIndex];
+      handleJumpToQuestion(targetQuestion.number);
     }
   }, [focusedQuestionNumber, questions, handleJumpToQuestion]);
 
@@ -104,8 +105,9 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
     if (!focusedQuestionNumber) return;
     const currentIndex = questions.findIndex(q => q.number === focusedQuestionNumber);
     if (currentIndex < questions.length - 1) {
-      const nextQuestion = questions[currentIndex + 1];
-      handleJumpToQuestion(nextQuestion.number);
+      const targetIndex = Math.min(questions.length - 1, currentIndex + 5);
+      const targetQuestion = questions[targetIndex];
+      handleJumpToQuestion(targetQuestion.number);
     }
   }, [focusedQuestionNumber, questions, handleJumpToQuestion]);
 
