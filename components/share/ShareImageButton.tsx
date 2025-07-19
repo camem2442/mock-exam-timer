@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as htmlToImage from 'html-to-image';
 import { type Question } from '../../types';
 import { Button } from '../ui/Button';
@@ -32,6 +32,16 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
     const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null); // 미리보기용 이미지 URL state 추가
     const [error, setError] = useState<string | null>(null);
     const imageRef = useRef<HTMLDivElement>(null); // DOM 요소를 참조하기 위한 ref
+
+    // blob: URL 메모리 누수 방지를 위한 정리 로직
+    useEffect(() => {
+        return () => {
+            if (previewImageUrl) {
+                URL.revokeObjectURL(previewImageUrl);
+            }
+        };
+    }, [previewImageUrl]);
+
 
     // --- Handlers ---
     const handleOpenSettings = () => {
@@ -77,7 +87,14 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
             const file = new File([blob], 'result.png', { type: 'image/png' });
             
             setGeneratedImageFile(file);
-            setPreviewImageUrl(dataUrl);
+
+            // 기존 URL이 있다면 해제
+            if (previewImageUrl) {
+                URL.revokeObjectURL(previewImageUrl);
+            }
+            const objectUrl = URL.createObjectURL(blob);
+            setPreviewImageUrl(objectUrl);
+
             setIsImageLoading(false); // 이미지 로딩 완료
             
             // 2. 백그라운드에서 DB 저장 및 공유 링크 생성 시작
@@ -219,6 +236,7 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                 handleCopyLink={() => {
                     if (shareUrl) navigator.clipboard.writeText(shareUrl);
                 }}
+                examName={examName}
             />
         </>
     );

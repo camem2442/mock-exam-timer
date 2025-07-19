@@ -127,16 +127,27 @@ export const copyToClipboard = async (csvData: string): Promise<boolean> => {
 /**
  * CSV 파일 다운로드
  */
-export const downloadCSV = (csvData: string, filename: string): void => {
-  const blob = new Blob(['\ufeff' + csvData], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+export const downloadCSV = (csv: string, filename: string) => {
+    const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+export const generateImageFilename = (examName?: string): string => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    
+    // 파일명으로 사용할 수 없는 문자 제거 및 공백 처리
+    const safeExamName = (examName || '시험결과').replace(/[\\/:*?"<>|]/g, '').trim();
+
+    return `${dateStr}_${safeExamName}-mocktimer.png`;
 };
 
 /**

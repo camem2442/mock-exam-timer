@@ -33,6 +33,14 @@ const SharePage: React.FC = () => {
     const pageTitle = resultData ? `${resultData.examName} 시험 결과` : '시험 결과';
 
     useEffect(() => {
+        return () => {
+            if (previewImageUrl) {
+                URL.revokeObjectURL(previewImageUrl);
+            }
+        };
+    }, [previewImageUrl]);
+
+    useEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         const handleChange = () => {
             if (mediaQuery.matches) {
@@ -70,7 +78,15 @@ const SharePage: React.FC = () => {
 
         try {
             const dataUrl = await htmlToImage.toPng(imageRef.current, { cacheBust: true });
-            setPreviewImageUrl(dataUrl);
+            
+            // 기존 URL이 있다면 해제
+            if (previewImageUrl) {
+                URL.revokeObjectURL(previewImageUrl);
+            }
+            const blob = await (await fetch(dataUrl)).blob();
+            const objectUrl = URL.createObjectURL(blob);
+            setPreviewImageUrl(objectUrl);
+
         } catch (err) {
             console.error('oops, something went wrong!', err);
             setError('이미지 생성 중 오류가 발생했습니다.');
@@ -88,7 +104,10 @@ const SharePage: React.FC = () => {
         setIsSharing(true);
 
         try {
-            const response = await fetch(previewImageUrl!);
+            if (!previewImageUrl) {
+                throw new Error("이미지 URL이 없습니다.");
+            }
+            const response = await fetch(previewImageUrl);
             const blob = await response.blob();
             const file = new File([blob], `${pageTitle}.png`, { type: blob.type });
 
@@ -201,6 +220,7 @@ const SharePage: React.FC = () => {
                     handleShare={handleNativeShare}
                     handleCopyLink={handleCopyLink}
                     showSettingsButton={false}
+                    examName={resultData?.examName}
                 />
             )}
 
