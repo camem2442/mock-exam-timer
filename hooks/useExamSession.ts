@@ -50,6 +50,11 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
                 ...prev,
                 [questionNumber]: { ...prev[questionNumber], answer: answer === '' ? null : answer }
             }));
+            // 답안 입력 시에는 다음 문제로 이동
+            const nextQuestionNumber = findNextQuestion(questionNumber);
+            if (nextQuestionNumber !== null) {
+                setFocusedQuestionNumber(nextQuestionNumber);
+            }
         }
         return;
     }
