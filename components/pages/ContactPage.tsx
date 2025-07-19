@@ -18,7 +18,7 @@ export const ContactPage: React.FC = () => {
                     
                     <main className="space-y-8 text-foreground">
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">문의 방법</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">문의 방법</h2>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-muted p-6 rounded-lg">
                                     <h3 className="text-xl font-semibold text-foreground mb-3">
@@ -54,7 +54,7 @@ export const ContactPage: React.FC = () => {
                         </section>
                         
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">자주 묻는 질문</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">자주 묻는 질문</h2>
                             <div className="space-y-4">
                                 <div className="border border-border rounded-lg p-4">
                                     <h3 className="text-lg font-semibold text-foreground mb-2">
@@ -95,7 +95,7 @@ export const ContactPage: React.FC = () => {
                         </section>
                         
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">개발자 정보</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">개발자 정보</h2>
                             <div className="bg-muted p-6 rounded-lg">
                                 <h3 className="text-xl font-semibold text-foreground mb-3">
                                     모의고사 타이머 & 분석기
@@ -106,25 +106,8 @@ export const ContactPage: React.FC = () => {
                                 <div className="space-y-2 text-lg">
                                     <p><strong>문의:</strong> {siteConfig.contact.email}</p>
                                     <p><strong>버전:</strong> v1.2.0</p>
-                                    <p><strong>최종 업데이트:</strong> 2025년 7월 17일</p>
+                                    <p><strong>최종 업데이트:</strong> 2025년 7월 19일</p>
                                 </div>
-                            </div>
-                        </section>
-                        
-                        <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">개인정보 처리방침</h2>
-                            <div className="bg-muted p-6 rounded-lg">
-                                <p className="text-lg mb-4">
-                                    모의고사 타이머 & 분석기는 사용자의 프라이버시 보호를 중요하게 생각하며, 개인정보를 최소한으로 처리합니다.
-                                </p>
-                                <ul className="list-disc space-y-2 pl-6 text-lg">
-                                    <li className="pl-2">시험 기록, 답안 등 대부분의 데이터는 사용자의 브라우저에만 저장됩니다.</li>
-                                    <li className="pl-2">결과 공유 기능 이용 시, 이미지 및 링크 생성을 위해 시험 데이터가 서버로 일시 전송될 수 있습니다. 이 데이터는 익명으로 처리되며 개인 식별 정보는 포함되지 않습니다.</li>
-                                    <li className="pl-2">문의 시 제공되는 이메일 주소는 답변 목적으로만 사용됩니다.</li>
-                                </ul>
-                                <p className="text-xs text-muted-foreground mt-4">
-                                  본 사이트는 방문 통계 분석을 위해 비식별화된 익명 데이터만 수집합니다. 개인정보는 저장/전송하지 않습니다.
-                                </p>
                             </div>
                         </section>
                     </main>

@@ -12,6 +12,7 @@ import { FAQPage } from './components/pages/FAQPage';
 import SharePage from './components/pages/SharePage';
 import { Navigation } from './components/layout/Navigation';
 import { useTheme } from './hooks/useTheme';
+import { PrivacyPolicyPage } from './components/pages/PrivacyPolicyPage';
 
 // 메인 페이지 컴포넌트
 const HomePage: React.FC = () => {
@@ -44,6 +45,9 @@ const HomePage: React.FC = () => {
           </Link>
           <Link to="/faq" className="text-primary hover:underline">
             자주 묻는 질문
+          </Link>
+          <Link to="/privacy" className="text-primary hover:underline">
+            개인정보 처리방침
           </Link>
         </div>
         <p>문의 : {siteConfig.contact.email} | © {siteConfig.copyright.year} {siteConfig.copyright.name}</p>
@@ -137,6 +141,7 @@ const AppContent: React.FC = () => {
         <Route path="/changelog" element={<ChangelogPageWrapper />} />
         <Route path="/contact" element={<ContactPageWrapper />} />
         <Route path="/faq" element={<FAQPageWrapper />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/share/:id" element={<SharePage />} />
       </Routes>
       <Analytics />

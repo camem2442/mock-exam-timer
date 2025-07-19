@@ -90,10 +90,14 @@ const SharePreviewModal: React.FC<SharePreviewModalProps> = ({
                             <p className="text-sm">{error}</p>
                         </div>
                     )}
-                    <div className="bg-background rounded-lg aspect-[9/16] w-full max-w-sm mx-auto flex items-center justify-center overflow-hidden">
-                        {isLoading && <Spinner size="lg" />}
+                    <div className="bg-background rounded-lg w-full max-w-sm mx-auto overflow-hidden">
+                        {isLoading && (
+                            <div className="aspect-[9/16] flex items-center justify-center">
+                                <Spinner size="lg" />
+                            </div>
+                        )}
                         {previewImageUrl && (
-                           <img src={previewImageUrl} alt="시험 결과 미리보기" className="w-full h-full object-contain" />
+                           <img src={previewImageUrl} alt="시험 결과 미리보기" className="w-full h-auto" />
                         )}
                     </div>
 

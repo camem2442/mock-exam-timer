@@ -88,36 +88,6 @@ const TimeManagementInsights: React.FC<TimeManagementInsightsProps> = ({ questio
         <Card className="p-6">
             <h3 className="text-xl font-bold mb-6 text-foreground">풀이 시간 분석 리포트</h3>
             <div className="space-y-6">
-                {/* Efficiency Analysis */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <h4 className="font-bold text-lg text-brand">효율성 분석</h4>
-                            <Tooltip text="시간을 얼마나 효율적으로 사용했는지 분석합니다.">
-                                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            </Tooltip>
-                        </div>
-                        <ToggleSwitch enabled={insightsVisibility.efficiency} onChange={() => handleToggleInsight('efficiency')} />
-                    </div>
-                    {insightsVisibility.efficiency && (
-                        <div className="pl-4 space-y-4">
-                            <div className="text-sm">
-                                <p className="font-medium">정답/오답별 평균 풀이 시간</p>
-                                <div className="pl-4 pt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    <p><strong>정답 문항:</strong> <span className="text-success font-semibold">{formatMinSec(analysisData.avgCorrectTime)}</span></p>
-                                    <p><strong>오답 문항:</strong> <span className="text-destructive font-semibold">{formatMinSec(analysisData.avgIncorrectTime)}</span></p>
-                                </div>
-                            </div>
-                            <div className="text-sm">
-                                <p className="font-medium">풀이 효율성 (분당 정답 수)</p>
-                                <div className="pl-4 pt-2">
-                                    <p><strong>분당 정답:</strong> <span className="text-primary font-semibold">{analysisData.correctAnswersPerMinute.toFixed(1)}개</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
                 {/* Problem Diagnostics */}
                 <div className="space-y-4">
                      <div className="flex items-center justify-between">
@@ -157,6 +127,36 @@ const TimeManagementInsights: React.FC<TimeManagementInsightsProps> = ({ questio
                                     </Tooltip>
                                 </p>
                                 {renderQuestionList(analysisData.inefficientCorrects)}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Efficiency Analysis */}
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <h4 className="font-bold text-lg text-brand">효율성 분석</h4>
+                            <Tooltip text="시간을 얼마나 효율적으로 사용했는지 분석합니다.">
+                                <svg className="w-4 h-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </Tooltip>
+                        </div>
+                        <ToggleSwitch enabled={insightsVisibility.efficiency} onChange={() => handleToggleInsight('efficiency')} />
+                    </div>
+                    {insightsVisibility.efficiency && (
+                        <div className="pl-4 space-y-4">
+                            <div className="text-sm">
+                                <p className="font-medium">정답/오답별 평균 풀이 시간</p>
+                                <div className="pl-4 pt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <p><strong>정답 문항:</strong> <span className="text-success font-semibold">{formatMinSec(analysisData.avgCorrectTime)}</span></p>
+                                    <p><strong>오답 문항:</strong> <span className="text-destructive font-semibold">{formatMinSec(analysisData.avgIncorrectTime)}</span></p>
+                                </div>
+                            </div>
+                            <div className="text-sm">
+                                <p className="font-medium">풀이 효율성 (분당 정답 수)</p>
+                                <div className="pl-4 pt-2">
+                                    <p><strong>분당 정답:</strong> <span className="text-primary font-semibold">{analysisData.correctAnswersPerMinute.toFixed(1)}개</span></p>
+                                </div>
                             </div>
                         </div>
                     )}

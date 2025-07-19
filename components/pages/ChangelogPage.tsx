@@ -17,7 +17,7 @@ export const ChangelogPage: React.FC = () => {
                     
                     <main className="space-y-8 text-muted-foreground">
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">최신 업데이트</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">최신 업데이트</h2>
                             <div className="space-y-6">
                                 <div className="border-l-4 border-primary pl-6">
                                     <h3 className="text-xl font-semibold text-foreground mb-2">
@@ -79,7 +79,7 @@ export const ChangelogPage: React.FC = () => {
                         
 
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">피드백 및 제안</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">피드백 및 제안</h2>
                             <p className="text-lg mb-4">
                                 새로운 기능 제안이나 버그 리포트가 있으시면 언제든지 문의해주세요.
                             </p>
