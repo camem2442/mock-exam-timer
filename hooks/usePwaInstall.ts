@@ -50,18 +50,13 @@ export const usePwaInstall = () => {
 
     // iOS Safari인 경우 수동 설치 가이드 표시
     if (isIOS) {
-      const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-      
-      if (isSafari) {
-        setShowIOSGuide(true);
-        return { type: 'ios-guide' as const };
-      } else {
-        return { type: 'ios-unsupported' as const };
-      }
+      setShowIOSGuide(true);
+      return { type: 'ios-guide' as const };
     }
 
     // Android/Chrome 등에서 자동 설치
     if (!installPromptEvent) {
+      alert('현재 사용 중인 브라우저에서는 자동 설치를 지원하지 않습니다.\nChrome 브라우저를 사용하면 앱처럼 설치하여 더 편리하게 이용할 수 있습니다.');
       return { type: 'not-supported' as const };
     }
 
@@ -85,8 +80,8 @@ export const usePwaInstall = () => {
     setShowIOSGuide(false);
   }, []);
 
-  // iOS에서는 설치 버튼을 항상 표시 (수동 가이드용)
-  const shouldShowInstallButton = canInstall || (isIOS && !isStandalone);
+  // 설치 버튼은 이미 설치된 상태가 아니라면 항상 표시
+  const shouldShowInstallButton = !isStandalone;
 
   return { 
     canInstall: shouldShowInstallButton, 

@@ -18,7 +18,7 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
     const [showInfoModal, setShowInfoModal] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-    const { canInstall, triggerInstallPrompt, isIOS } = usePwaInstall();
+    const { canInstall, triggerInstallPrompt, isIOS, showIOSGuide, closeIOSGuide } = usePwaInstall();
     const { theme, toggleTheme } = useTheme();
 
     const handleScaleChange = (direction: 'increase' | 'decrease') => {
@@ -129,25 +129,6 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
               {showMenu && (
                 <div className="absolute right-0 mt-2 w-56 bg-card rounded-lg shadow-lg border border-border z-50">
                   <div className="py-2">
-                    {canInstall && (
-                      <button
-                        onClick={async () => {
-                          const result = await triggerInstallPrompt();
-                          setShowMenu(false);
-                          
-                          if (result?.type === 'already-installed') {
-                            alert('이미 앱으로 실행 중입니다!');
-                          } else if (result?.type === 'not-supported') {
-                            alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
-                          } else if (result?.type === 'ios-unsupported') {
-                            alert('iOS에서는 Safari 브라우저를 사용하여 홈 화면에 추가할 수 있습니다.');
-                          }
-                        }}
-                        className="w-full text-left block px-4 py-2 text-sm text-foreground hover:bg-accent transition-colors"
-                      >
-                        {isIOS ? '📱 홈 화면에 추가 (iOS)' : '📲 홈 화면에 추가'}
-                      </button>
-                    )}
                     <Link 
                       to="/guide" 
                       onClick={() => setShowMenu(false)}
@@ -176,6 +157,17 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
                     >
                       📧 문의하기
                     </Link>
+                    {canInstall && (
+                      <button
+                        onClick={async () => {
+                          await triggerInstallPrompt();
+                          setShowMenu(false);
+                        }}
+                        className="w-full text-left block px-4 py-2 text-sm text-foreground hover:bg-accent transition-colors"
+                      >
+                        {isIOS ? '📱 홈 화면에 추가 (iOS)' : '📲 홈 화면에 추가'}
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -220,6 +212,7 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
           </div>
         </div>
         <InfoModal isOpen={showInfoModal} onClose={() => setShowInfoModal(false)} />
+        <IOSInstallGuideModal isOpen={showIOSGuide} onClose={closeIOSGuide} />
       </div>
     );
   }; 
