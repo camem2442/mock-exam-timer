@@ -5,6 +5,7 @@ import QuickNav from './QuickNav';
 import DynamicMarkingWindow from './DynamicMarkingWindow';
 import ControlToolbar from './ControlToolbar';
 import ProblemList from './ProblemList';
+import ProblemListHeader from './ProblemListHeader';
 import { type Question } from '../../types';
 
 interface ActiveExamViewProps {
@@ -71,6 +72,30 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
       problemRefs.current[qNum] = el;
     }
   };
+
+  // 스크롤 네비게이션 로직
+  const handleScrollUp = useCallback(() => {
+    if (!focusedQuestionNumber) return;
+    const currentIndex = questions.findIndex(q => q.number === focusedQuestionNumber);
+    if (currentIndex > 0) {
+      const prevQuestion = questions[currentIndex - 1];
+      handleJumpToQuestion(prevQuestion.number);
+    }
+  }, [focusedQuestionNumber, questions, handleJumpToQuestion]);
+
+  const handleScrollDown = useCallback(() => {
+    if (!focusedQuestionNumber) return;
+    const currentIndex = questions.findIndex(q => q.number === focusedQuestionNumber);
+    if (currentIndex < questions.length - 1) {
+      const nextQuestion = questions[currentIndex + 1];
+      handleJumpToQuestion(nextQuestion.number);
+    }
+  }, [focusedQuestionNumber, questions, handleJumpToQuestion]);
+
+  // 현재 문제 인덱스 계산
+  const currentQuestionIndex = focusedQuestionNumber 
+    ? questions.findIndex(q => q.number === focusedQuestionNumber) + 1 
+    : 1;
 
   const handleJumpToQuestion = useCallback((questionNumber: number) => {
     setFocusedQuestionNumber(questionNumber);
@@ -147,7 +172,12 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
         <div className="border-t border-border pt-4">
           <div>
-            <h3 className="text-lg font-bold mb-3">전체 문제 목록</h3>
+            <ProblemListHeader
+              currentQuestionIndex={currentQuestionIndex}
+              totalQuestions={questions.length}
+              onScrollUp={handleScrollUp}
+              onScrollDown={handleScrollDown}
+            />
             <ProblemList
               ref={problemListContainerRef}
               isExamActive={isExamActive}
