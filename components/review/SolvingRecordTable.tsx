@@ -8,8 +8,11 @@ import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../.
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/DropdownMenu';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/Popover';
 import { ToggleSwitch } from '../ui/ToggleSwitch';
+import { Spinner } from '../ui/Spinner';
 
 type SortOption = 'solveOrder' | 'questionNumber' | 'timeDesc' | 'timeAsc';
+
+type CopyState = 'idle' | 'copying' | 'success' | 'error';
 
 interface FilterOptions {
   correct: boolean;
@@ -29,6 +32,7 @@ interface SolvingRecordTableProps {
 
 const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) => {
     const [sortOption, setSortOption] = useState<SortOption>('solveOrder');
+    const [copyState, setCopyState] = useState<CopyState>('idle');
     const [filters, setFilters] = useState<FilterOptions>({
       correct: false,
       incorrect: false,
@@ -37,6 +41,10 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
     const { solveHistory } = useChartData(questions);
 
     const handleExportData = async () => {
+        if (copyState !== 'idle') return;
+
+        setCopyState('copying');
+
         const totalTime = questions.reduce((sum, q) => sum + q.solveTime, 0);
         const exportData: ExportData = {
             questions,
@@ -48,11 +56,11 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
         const csvData = generateCSV(exportData);
         const success = await copyToClipboard(csvData);
         
-        if (success) {
-            alert('풀이 데이터가 클립보드에 복사되었습니다!\n\n엑셀이나 구글 시트에서 Ctrl+V로 붙여넣기 하세요.');
-        } else {
-            alert('클립보드 복사에 실패했습니다.');
-        }
+        setCopyState(success ? 'success' : 'error');
+
+        setTimeout(() => {
+            setCopyState('idle');
+        }, 3000);
     };
 
     const handleDownloadCSV = () => {
@@ -67,6 +75,26 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
         const csvData = generateCSV(exportData);
         const filename = `시험기록_${new Date().toISOString().split('T')[0]}.csv`;
         downloadCSV(csvData, filename);
+    };
+
+    const getCopyButtonContent = () => {
+        switch (copyState) {
+            case 'copying':
+                return <span className="flex items-center justify-center gap-2"><Spinner size="sm" /><span className="hidden sm:inline">복사 중...</span></span>;
+            case 'success':
+                return <span className="flex items-center gap-1">✔<span className="hidden sm:inline"> 복사 완료!</span></span>;
+            case 'error':
+                return <span className="flex items-center gap-1">✗<span className="hidden sm:inline"> 복사 실패</span></span>;
+            default:
+                return (
+                    <span className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        <span>CSV 복사</span>
+                    </span>
+                );
+        }
     };
     
     const questionsByNumber = useMemo(() => {
@@ -207,9 +235,10 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                         onClick={handleExportData} 
                         variant="ghost" 
                         size="sm"
-                        className="text-muted-foreground"
+                        className="text-muted-foreground w-32 justify-center"
+                        disabled={copyState !== 'idle'}
                     >
-                        📋 CSV 복사
+                        {getCopyButtonContent()}
                     </Button>
                     <Button 
                         onClick={handleDownloadCSV} 
@@ -217,7 +246,12 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
                         size="sm"
                         className="text-muted-foreground"
                     >
-                        📄 CSV 다운로드
+                        <span className="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            <span>CSV 다운로드</span>
+                        </span>
                     </Button>
                 </div>
 

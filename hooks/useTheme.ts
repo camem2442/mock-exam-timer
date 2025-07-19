@@ -26,5 +26,11 @@ export const useTheme = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    if (window.clarity) {
+      window.clarity('set', 'theme', theme);
+    }
+  }, [theme]);
+
   return { theme, toggleTheme };
 }; 

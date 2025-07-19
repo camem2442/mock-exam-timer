@@ -58,7 +58,6 @@ interface SetupPanelProps {
     isExamActive: boolean;
     onStart: () => void;
     error: string;
-    onShowRecords: () => void;
 }
 
 const SetupPanel: FC<SetupPanelProps> = ({
@@ -75,7 +74,6 @@ const SetupPanel: FC<SetupPanelProps> = ({
     isExamActive,
     onStart,
     error,
-    onShowRecords,
 }) => {
     const applyPreset = (preset: Preset) => {
         setStartQuestion(preset.start.toString());

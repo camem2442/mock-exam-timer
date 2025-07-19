@@ -1,10 +1,4 @@
 
-export interface SolveEvent {
-  timestamp: number; // totalElapsedTime when this lap was recorded
-  duration: number; // time spent on this lap (currentProblemTime)
-  answer?: string; // The answer submitted with this lap
-}
-
 export enum LapType {
   SOLVE = 'SOLVE',
   ANSWER = 'ANSWER',
@@ -12,7 +6,7 @@ export enum LapType {
   BATCH_SOLVE = 'BATCH_SOLVE',
 }
 
-export interface Question {
+export type Question = {
   number: number;
   solveTime: number; // in seconds
   answer: string | null;
@@ -43,4 +37,16 @@ export interface SolvingRecord {
   isBookmarked: boolean;
   solveTime: number; // in seconds
   isCorrect?: boolean;
+}
+
+export type SolveEvent = {
+  timestamp: number;
+  duration: number;
+  answer?: string;
+};
+
+declare global {
+  interface Window {
+    clarity?: (action: string, key: string, value: string) => void;
+  }
 }

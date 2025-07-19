@@ -5,7 +5,7 @@ import QuickNav from './QuickNav';
 import DynamicMarkingWindow from './DynamicMarkingWindow';
 import ControlToolbar from './ControlToolbar';
 import ProblemList from './ProblemList';
-import { type Question, type SolveEvent } from '../../types';
+import { type Question } from '../../types';
 
 interface ActiveExamViewProps {
   problemRefs: RefObject<Record<number, HTMLDivElement | null>>;

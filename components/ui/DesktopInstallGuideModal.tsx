@@ -65,10 +65,10 @@ export const DesktopInstallGuideModal: React.FC<DesktopInstallGuideModalProps> =
             </div>
 
             <div className="border-t border-border pt-4 mt-4">
-              <h3 className="text-base font-semibold text-center text-foreground mb-2">
+              <h3 className="text-base font-semibold text-left text-foreground mb-2">
                 📱 모바일에서 설치하기
               </h3>
-              <p className="text-center text-muted-foreground text-sm">
+              <p className="text-left text-muted-foreground text-sm">
                 스마트폰 브라우저에서 접속하여 '홈 화면에 추가' 메뉴를 이용해 주세요. iOS 기기는 Safari 브라우저의 '공유' 메뉴에 있습니다.
               </p>
             </div>

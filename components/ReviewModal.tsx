@@ -8,7 +8,6 @@ import SolveTimeChart from './charts/SolveTimeChart';
 import FinalAnswerSheet from './review/FinalAnswerSheet';
 import TimeManagementInsights from './review/TimeManagementInsights';
 import SolvingRecordTable from './review/SolvingRecordTable';
-import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../utils/exportUtils';
 import ShareImageButton from './share/ShareImageButton';
 import { Input } from './ui/Input';
 import SaveExamButton from './review/SaveExamButton';

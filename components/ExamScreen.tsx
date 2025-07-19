@@ -178,9 +178,11 @@ const ExamScreen: React.FC = () => {
         setStartQuestionStr(String(firstQ.number));
         setEndQuestionStr(String(lastQ.number));
         const totalTimeInSeconds = loadedQuestions.reduce((acc, q) => acc + q.solveTime, 0);
-        setTotalMinutesStr(String(Math.round(totalTimeInSeconds / 60)));
+        const totalMinutes = Math.round(totalTimeInSeconds / 60);
+        setTotalMinutesStr(String(totalMinutes));
+        setIsUnlimitedTime(totalMinutes <= 0);
         alert('시험 기록을 설정창에 불러왔습니다. 내용을 확인하고 시험을 시작하세요.');
-    }, [setExamName, setStartQuestionStr, setEndQuestionStr, setTotalMinutesStr]);
+    }, [setExamName, setStartQuestionStr, setEndQuestionStr, setTotalMinutesStr, setIsUnlimitedTime]);
 
 
     const questionsWithGrading = React.useMemo(() => {
@@ -272,7 +274,7 @@ const ExamScreen: React.FC = () => {
                 <div className="space-y-4">
                     <hr className="border-border" />
                     <div className="flex flex-col gap-2">
-                                                  {canInstall && (
+                                                  {canInstall && !isStandalone && (
                               <Button variant="outline" onClick={async () => {
                                   const result = await triggerInstallPrompt();
                                   
@@ -281,8 +283,6 @@ const ExamScreen: React.FC = () => {
                                       alert('이미 앱으로 실행 중입니다!');
                                   } else if (result?.type === 'not-supported') {
                                       alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
-                                  } else if (result?.type === 'ios-unsupported') {
-                                      alert('iOS에서는 Safari 브라우저를 사용하여 홈 화면에 추가할 수 있습니다.');
                                   }
                               }}>
                                   {isIOS ? '📱 홈 화면에 추가 (iOS)' : '📲 홈 화면에 추가'}
