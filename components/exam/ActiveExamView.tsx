@@ -1,5 +1,6 @@
 import React, { useRef, useCallback, useMemo, useState, useEffect, type RefObject } from 'react';
 import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
 import TimerDisplay from './TimerDisplay';
 import QuickNav from './QuickNav';
 import DynamicMarkingWindow from './DynamicMarkingWindow';
