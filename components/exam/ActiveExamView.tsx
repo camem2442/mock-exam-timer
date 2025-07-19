@@ -69,16 +69,30 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [visibleRange, setVisibleRange] = useState({ start: 1, end: Math.min(5, questions.length || 1) });
 
-  // 스크롤 감지 (throttled with hysteresis)
+  // 스크롤 감지 (iOS 최적화, throttled with hysteresis)
   useEffect(() => {
     let ticking = false;
+    let lastScrollY = 0;
     const SCROLL_UP_THRESHOLD = 80;   // 위로 스크롤할 때 normal 모드로 전환하는 임계값
     const SCROLL_DOWN_THRESHOLD = 120; // 아래로 스크롤할 때 compact 모드로 전환하는 임계값
+    const MIN_SCROLL_DELTA = 10; // 최소 스크롤 변화량 (iOS 바운스 효과 무시)
     
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          const scrollY = window.scrollY || window.pageYOffset;
+          const scrollY = Math.max(0, window.scrollY || window.pageYOffset); // 음수 방지
+          
+          // iOS 바운스 효과로 인한 음수 스크롤 무시
+          if (scrollY < 0) {
+            ticking = false;
+            return;
+          }
+          
+          // 스크롤 변화량이 너무 작으면 무시 (iOS 부드러운 스크롤 대응)
+          if (Math.abs(scrollY - lastScrollY) < MIN_SCROLL_DELTA && lastScrollY !== 0) {
+            ticking = false;
+            return;
+          }
           
           // 하이스테리시스 적용: 현재 상태에 따라 다른 임계값 사용
           if (isScrolled) {
@@ -93,13 +107,20 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
             }
           }
           
+          lastScrollY = scrollY;
           ticking = false;
         });
         ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // iOS에서 더 부드러운 스크롤을 위한 설정
+    const options = { 
+      passive: true,
+      capture: false 
+    };
+
+    window.addEventListener('scroll', handleScroll, options);
     handleScroll(); // 초기 상태 확인
 
     return () => window.removeEventListener('scroll', handleScroll);
@@ -208,7 +229,8 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
   return (
     <div className="space-y-8">
-      <div className="sticky top-8 z-10 space-y-4">
+      {/* 타이머 디스플레이만 스티키 적용 */}
+      <div className="sticky top-8 z-10">
         <Card className="bg-transparent shadow-none backdrop-blur-sm">
           <TimerDisplay
             examName={examName}
@@ -229,21 +251,22 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
             isCompact={isScrolled}
           />
         </Card>
-
-        {focusedQuestionObj && (
-          <Card className="bg-background/90 backdrop-blur-sm shadow-sm">
-            <DynamicMarkingWindow
-              key={`focused-${focusedQuestionObj.number}`}
-              isExamActive={isExamActive}
-              question={focusedQuestionObj}
-              batchSelected={batchSelectedQuestions.has(focusedQuestionObj.number)}
-              onLap={onLap}
-              subjectiveInput={subjectiveInputs[focusedQuestionObj.number] ?? ''}
-              onSubjectiveInputChange={(value) => onSubjectiveInputChange(focusedQuestionObj.number, value)}
-            />
-          </Card>
-        )}
       </div>
+
+      {/* 다이나믹 마킹 윈도우는 일반 플로우 */}
+      {focusedQuestionObj && (
+        <Card className="bg-background/90 backdrop-blur-sm shadow-sm">
+          <DynamicMarkingWindow
+            key={`focused-${focusedQuestionObj.number}`}
+            isExamActive={isExamActive}
+            question={focusedQuestionObj}
+            batchSelected={batchSelectedQuestions.has(focusedQuestionObj.number)}
+            onLap={onLap}
+            subjectiveInput={subjectiveInputs[focusedQuestionObj.number] ?? ''}
+            onSubjectiveInputChange={(value) => onSubjectiveInputChange(focusedQuestionObj.number, value)}
+          />
+        </Card>
+      )}
 
       {questions.length > 0 && (
         <QuickNav

@@ -143,6 +143,10 @@
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+    
+    /* iOS 스크롤 최적화 */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   /* 12345 버튼 최적화 */
@@ -164,12 +168,12 @@
     @apply bg-secondary/40 border-primary/40;
   }
   
-  /* 선택된 버튼은 항상 primary 색상 유지 */
+  /* 선택된 버튼은 항상 brand 색상 유지 */
   .answer-button.selected,
   .answer-button.selected:hover,
   .answer-button.selected:focus,
   .answer-button.selected:active {
-    @apply bg-primary text-primary-foreground border-primary shadow-sm;
+    @apply bg-brand text-brand-foreground border-brand shadow-sm;
   }
   
   /* 선택되지 않은 버튼은 focus 해제 시 원래 상태로 복귀 */

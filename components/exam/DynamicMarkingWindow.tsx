@@ -41,6 +41,7 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
     return (
         <div
             className={`p-3 flex items-center justify-between gap-2 md:gap-4 transition-all border rounded-lg ${
+                question.answer ? 'bg-brand/10 border-brand/30' : 
                 batchSelected ? 'bg-primary/20 border-primary' : 'border-transparent'
             }`}
         >
@@ -74,9 +75,9 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
                                 className={`w-8 h-8 rounded-md answer-button ${isSelected ? 'selected' : ''}`}
                                 style={{
                                     // 강제로 상태 재설정
-                                    backgroundColor: isSelected ? 'hsl(var(--primary))' : 'transparent',
-                                    color: isSelected ? 'hsl(var(--primary-foreground))' : 'hsl(var(--foreground))',
-                                    borderColor: isSelected ? 'hsl(var(--primary))' : 'hsl(var(--border))'
+                                    backgroundColor: isSelected ? 'hsl(var(--brand))' : 'transparent',
+                                    color: isSelected ? 'hsl(var(--brand-foreground))' : 'hsl(var(--foreground))',
+                                    borderColor: isSelected ? 'hsl(var(--brand))' : 'hsl(var(--border))'
                                 }}
                             >
                                 {ans}
