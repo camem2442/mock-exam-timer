@@ -151,12 +151,30 @@
     transform: translateZ(0); /* GPU 가속 */
   }
   
+  /* 선택되지 않은 버튼의 hover/focus/active 상태 */
   .answer-button:not(.selected):hover {
     @apply bg-secondary/30 border-primary/20;
   }
   
-  .answer-button.selected {
+  .answer-button:not(.selected):focus {
+    @apply bg-secondary/20 border-primary/30;
+  }
+  
+  .answer-button:not(.selected):active {
+    @apply bg-secondary/40 border-primary/40;
+  }
+  
+  /* 선택된 버튼은 항상 primary 색상 유지 */
+  .answer-button.selected,
+  .answer-button.selected:hover,
+  .answer-button.selected:focus,
+  .answer-button.selected:active {
     @apply bg-primary text-primary-foreground border-primary shadow-sm;
+  }
+  
+  /* 선택되지 않은 버튼은 focus 해제 시 원래 상태로 복귀 */
+  .answer-button:not(.selected):not(:hover):not(:focus):not(:active) {
+    @apply bg-transparent border-border text-foreground;
   }
 
   /* 모바일 최적화 (기존 스타일 복원) */
