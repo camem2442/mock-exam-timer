@@ -64,13 +64,13 @@ const ShareSettingsModal: React.FC<ShareSettingsModalProps> = ({ isOpen, onClose
                                 id="policy-agree"
                                 checked={agreedToPolicy}
                                 onChange={(e) => setAgreedToPolicy(e.target.checked)}
-                                className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary flex-shrink-0"
                             />
-                            <div className="flex-1">
-                                <label htmlFor="policy-agree" className="text-sm font-medium text-foreground">
+                            <div className="flex-1 min-w-0">
+                                <label htmlFor="policy-agree" className="text-sm font-medium text-foreground cursor-pointer">
                                     개인정보 처리방침에 동의하며 공유 링크를 생성합니다.
                                 </label>
-                                <p className="text-xs text-muted-foreground">
+                                <p className="text-xs text-muted-foreground mt-1">
                                     공유 링크 생성을 위해 시험 기록이 서버에 저장됩니다.
                                     {' '}
                                     <Link to="/privacy" target="_blank" className="underline hover:text-primary">

@@ -50,7 +50,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ questions, examName, onExamNa
                 <header className="p-4 sm:p-6 border-b border-border flex-shrink-0">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl sm:text-2xl font-bold text-foreground">풀이 과정 분석 리포트</h2>
-                        <ShareButton questions={questions} />
+                        <div className="relative">
+                            <ShareButton questions={questions} />
+                        </div>
                     </div>
                     <div className="flex flex-col justify-between items-start gap-4 mt-2">
                         <div className="w-full pb-4 border-b border-border">

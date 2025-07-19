@@ -120,7 +120,7 @@ const SharePreviewModal: React.FC<SharePreviewModalProps> = ({
                         <div className="relative">
                             <Input
                                 type="text"
-                                value={isUrlLoading ? '공유 링크 생성 중...' : (shareUrl || '오류가 발생했습니다.')}
+                                value={isUrlLoading ? '공유 링크 생성 중...' : (shareUrl || (error ? '오류가 발생했습니다.' : '링크 생성을 기다리는 중...'))}
                                 readOnly
                                 className="pr-10"
                             />
