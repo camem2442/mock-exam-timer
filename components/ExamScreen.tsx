@@ -66,6 +66,15 @@ const ExamScreen: React.FC = () => {
         isMarkingMode, toggleMarkingMode,
     } = examSession;
 
+    // 일괄 선택 모드 변경 시 선택된 문제들도 함께 관리
+    const handleBatchModeChange = useCallback((enabled: boolean) => {
+        examSession.setBatchMode(enabled);
+        if (!enabled) {
+            // 일괄 선택을 끄면 선택된 문제들도 초기화
+            examSession.setBatchSelectedQuestions(new Set());
+        }
+    }, [examSession]);
+
     const review = useReview(questionNumbers);
     const {
         isGradingModalOpen, setIsGradingModalOpen,
@@ -365,7 +374,7 @@ const ExamScreen: React.FC = () => {
                             subjectiveInputs={subjectiveInputs}
                             onSubjectiveInputChange={(number, value) => examSession.setSubjectiveInputs(prev => ({...prev, [number]: value}))}
                             batchMode={batchMode}
-                            onBatchModeChange={examSession.setBatchMode}
+                            onBatchModeChange={handleBatchModeChange}
                             onBatchRecord={examSession.handleBatchRecord}
                             batchSelectedQuestions={batchSelectedQuestions}
                             onFinishExam={handleFinishExam}
