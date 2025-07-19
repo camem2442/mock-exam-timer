@@ -15,6 +15,8 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
   const [batchSelectedQuestions, setBatchSelectedQuestions] = useState<Set<number>>(new Set());
 
   const findNextQuestion = useCallback((currentQNum: number): number | null => {
+    if (questionNumbers.length === 0) return null;
+    
     const currentIndex = questionNumbers.indexOf(currentQNum);
     if (currentIndex > -1 && currentIndex < questionNumbers.length - 1) {
         return questionNumbers[currentIndex + 1];
