@@ -21,6 +21,17 @@ export const ChangelogPage: React.FC = () => {
                             <div className="space-y-6">
                                 <div className="border-l-4 border-primary pl-6">
                                     <h3 className="text-xl font-semibold text-foreground mb-2">
+                                        v1.4.0 (2025년 7월 19일)
+                                    </h3>
+                                    <ul className="list-disc space-y-2 pl-6 text-lg">
+                                        <li className="pl-2">다크모드/라이트모드 지원</li>
+                                        <li className="pl-2">풀이 기록표 정렬/필터 추가</li>
+                                        <li className="pl-2">풀이 시간 분석 리포트 상세화</li>
+                                        <li className="pl-2">UI/UX 개선</li>
+                                    </ul>
+                                </div>
+                                <div className="border-l-4 border-border pl-6">
+                                    <h3 className="text-xl font-semibold text-foreground mb-2">
                                         v1.3.0 (2025년 7월 19일)
                                     </h3>
                                     <ul className="list-disc space-y-2 pl-6 text-lg">

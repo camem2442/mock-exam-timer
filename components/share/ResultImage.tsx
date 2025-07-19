@@ -48,9 +48,15 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
           <div className="grid grid-cols-2 gap-4 text-center">
             <div className="bg-muted p-3 rounded-md">
               <p className="text-muted-foreground text-base">총 소요 시간</p>
-              <p className="text-3xl font-bold text-foreground whitespace-nowrap">
-                {`${Math.round(totalTime / 60)}분`}
-              </p>
+              {includeGrading && gradedQuestions.length > 0 && totalMinutes ? (
+                  <p className="text-2xl font-bold text-foreground whitespace-nowrap">
+                    {`${Math.round(totalTime / 60)}분 / ${totalMinutes}분`}
+                  </p>
+              ) : (
+                  <p className="text-3xl font-bold text-foreground whitespace-nowrap">
+                    {`${Math.round(totalTime / 60)}분`}
+                  </p>
+              )}
             </div>
             <div className="bg-muted p-3 rounded-md">
               {includeGrading && gradedQuestions.length > 0 ? (

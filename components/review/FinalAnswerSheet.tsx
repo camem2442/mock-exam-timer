@@ -32,20 +32,33 @@ const FinalAnswerSheet: React.FC<FinalAnswerSheetProps> = ({ questions, blurAnsw
         return 'bg-answer-default border-transparent';
     };
     
+    const universalAnswerFontSize = useMemo(() => {
+        const longestAnswerLength = questions.reduce((maxLength, q) => {
+            const currentLength = (q.answer ?? '').toString().length;
+            return Math.max(maxLength, currentLength);
+        }, 0);
+
+        if (longestAnswerLength > 8) return 'text-[10px]';
+        if (longestAnswerLength > 6) return 'text-xs';
+        if (longestAnswerLength > 3) return 'text-sm';
+        return 'text-base';
+    }, [questions]);
+
     return (
         <div className={`grid ${getGridClass()} gap-2`}>
             {sortedQuestions.map(q => (
                 <div
                     key={`answer-grid-${q.number}`}
                     className={cn(
-                        "p-1.5 rounded-md flex flex-col items-center justify-center text-center border transition-colors",
+                        "p-1.5 rounded-md flex flex-col items-center justify-center text-center border transition-colors overflow-hidden",
                         getStyles(q)
                     )}
                 >
                     <span className="text-sm font-medium text-muted-foreground">{q.number}</span>
                     <span
                         className={cn(
-                            "text-base font-bold text-foreground truncate",
+                            "w-full font-bold text-foreground whitespace-nowrap",
+                            universalAnswerFontSize,
                             blurAnswer && "blur-sm select-none"
                         )}
                     >
