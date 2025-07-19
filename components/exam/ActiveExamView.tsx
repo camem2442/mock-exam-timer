@@ -115,7 +115,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         </Card>
 
         {focusedQuestionObj && (
-          <Card className="bg-background/95 backdrop-blur-sm shadow-md">
+          <Card className="bg-background/90 backdrop-blur-sm shadow-sm">
             <DynamicMarkingWindow
               key={`focused-${focusedQuestionObj.number}`}
               isExamActive={isExamActive}
