@@ -123,27 +123,47 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
   // 스크롤 위치에 따른 범위 업데이트
   useEffect(() => {
-    const container = problemListContainerRef.current;
-    if (!container) return;
+    let cleanup: (() => void) | undefined;
 
-    const handleScroll = () => {
-      const itemHeight = container.firstElementChild?.getBoundingClientRect().height || 0;
-      if (itemHeight === 0) return;
+    const setupScrollListener = () => {
+      const container = problemListContainerRef.current;
+      if (!container) {
+        // container가 아직 없으면 다시 시도
+        const retryTimeout = setTimeout(setupScrollListener, 50);
+        cleanup = () => clearTimeout(retryTimeout);
+        return;
+      }
 
-      const scrollTop = container.scrollTop;
-      const startIndex = Math.floor(scrollTop / itemHeight);
-      const visibleCount = Math.ceil(container.clientHeight / itemHeight);
-      
-      setVisibleRange({
-        start: Math.min(startIndex + 1, questions.length),
-        end: Math.min(startIndex + visibleCount, questions.length)
-      });
+      const handleScroll = () => {
+        const firstChild = container.firstElementChild as HTMLElement | null;
+        if (!firstChild) return;
+        
+        const itemHeight = firstChild.getBoundingClientRect().height;
+        if (itemHeight === 0) return;
+
+        const scrollTop = container.scrollTop;
+        const startIndex = Math.floor(scrollTop / itemHeight);
+        const visibleCount = Math.ceil(container.clientHeight / itemHeight);
+        
+        setVisibleRange({
+          start: Math.max(1, startIndex + 1),
+          end: Math.min(startIndex + visibleCount, questions.length)
+        });
+      };
+
+      container.addEventListener('scroll', handleScroll);
+      handleScroll(); // 초기 상태 설정
+
+      cleanup = () => {
+        container.removeEventListener('scroll', handleScroll);
+      };
     };
 
-    container.addEventListener('scroll', handleScroll);
-    handleScroll(); // 초기 상태 설정
+    setupScrollListener();
 
-    return () => container.removeEventListener('scroll', handleScroll);
+    return () => {
+      if (cleanup) cleanup();
+    };
   }, [questions.length]);
 
   const canScrollUp = visibleRange.start > 1;
