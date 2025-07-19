@@ -66,6 +66,33 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
           </p>
             </div>
         <div className="flex-shrink-0 flex items-center gap-2">
+          {/* 화면 배율 캡슐 */}
+          <div className="flex items-center bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleScaleChange('decrease')}
+              aria-label="화면 축소"
+              className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 !w-8 !h-8 !p-0 flex items-center justify-center"
+              style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+            >
+              <span className="leading-none">−</span>
+            </Button>
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 px-2 tabular-nums whitespace-nowrap" style={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.875rem)' }}>
+              {scale}%
+            </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleScaleChange('increase')}
+              aria-label="화면 확대"
+              className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 !w-8 !h-8 !p-0 flex items-center justify-center"
+              style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+            >
+              <span className="leading-none">+</span>
+            </Button>
+          </div>
+          
           <Button 
             variant="ghost" 
             size="icon" 
@@ -97,6 +124,7 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
             </svg>
           </Button>
+          
           <Button 
             variant="ghost" 
             size="icon" 
@@ -122,22 +150,23 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
             </Button>
             {showMenu && (
               <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 z-50">
-                <div className="p-2 border-b border-slate-200 dark:border-slate-700">
-                  <div className="flex items-center justify-between gap-1">
-                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 px-2">
+                <div className="p-3 border-b border-slate-200 dark:border-slate-700">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">
                       화면 배율
                     </span>
-                    <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-700/50 rounded-full">
+                    <div className="flex items-center bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden">
                       <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => handleScaleChange('decrease')}
                         aria-label="화면 축소"
-                        className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 !w-8 !h-8"
+                        className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 !w-8 !h-8 !p-0 flex items-center justify-center"
+                        style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
                       >
-                        -
+                        <span className="leading-none">−</span>
                       </Button>
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 w-12 text-center tabular-nums">
+                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 px-2 tabular-nums whitespace-nowrap" style={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.875rem)' }}>
                         {scale}%
                       </span>
                       <Button
@@ -145,9 +174,10 @@ export const Navigation: React.FC<NavigationProps> = ({ scale, setScale }) => {
                         size="icon"
                         onClick={() => handleScaleChange('increase')}
                         aria-label="화면 확대"
-                        className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 !w-8 !h-8"
+                        className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 !w-8 !h-8 !p-0 flex items-center justify-center"
+                        style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
                       >
-                        +
+                        <span className="leading-none">+</span>
                       </Button>
                     </div>
                   </div>

@@ -98,7 +98,14 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
 
         {/* 5. 브랜딩 */}
         <footer className="text-center mt-6 pt-4 border-t border-slate-700">
-          <p className="text-2xl font-bold text-blue-400">{siteConfig.domain.replace('https://', '')}</p>
+          <a 
+            href={siteConfig.domain} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-2xl font-bold text-blue-400 hover:text-blue-300 transition-colors"
+          >
+            mocktimer.kr
+          </a>
           <p className="text-base text-slate-300">나만의 시험 분석 파트너</p>
         </footer>
       </div>
