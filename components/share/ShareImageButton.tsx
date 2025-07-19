@@ -6,6 +6,7 @@ import ShareSettingsModal from './ShareSettingsModal';
 import SharePreviewModal from './SharePreviewModal';
 import { siteConfig } from '../../config/site';
 import { ResultImage } from '../share/ResultImage'; // ResultImage를 직접 사용하기 위해 import
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 
 interface ShareImageButtonProps {
     questions: Question[];
@@ -32,6 +33,9 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
     const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null); // 미리보기용 이미지 URL state 추가
     const [error, setError] = useState<string | null>(null);
     const imageRef = useRef<HTMLDivElement>(null); // DOM 요소를 참조하기 위한 ref
+    
+    // 클립보드 복사 훅 사용
+    const { copy, isCopied, error: copyError } = useCopyToClipboard();
 
     // blob: URL 메모리 누수 방지를 위한 정리 로직
     useEffect(() => {
@@ -234,8 +238,10 @@ const ShareImageButton: React.FC<ShareImageButtonProps> = ({ questions, examName
                 error={error}
                 handleShare={handleShare}
                 handleCopyLink={() => {
-                    if (shareUrl) navigator.clipboard.writeText(shareUrl);
+                    if (shareUrl) copy(shareUrl);
                 }}
+                isCopied={isCopied}
+                copyError={copyError}
                 examName={examName}
             />
         </>

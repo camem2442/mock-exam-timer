@@ -149,11 +149,20 @@
   @media (max-width: 768px) {
     button:not(.toggle-switch-button), 
     [role="button"]:not(.toggle-switch-button),
-    .btn,
-    input[type="checkbox"],
-    input[type="radio"] {
+    .btn {
       min-height: 44px;
       min-width: 44px;
+    }
+    
+    /* 체크박스와 라디오는 원래 크기 유지하되 터치 영역 확보 */
+    input[type="checkbox"],
+    input[type="radio"] {
+      min-height: initial;
+      min-width: initial;
+      /* 터치 타겟을 위한 패딩 추가 */
+      padding: 12px;
+      margin: -12px;
+      position: relative;
     }
 
     input, textarea, select {

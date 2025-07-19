@@ -3,8 +3,10 @@ import { type Question } from '../types';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
 import { formatTime } from '../utils/formatters';
-import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../utils/exportUtils';
+import { generateCSV, downloadCSV, type ExportData } from '../utils/exportUtils';
 import { useExamRecord, type ExamRecord } from '../hooks/useExamRecord';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
+import { Spinner } from './ui/Spinner';
 
 interface RecordModalProps {
     isOpen: boolean;
@@ -16,6 +18,10 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
     const { records, updateRecordName, deleteRecord } = useExamRecord();
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editingName, setEditingName] = useState<string>('');
+    const [copyingRecordId, setCopyingRecordId] = useState<number | null>(null);
+    
+    // 각 레코드별로 독립적인 복사 상태 관리
+    const { copy, isCopied, error: copyError } = useCopyToClipboard(2000);
 
     const handleStartEdit = (record: ExamRecord) => {
         setEditingId(record.id);
@@ -40,6 +46,7 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
     };
 
     const handleExportRecord = async (record: ExamRecord) => {
+        setCopyingRecordId(record.id);
         const totalTime = record.questions.reduce((sum, q) => sum + q.solveTime, 0);
         const exportData: ExportData = {
             questions: record.questions,
@@ -49,13 +56,12 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
         };
 
         const csvData = generateCSV(exportData);
-        const success = await copyToClipboard(csvData);
+        await copy(csvData);
         
-        if (success) {
-            alert('풀이 데이터가 클립보드에 복사되었습니다!\n\n엑셀에서 Ctrl+V로 붙여넣기 하세요.');
-        } else {
-            alert('클립보드 복사에 실패했습니다.');
-        }
+        // 2초 후 copyingRecordId 리셋
+        setTimeout(() => {
+            setCopyingRecordId(null);
+        }, 2000);
     };
 
     const handleDownloadRecordCSV = (record: ExamRecord) => {
@@ -181,8 +187,30 @@ const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, onLoadRecord
                                                 variant="secondary"
                                                 size="sm"
                                                 className="flex-1 sm:flex-none text-xs sm:text-sm"
+                                                disabled={copyingRecordId === record.id}
                                             >
-                                                CSV 복사
+                                                {copyingRecordId === record.id ? (
+                                                    <span className="flex items-center justify-center gap-1">
+                                                        <Spinner size="sm" />
+                                                        <span className="hidden sm:inline">복사 중...</span>
+                                                    </span>
+                                                ) : isCopied && copyingRecordId === null ? (
+                                                    <span className="flex items-center gap-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        <span>복사 완료!</span>
+                                                    </span>
+                                                ) : copyError ? (
+                                                    <span className="flex items-center gap-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                        <span>복사 실패</span>
+                                                    </span>
+                                                ) : (
+                                                    'CSV 복사'
+                                                )}
                                             </Button>
                                             <Button 
                                                 onClick={() => handleDownloadRecordCSV(record)}

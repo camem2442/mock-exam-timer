@@ -43,7 +43,12 @@ export const IOSInstallGuideModal: React.FC<IOSInstallGuideModalProps> = ({ isOp
                 <div>
                   <p className="text-foreground font-medium">공유 버튼 탭</p>
                   <p className="text-muted-foreground text-sm">
-                    Safari 브라우저 하단의 공유 버튼(□↑)을 탭하세요
+                    Safari 브라우저 하단의 공유 버튼
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v10m0-10L8 7m4-4l4 4" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12v7a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    </svg>
+                    을 탭하세요
                   </p>
                 </div>
               </div>
@@ -74,8 +79,11 @@ export const IOSInstallGuideModal: React.FC<IOSInstallGuideModalProps> = ({ isOp
             </div>
             
             <div className="bg-info/50 border border-info/70 rounded-lg p-3">
-              <p className="text-info-foreground text-sm">
-                💡 설치 후에는 홈 화면의 앱 아이콘을 탭하여 실행할 수 있습니다!
+              <p className="text-info-foreground text-sm flex items-start gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+                <span>설치 후에는 홈 화면의 앱 아이콘을 탭하여 실행할 수 있습니다!</span>
               </p>
             </div>
           </div>

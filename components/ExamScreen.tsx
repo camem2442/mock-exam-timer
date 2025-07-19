@@ -274,21 +274,26 @@ const ExamScreen: React.FC = () => {
                 <div className="space-y-4">
                     <hr className="border-border" />
                     <div className="flex flex-col gap-2">
-                                                  {canInstall && !isStandalone && (
-                              <Button variant="outline" onClick={async () => {
-                                  const result = await triggerInstallPrompt();
-                                  
-                                  // 결과에 따른 처리
-                                  if (result?.type === 'already-installed') {
-                                      alert('이미 앱으로 실행 중입니다!');
-                                  } else if (result?.type === 'not-supported') {
-                                      alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
-                                  }
-                              }}>
-                                  {isIOS ? '📱 홈 화면에 추가 (iOS)' : '📲 홈 화면에 추가'}
-                              </Button>
-                          )}
-                         <Button
+                        {canInstall && !isStandalone && (
+                            <Button variant="outline" onClick={async () => {
+                                const result = await triggerInstallPrompt();
+                                
+                                // 결과에 따른 처리
+                                if (result?.type === 'already-installed') {
+                                    alert('이미 앱으로 실행 중입니다!');
+                                } else if (result?.type === 'not-supported') {
+                                    alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
+                                }
+                            }}>
+                                <span className="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V8" />
+                                    </svg>
+                                    <span>{isIOS ? '홈 화면에 추가 (iOS)' : '홈 화면에 추가'}</span>
+                                </span>
+                            </Button>
+                        )}
+                        <Button
                             variant="outline"
                             onClick={async () => {
                                 const shareText = `${siteConfig.title}\n\n${siteConfig.description}\n\n${siteConfig.domain}`;
@@ -308,7 +313,12 @@ const ExamScreen: React.FC = () => {
                                 }
                             }}
                         >
-                            🔗 서비스 공유하기
+                            <span className="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                                </svg>
+                                <span>타이머 공유하기</span>
+                            </span>
                         </Button>
                     </div>
                 </div>
