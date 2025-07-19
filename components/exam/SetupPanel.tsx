@@ -103,6 +103,19 @@ const SetupPanel: FC<SetupPanelProps> = ({
 
                     <div className="border-t border-border my-4"></div>
 
+                    <div className="grid grid-cols-2 gap-4">
+                        <Input label="시작 번호" type="number" value={startQuestion} onChange={e => setStartQuestion(e.target.value)} disabled={isExamActive}/>
+                        <Input label="종료 번호" type="number" value={endQuestion} onChange={e => setEndQuestion(e.target.value)} disabled={isExamActive}/>
+                    </div>
+                    <Input label="총 시험 시간 (분)" type="number" value={totalMinutes} onChange={e => setTotalMinutes(e.target.value)} disabled={isUnlimited || isExamActive}/>
+                    <ToggleSwitch label="무제한 모드" enabled={isUnlimited} onChange={setIsUnlimited} disabled={isExamActive}/>
+                    {error && <p className="text-destructive text-sm text-center">{error}</p>}
+                    <Button onClick={onStart} size="lg" className="w-full" disabled={isExamActive}>
+                        {isExamActive ? '시험 진행 중' : '시험 시작'}
+                    </Button>
+
+                    <div className="border-t border-border my-4"></div>
+
                     <div>
                         <h3 className="text-lg font-semibold mb-2 text-foreground">프리셋</h3>
                         <p className="text-sm text-muted-foreground mb-4">자주 사용하는 시험 설정을 선택하세요.</p>
@@ -128,19 +141,6 @@ const SetupPanel: FC<SetupPanelProps> = ({
                             ))}
                         </div>
                     </div>
-
-                    <div className="border-t border-border my-4"></div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <Input label="시작 번호" type="number" value={startQuestion} onChange={e => setStartQuestion(e.target.value)} disabled={isExamActive}/>
-                        <Input label="종료 번호" type="number" value={endQuestion} onChange={e => setEndQuestion(e.target.value)} disabled={isExamActive}/>
-                    </div>
-                    <Input label="총 시험 시간 (분)" type="number" value={totalMinutes} onChange={e => setTotalMinutes(e.target.value)} disabled={isUnlimited || isExamActive}/>
-                    <ToggleSwitch label="무제한 모드" enabled={isUnlimited} onChange={setIsUnlimited} disabled={isExamActive}/>
-                    {error && <p className="text-destructive text-sm text-center">{error}</p>}
-                    <Button onClick={onStart} size="lg" className="w-full" disabled={isExamActive}>
-                        {isExamActive ? '시험 진행 중' : '시험 시작'}
-                    </Button>
                 </div>
             </div>
         </div>
