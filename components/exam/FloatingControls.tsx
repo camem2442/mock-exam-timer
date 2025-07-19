@@ -23,8 +23,6 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
     onMarkingModeChange
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    
-    console.log('FloatingControls rendering:', { isExamActive, batchMode, isMarkingMode });
 
     return (
         <div className="fixed bottom-4 right-4 z-50">
