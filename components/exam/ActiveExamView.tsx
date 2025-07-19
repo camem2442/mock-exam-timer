@@ -103,15 +103,25 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
     }
   }, [setFocusedQuestionNumber, problemRefs]);
 
-  const focusedQuestionObj = focusedQuestionNumber ? questions.find(q => q.number === focusedQuestionNumber) : null;
-  const questionMap = React.useMemo(() => Object.fromEntries(questions.map(q => [q.number, q])), [questions]);
+  const focusedQuestionObj = focusedQuestionNumber && questions.length > 0 
+    ? questions.find(q => q.number === focusedQuestionNumber) 
+    : null;
+  const questionMap = React.useMemo(() => 
+    questions.length > 0 ? Object.fromEntries(questions.map(q => [q.number, q])) : {}, 
+    [questions]
+  );
 
   // 스크롤 버튼 핸들러
   const scrollProblemList = useCallback((direction: 'up' | 'down') => {
     const container = problemListContainerRef.current;
-    if (!container) return;
+    if (!container || questions.length === 0) return;
 
-    const itemHeight = container.firstElementChild?.getBoundingClientRect().height || 0;
+    const firstChild = container.firstElementChild as HTMLElement | null;
+    if (!firstChild) return;
+    
+    const itemHeight = firstChild.getBoundingClientRect().height;
+    if (itemHeight === 0) return;
+    
     const scrollAmount = itemHeight * 5; // 5개씩 스크롤
 
     if (direction === 'up') {
@@ -119,7 +129,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
     } else {
       container.scrollBy({ top: scrollAmount, behavior: 'smooth' });
     }
-  }, []);
+  }, [questions.length]);
 
   // 스크롤 위치에 따른 범위 업데이트
   useEffect(() => {
@@ -211,12 +221,14 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         )}
       </div>
 
-      <QuickNav
-        questionNumbers={questions.map(q => q.number)}
-        questions={questionMap}
-        onJumpTo={handleJumpToQuestion}
-        focusedQuestionNumber={focusedQuestionNumber}
-      />
+      {questions.length > 0 && (
+        <QuickNav
+          questionNumbers={questions.map(q => q.number)}
+          questions={questionMap}
+          onJumpTo={handleJumpToQuestion}
+          focusedQuestionNumber={focusedQuestionNumber}
+        />
+      )}
 
       <Card className="space-y-4">
         <ControlToolbar
@@ -230,10 +242,11 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         />
 
         <div className="border-t border-border pt-4">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-bold">전체 문제 목록</h3>
-              <div className="flex items-center gap-2">
+          {questions.length > 0 ? (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-bold">전체 문제 목록</h3>
+                <div className="flex items-center gap-2">
                 <Button
                   size="icon"
                   variant="outline"
@@ -276,6 +289,11 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
               setProblemRef={setProblemRef}
             />
           </div>
+          ) : (
+            <div className="text-center text-muted-foreground py-8">
+              문제를 불러오는 중...
+            </div>
+          )}
         </div>
       </Card>
     </div>
