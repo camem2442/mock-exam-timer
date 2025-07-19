@@ -35,7 +35,8 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
     
     setFocusedQuestionNumber(questionNumber);
 
-    if (batchMode) {
+    // 일괄 모드에서 선택 토글
+    if (batchMode && answer === undefined) {
         setBatchSelectedQuestions(prev => {
             const newSet = new Set(prev);
             if (newSet.has(questionNumber)) {
@@ -45,33 +46,43 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
             }
             return newSet;
         });
-        if (answer !== undefined) {
-             setQuestions(prev => ({
-                ...prev,
-                [questionNumber]: { ...prev[questionNumber], answer: answer === '' ? null : answer }
-            }));
-            // 답안 입력 시에는 다음 문제로 이동
-            const nextQuestionNumber = findNextQuestion(questionNumber);
-            if (nextQuestionNumber !== null) {
-                setFocusedQuestionNumber(nextQuestionNumber);
-            }
-        }
-        return;
     }
 
-    if (isMarkingMode) {
-      setQuestions(prev => ({
-          ...prev,
-          [questionNumber]: {
-              ...prev[questionNumber],
-              answer: answer !== undefined ? (answer === '' ? null : answer) : prev[questionNumber].answer
-          }
-      }));
-      const nextQuestionNumber = findNextQuestion(questionNumber);
-      if (nextQuestionNumber !== null) {
-          setFocusedQuestionNumber(nextQuestionNumber);
-      }
-      return;
+    // 일괄 모드에서도 선택 상태 업데이트
+    if (batchMode && answer !== undefined) {
+        setBatchSelectedQuestions(prev => {
+            const newSet = new Set(prev);
+            newSet.add(questionNumber);
+            return newSet;
+        });
+    }
+
+    // 답안 저장 (마킹 모드 또는 일괄 모드)
+    if ((isMarkingMode || batchMode) && answer !== undefined) {
+        setQuestions(prev => ({
+            ...prev,
+            [questionNumber]: { 
+                ...prev[questionNumber], 
+                answer: answer === '' ? null : answer 
+            }
+        }));
+        
+        // 다음 문제로 이동
+        const nextQuestionNumber = findNextQuestion(questionNumber);
+        if (nextQuestionNumber !== null) {
+            setFocusedQuestionNumber(nextQuestionNumber);
+        }
+        
+        if (isMarkingMode || batchMode) return;
+    }
+
+    // 마킹 모드에서 답안 없이 랩타임만 기록하는 경우
+    if (isMarkingMode && answer === undefined) {
+        const nextQuestionNumber = findNextQuestion(questionNumber);
+        if (nextQuestionNumber !== null) {
+            setFocusedQuestionNumber(nextQuestionNumber);
+        }
+        return;
     }
     
     const lapTimestamp = timer.elapsedTime;
