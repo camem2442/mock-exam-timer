@@ -18,8 +18,10 @@ export const usePwaInstall = () => {
   const [showDesktopGuide, setShowDesktopGuide] = useState(false);
 
   useEffect(() => {
-    // iOS 감지
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    // 더 견고한 iOS 감지 (데스크탑 모드로 요청하는 iPad 포함)
+    const isIOSDevice = 
+      /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     setIsIOS(isIOSDevice);
 
     // 이미 PWA로 실행 중인지 확인
