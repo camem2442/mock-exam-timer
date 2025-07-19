@@ -89,7 +89,7 @@ export const useTimer = ({ totalMinutes, isUnlimited, onTimeUp, restoreState }: 
 
     const startTimeout = setTimeout(() => {
       setIsPaused(false);
-    }, 500); // 0.5-second delay
+    }, 100); // 0.1-second delay for quicker response
 
     // Cleanup timeout if the component unmounts before it fires
     return () => clearTimeout(startTimeout);

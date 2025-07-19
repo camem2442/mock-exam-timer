@@ -151,11 +151,9 @@ const ExamScreen: React.FC = () => {
         examSession.setQuestionNumbers(qNumbers);
         setFocusedQuestionNumber(qNumbers[0]);
 
-        // 상태 업데이트가 완료된 후 시험 시작
-        setTimeout(() => {
-            setIsExamActive(true);
-            timer.start();
-        }, 0);
+        // 상태 업데이트를 즉시 실행
+        setIsExamActive(true);
+        timer.start();
     }, [startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime, resetExamState, timer, examSession, setFocusedQuestionNumber]);
     
     const handleContinueExam = useCallback(() => {
