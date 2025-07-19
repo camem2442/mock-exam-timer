@@ -51,7 +51,13 @@ const SharePreviewModal: React.FC<SharePreviewModalProps> = ({
 
     return createPortal(
         <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl flex flex-col max-h-full w-full max-w-lg overflow-hidden">
+            <div 
+                className="bg-white dark:bg-slate-900 rounded-xl shadow-xl flex flex-col w-full max-w-lg overflow-hidden" 
+                style={{ 
+                    maxHeight: 'calc(100vh - 2rem)',
+                    minHeight: '400px'
+                }}
+            >
                 {/* Header */}
                 <div className="flex-shrink-0 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
                     <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">결과 공유하기</h3>
@@ -61,8 +67,8 @@ const SharePreviewModal: React.FC<SharePreviewModalProps> = ({
                 </div>
 
                 {/* Main Scrollable Content */}
-                <div className="flex-grow overflow-y-auto">
-                    <div className="relative p-4 sm:p-6 flex flex-col justify-center items-center bg-slate-100 dark:bg-slate-800/20 min-h-[320px]">
+                <div className="flex-grow overflow-y-auto min-h-0">
+                    <div className="relative p-4 sm:p-6 flex flex-col justify-center items-center bg-slate-100 dark:bg-slate-800/20" style={{ minHeight: '280px' }}>
                         {(isLoading || error) && (
                             <div className="absolute inset-4 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center transition-opacity rounded-xl">
                                 {isLoading && (
@@ -91,24 +97,32 @@ const SharePreviewModal: React.FC<SharePreviewModalProps> = ({
                 </div>
                 
                 {/* Footer Buttons */}
-                <div className="flex-shrink-0 p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
-                    <div className="space-y-2">
-                         <div className="flex items-center justify-between w-full h-12 bg-slate-100 dark:bg-slate-800 rounded-md px-3">
+                <div className="flex-shrink-0 p-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                    {/* URL Display and Copy Button */}
+                    <div className="bg-slate-100 dark:bg-slate-800 rounded-md p-3">
+                        <div className="flex items-center justify-between gap-2">
                             {isUrlLoading ? (
-                                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 min-w-0 flex-1">
                                     <Spinner size="sm" />
-                                    <span>링크 생성 중...</span>
+                                    <span className="text-sm">링크 생성 중...</span>
                                 </div>
                             ) : (
-                                <span className="flex-grow text-sm text-slate-800 dark:text-slate-200 truncate">
+                                <span className="flex-grow text-sm text-slate-800 dark:text-slate-200 truncate min-w-0">
                                     {shareUrl || '오류: 링크를 생성할 수 없습니다.'}
                                 </span>
                             )}
-                            <Button onClick={onCopy} variant={isCopied ? "success" : "secondary"} disabled={!shareUrl || isUrlLoading} className="ml-2 flex-shrink-0 px-3 py-1 text-sm">
+                            <Button 
+                                onClick={onCopy} 
+                                variant={isCopied ? "success" : "secondary"} 
+                                disabled={!shareUrl || isUrlLoading} 
+                                className="flex-shrink-0 px-3 py-1.5 text-sm whitespace-nowrap"
+                            >
                                 {isCopied ? '복사됨' : '복사'}
                             </Button>
                         </div>
                     </div>
+                    
+                    {/* Action Buttons */}
                     <div className="flex gap-2">
                         {showSettingsButton && (
                             <Button onClick={onBackToSettings} className="flex-1" variant="outline" disabled={isLoading || isUrlLoading || isSharing}>
