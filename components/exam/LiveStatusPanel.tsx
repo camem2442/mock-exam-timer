@@ -26,6 +26,9 @@ const LiveStatusPanel: React.FC<LiveStatusPanelProps> = ({
     // lapCounter is added to the dependency array to ensure this recalculates on each lap.
     const sortedQuestionsForChart = useMemo(() => {
         const allQuestions = Object.values(questions);
+        if (allQuestions.length === 0) {
+            return [];
+        }
         if (!sortBySolveOrder) {
             return allQuestions.sort((a, b) => a.number - b.number);
         }

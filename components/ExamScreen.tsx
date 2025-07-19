@@ -150,8 +150,6 @@ const ExamScreen: React.FC = () => {
         examSession.setQuestions(initialQuestions);
         examSession.setQuestionNumbers(qNumbers);
         setFocusedQuestionNumber(qNumbers[0]);
-
-        // 상태 업데이트를 즉시 실행
         setIsExamActive(true);
         timer.start();
     }, [startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime, resetExamState, timer, examSession, setFocusedQuestionNumber]);
@@ -188,6 +186,12 @@ const ExamScreen: React.FC = () => {
 
     const questionsWithGrading = React.useMemo(() => {
         const questionsArray = Object.values(questions);
+        
+        // questions가 비어있으면 빈 배열 반환
+        if (questionsArray.length === 0) {
+            return [];
+        }
+        
         if (Object.keys(submittedCorrectAnswers).length === 0) {
             // 채점 전, isCorrect를 undefined로 명시적으로 추가
             return questionsArray.map(q => ({ ...q, isCorrect: undefined }));
