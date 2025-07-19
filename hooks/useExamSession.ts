@@ -130,7 +130,8 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
 
     setBatchSelectedQuestions(new Set());
     setBatchMode(false);
-    setIsMarkingMode(false);
+    // 마킹 모드는 사용자가 명시적으로 끄기 전까지 유지
+    // setIsMarkingMode(false);
     setLapCounter(c => c + 1);
     timer.recordLap();
   }, [isExamActive, batchSelectedQuestions, timer]);
