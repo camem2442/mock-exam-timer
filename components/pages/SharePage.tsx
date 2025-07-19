@@ -145,7 +145,7 @@ const SharePage: React.FC = () => {
             </Helmet>
 
             <div className="text-center mb-8">
-                <Link to="/" className="text-2xl font-bold text-primary hover:underline">
+                <Link to="/" className="text-2xl font-bold text-brand hover:underline">
                     {siteConfig.title}
                 </Link>
                 <p className="text-muted-foreground">나만의 시험 분석 파트너</p>

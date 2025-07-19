@@ -11,6 +11,7 @@ export const useThemeColors = () => {
         primary: getCssVar('--primary'),
         destructive: getCssVar('--destructive'),
         mutedForeground: getCssVar('--muted-foreground'),
+        accent: getCssVar('--accent'),
         card: getCssVar('--card'),
         border: getCssVar('--border'),
         chart: {
@@ -27,6 +28,7 @@ export const useThemeColors = () => {
                 primary: getCssVar('--primary'),
                 destructive: getCssVar('--destructive'),
                 mutedForeground: getCssVar('--muted-foreground'),
+                accent: getCssVar('--accent'),
                 card: getCssVar('--card'),
                 border: getCssVar('--border'),
                 chart: {

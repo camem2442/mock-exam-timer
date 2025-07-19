@@ -82,7 +82,7 @@ const SolveTimeChart: React.FC<SolveTimeChartProps> = ({ questions, forceSolveOr
                                 label={{ value: '누적 시간', angle: 90, position: 'insideRight', fill: colors.chart.axis, style: {textAnchor: 'middle'} }}
                                 tickFormatter={formatMinSec}
                             />
-                            <Recharts.Tooltip content={<CustomTooltip />} cursor={{fill: colors.mutedForeground.replace(')', ', 0.1)').replace('hsl(', 'hsla(')}} />
+                            <Recharts.Tooltip content={<CustomTooltip />} cursor={{fill: 'rgba(200, 200, 220, 0.1)'}} />
                             <Recharts.Legend formatter={renderLegendText} />
                             <Recharts.Bar yAxisId="left" dataKey="lapTime" name="구간별 풀이 시간" fill={colors.chart.bar} isAnimationActive={false} />
                             <Recharts.Line yAxisId="right" type="monotone" dataKey="cumulativeTime" name="누적 시간" stroke={colors.chart.line} dot={false} strokeWidth={2} isAnimationActive={false} />
@@ -99,7 +99,7 @@ const SolveTimeChart: React.FC<SolveTimeChartProps> = ({ questions, forceSolveOr
                                 tick={{ fontSize: 12, fill: colors.chart.axis }} 
                                 label={{ value: '풀이 시간', angle: -90, position: 'insideLeft', fill: colors.chart.axis, style: {textAnchor: 'middle'} }}
                             />
-                            <Recharts.Tooltip content={<CustomTooltip />} cursor={{fill: colors.mutedForeground.replace(')', ', 0.1)').replace('hsl(', 'hsla(')}} />
+                            <Recharts.Tooltip content={<CustomTooltip />} cursor={{fill: 'rgba(200, 200, 220, 0.1)'}} />
                             <Recharts.Legend formatter={renderLegendText} />
                             <Recharts.Bar dataKey="solveTime" name="풀이 시간" fill={colors.chart.bar} isAnimationActive={false} />
                         </Recharts.BarChart>

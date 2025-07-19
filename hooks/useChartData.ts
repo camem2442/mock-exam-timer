@@ -1,6 +1,6 @@
 
 import { useMemo } from 'react';
-import { type Question, type SolveEvent } from '../types';
+import { type Question } from '../types';
 
 export interface QuestionNumberChartData {
     name: string;
@@ -13,7 +13,12 @@ export interface SolveOrderChartData {
     cumulativeTime: number;
 }
 
-export type SolveHistoryEvent = { questionNumber: number } & SolveEvent;
+export interface SolveHistoryEvent {
+    questionNumber: number;
+    duration: number;
+    timestamp: number;
+    answer?: string;
+}
 
 export interface TimeManagementInsightsData {
     longest: Question[];
@@ -23,12 +28,12 @@ export interface TimeManagementInsightsData {
  * A custom hook to process and memoize analytics data from raw question objects.
  * This centralizes the data transformation logic for charts and tables.
  */
-export const useChartData = (questions: Question[] | Record<number, Question>) => {
+export const useChartData = (questions: Question[]) => {
     
     // This check makes the hook robust. It now accepts an array or the raw questions object.
-    const questionsArray = Array.isArray(questions) ? questions : Object.values(questions);
+    const questionsArray = questions;
 
-    const hasData = questionsArray.some(q => q.attempts > 0);
+    const hasData = useMemo(() => questionsArray.some(q => q.solveTime > 0), [questionsArray]);
     
     const solvedQuestions = questionsArray.filter(q => q.attempts > 0);
 

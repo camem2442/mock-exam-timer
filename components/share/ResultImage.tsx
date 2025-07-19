@@ -19,7 +19,7 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
     // 채점된 문제 수 계산
     const gradedQuestions = questions.filter(q => q.isCorrect !== undefined);
     const correctCount = gradedQuestions.filter(q => q.isCorrect === true).length;
-    const totalTime = questions.reduce((sum, q) => sum + q.solveTime, 0);
+    const totalTime = Math.max(0, ...questions.flatMap(q => q.solveEvents.map(e => e.timestamp)));
 
     // 채점 정보 미포함 시, isCorrect 상태를 모두 undefined로 만듦
     const displayQuestions = includeGrading ? questions : questions.map(q => ({ ...q, isCorrect: undefined }));
@@ -39,7 +39,7 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
       >
         
         <header className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-foreground">{examName}</h1>
+          <h1 className="text-3xl font-bold text-brand">{examName}</h1>
         </header>
         
         {/* 2. 결과 요약 */}
@@ -48,7 +48,9 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
           <div className="grid grid-cols-2 gap-4 text-center">
             <div className="bg-muted p-3 rounded-md">
               <p className="text-muted-foreground text-base">총 소요 시간</p>
-              <p className="text-3xl font-bold text-foreground">{formatTime(totalTime)}</p>
+              <p className="text-3xl font-bold text-foreground whitespace-nowrap">
+                {`${Math.round(totalTime / 60)}분`}
+              </p>
             </div>
             <div className="bg-muted p-3 rounded-md">
               {includeGrading && gradedQuestions.length > 0 ? (
@@ -102,7 +104,7 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
             href={siteConfig.domain} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity"
+            className="text-2xl font-bold text-brand hover:opacity-80 transition-opacity"
           >
             mocktimer.kr
           </a>
