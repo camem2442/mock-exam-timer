@@ -148,7 +148,7 @@ const SharePage: React.FC = () => {
                 <Link to="/" className="text-2xl font-bold text-brand hover:underline">
                     {siteConfig.title}
                 </Link>
-                <p className="text-muted-foreground">나만의 시험 분석 파트너</p>
+                <p className="text-muted-foreground">시간 관리 능력을 극대화하여 최고의 성과를 만드세요.</p>
             </div>
 
             {loading && <div className="flex justify-center"><Spinner /></div>}
