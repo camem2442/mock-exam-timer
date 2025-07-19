@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, type RefObject } from 'react';
+import React, { useRef, useCallback, useMemo, useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
 import TimerDisplay from './TimerDisplay';
 import QuickNav from './QuickNav';
@@ -65,12 +65,27 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 }) => {
 
   const problemListContainerRef = useRef<HTMLDivElement | null>(null);
+  const problemRefs = useRef<Record<number, HTMLDivElement>>({});
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const setProblemRef = (qNum: number, el: HTMLDivElement | null) => {
+  // 스크롤 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      setIsScrolled(scrollY > 50); // 50px 이상 스크롤하면 compact 모드
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // 초기 상태 확인
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const setProblemRef = useCallback((num: number, el: HTMLDivElement | null) => {
     if(problemRefs.current) {
-      problemRefs.current[qNum] = el;
+      problemRefs.current[num] = el;
     }
-  };
+  }, []);
 
   const handleJumpToQuestion = useCallback((questionNumber: number) => {
     setFocusedQuestionNumber(questionNumber);
@@ -111,60 +126,11 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
             startQuestion={startQuestionStr}
             endQuestion={endQuestionStr}
             totalMinutes={totalMinutesStr}
+            isCompact={isScrolled}
           />
         </Card>
 
         {focusedQuestionObj && (
           <Card className="bg-background/90 backdrop-blur-sm shadow-sm">
             <DynamicMarkingWindow
-              key={`focused-${focusedQuestionObj.number}`}
-              isExamActive={isExamActive}
-              question={focusedQuestionObj}
-              batchSelected={batchSelectedQuestions.has(focusedQuestionObj.number)}
-              onLap={onLap}
-              subjectiveInput={subjectiveInputs[focusedQuestionObj.number] ?? ''}
-              onSubjectiveInputChange={(value) => onSubjectiveInputChange(focusedQuestionObj.number, value)}
-            />
-          </Card>
-        )}
-      </div>
-
-      <QuickNav
-        questionNumbers={questions.map(q => q.number)}
-        questions={questionMap}
-        onJumpTo={handleJumpToQuestion}
-        focusedQuestionNumber={focusedQuestionNumber}
-      />
-
-      <Card className="space-y-4">
-        <ControlToolbar
-          isExamActive={isExamActive}
-          batchMode={batchMode}
-          onBatchModeChange={onBatchModeChange}
-          onBatchRecord={onBatchRecord}
-          isBatchRecordDisabled={!batchMode || batchSelectedQuestions.size === 0}
-          isMarkingMode={isMarkingMode}
-          onMarkingModeChange={onMarkingModeChange}
-        />
-
-        <div className="border-t border-border pt-4">
-          <div>
-            <h3 className="text-lg font-bold mb-3">전체 문제 목록</h3>
-            <ProblemList
-              ref={problemListContainerRef}
-              isExamActive={isExamActive}
-              questionNumbers={questions.map(q => q.number)}
-              questions={questionMap}
-              batchSelectedQuestions={batchSelectedQuestions}
-              subjectiveInputs={subjectiveInputs}
-              onLap={onLap}
-              onSubjectiveInputChange={onSubjectiveInputChange}
-              onQuestionFocus={handleJumpToQuestion}
-              setProblemRef={setProblemRef}
-            />
-          </div>
-        </div>
-      </Card>
-    </div>
-  );
-}; 
+              key={`focused-${focusedQuestionObj.number}`
