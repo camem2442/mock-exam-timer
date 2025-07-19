@@ -270,10 +270,7 @@ const ExamScreen: React.FC = () => {
                 onConfirm={handleConfirmRestart}
                 title="새로운 시험 시작"
                 message="현재 진행 중인 시험이 종료되고 모든 기록이 초기화됩니다. 정말 새로운 시험을 시작하시겠습니까?"
-            >
-                <div className="space-y-4">
-                    <hr className="border-border" />
-                    <div className="flex flex-col gap-2">
+            />
                                                   {canInstall && !isStandalone && (
                               <Button variant="outline" onClick={async () => {
                                   const result = await triggerInstallPrompt();
