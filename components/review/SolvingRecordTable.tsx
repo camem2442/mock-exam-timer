@@ -4,15 +4,14 @@ import { type Question } from '../../types';
 import { Button } from '../ui/Button';
 import { formatTime } from '../../utils/formatters';
 import { useChartData, type SolveHistoryEvent } from '../../hooks/useChartData';
-import { generateCSV, copyToClipboard, downloadCSV, type ExportData } from '../../utils/exportUtils';
+import { generateCSV, downloadCSV, type ExportData } from '../../utils/exportUtils';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/DropdownMenu';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/Popover';
 import { ToggleSwitch } from '../ui/ToggleSwitch';
 import { Spinner } from '../ui/Spinner';
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 
 type SortOption = 'solveOrder' | 'questionNumber' | 'timeDesc' | 'timeAsc';
-
-type CopyState = 'idle' | 'copying' | 'success' | 'error';
 
 interface FilterOptions {
   correct: boolean;
@@ -32,18 +31,21 @@ interface SolvingRecordTableProps {
 
 const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) => {
     const [sortOption, setSortOption] = useState<SortOption>('solveOrder');
-    const [copyState, setCopyState] = useState<CopyState>('idle');
     const [filters, setFilters] = useState<FilterOptions>({
       correct: false,
       incorrect: false,
     });
     
     const { solveHistory } = useChartData(questions);
+    
+    // 복사 상태 관리를 위한 훅 사용
+    const { copy, isCopied, error: copyError } = useCopyToClipboard(2000);
+    const [isCopying, setIsCopying] = useState(false);
 
     const handleExportData = async () => {
-        if (copyState !== 'idle') return;
+        if (isCopying) return;
 
-        setCopyState('copying');
+        setIsCopying(true);
 
         const totalTime = questions.reduce((sum, q) => sum + q.solveTime, 0);
         const exportData: ExportData = {
@@ -54,13 +56,9 @@ const SolvingRecordTable: React.FC<SolvingRecordTableProps> = ({ questions }) =>
         };
 
         const csvData = generateCSV(exportData);
-        const success = await copyToClipboard(csvData);
+        await copy(csvData);
         
-        setCopyState(success ? 'success' : 'error');
-
-        setTimeout(() => {
-            setCopyState('idle');
-        }, 3000);
+        setIsCopying(false);
     };
 
     const handleDownloadCSV = () => {
