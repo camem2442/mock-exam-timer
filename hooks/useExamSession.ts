@@ -130,7 +130,6 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
 
     setBatchSelectedQuestions(new Set());
     setBatchMode(false);
-    setIsMarkingMode(false);
     setLapCounter(c => c + 1);
     timer.recordLap();
   }, [isExamActive, batchSelectedQuestions, timer]);
