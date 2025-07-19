@@ -39,14 +39,8 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 whitespace-pre-wrap">
           {message}
         </p>
-        
-        {children && (
-          <div className="my-6">
-            {children}
-          </div>
-        )}
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+        <div className="flex gap-2 mb-4">
           <Button onClick={onClose} variant="secondary" className="flex-1">
             {cancelText}
           </Button>
@@ -54,6 +48,12 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             {confirmText}
           </Button>
         </div>
+        
+        {children && (
+          <div className="mt-4">
+            {children}
+          </div>
+        )}
       </div>
     </div>
   );

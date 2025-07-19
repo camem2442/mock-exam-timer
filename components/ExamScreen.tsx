@@ -270,27 +270,30 @@ const ExamScreen: React.FC = () => {
                 onConfirm={handleConfirmRestart}
                 title="새로운 시험 시작"
                 message="현재 진행 중인 시험이 종료되고 모든 기록이 초기화됩니다. 정말 새로운 시험을 시작하시겠습니까?"
-            />
-                                                  {canInstall && !isStandalone && (
-                              <Button variant="outline" onClick={async () => {
-                                  const result = await triggerInstallPrompt();
-                                  
-                                  // 결과에 따른 처리
-                                  if (result?.type === 'already-installed') {
-                                      alert('이미 앱으로 실행 중입니다!');
-                                  } else if (result?.type === 'not-supported') {
-                                      alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
-                                  }
-                              }}>
-                                  <span className="flex items-center gap-2">
-                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V8" />
-                                      </svg>
-                                      <span>{isIOS ? '홈 화면에 추가 (iOS)' : '홈 화면에 추가'}</span>
-                                  </span>
-                              </Button>
-                          )}
-                         <Button
+            >
+                <div className="space-y-4">
+                    <hr className="border-border" />
+                    <div className="flex flex-col gap-2">
+                        {canInstall && !isStandalone && (
+                            <Button variant="outline" onClick={async () => {
+                                const result = await triggerInstallPrompt();
+                                
+                                // 결과에 따른 처리
+                                if (result?.type === 'already-installed') {
+                                    alert('이미 앱으로 실행 중입니다!');
+                                } else if (result?.type === 'not-supported') {
+                                    alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
+                                }
+                            }}>
+                                <span className="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V8" />
+                                    </svg>
+                                    <span>{isIOS ? '홈 화면에 추가 (iOS)' : '홈 화면에 추가'}</span>
+                                </span>
+                            </Button>
+                        )}
+                        <Button
                             variant="outline"
                             onClick={async () => {
                                 const shareText = `${siteConfig.title}\n\n${siteConfig.description}\n\n${siteConfig.domain}`;
