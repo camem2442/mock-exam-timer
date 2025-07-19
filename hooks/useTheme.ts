@@ -27,8 +27,12 @@ export const useTheme = () => {
   }, [theme]);
 
   useEffect(() => {
-    if (window.clarity) {
-      window.clarity('set', 'theme', theme);
+    if (typeof window !== 'undefined' && window.clarity && typeof window.clarity === 'function') {
+      try {
+        window.clarity('set', 'theme', theme);
+      } catch (error) {
+        console.warn('Clarity tracking error:', error);
+      }
     }
   }, [theme]);
 
