@@ -1,3 +1,5 @@
+import { version } from '@/package.json';
+
 // 사이트 설정 - 도메인 변경 시 이 파일만 수정하면 됩니다
 export const siteConfig = {
     // 기본 도메인 설정
@@ -6,7 +8,7 @@ export const siteConfig = {
     // 사이트 메타 정보
     title: 'MockTimer | 모의고사 타이머 & 채점·분석기',
     description: '모의고사 타이머 & 채점·분석기 : 시간 관리 능력을 극대화하여 최고의 성과를 만드세요.',
-    keywords: 'MockTimer, 목타이머, 모의고사 타이머, 시험 타이머, 문제풀이 시간, 수능 타이머, 공무원시험 타이머, LEET 타이머, CPA 타이머, 학습 분석, 시간 관리, 시험 준비, 수험생 도구',
+    keywords: 'MockTimer, 목타이머, 모의고사 타이머, 시험 타이머, 문제풀이 시간, 국어 타이머, 수학 타이머, 수능 타이머, 공시 타이머, LEET 타이머, CPA 타이머, 학습 분석, 시간 관리, 시험 준비, 수험생 도구',
     
     // 소셜 미디어 설정
     social: {
@@ -44,9 +46,9 @@ export const siteConfig = {
     seo: {
         author: 'MockTimer',
         publisher: 'MockTimer',
-        datePublished: '2025-7-15',
-        dateModified: '2025-07-17',
-        version: '1.2.0',
+        datePublished: '2025-07-15',
+        dateModified: '2025-07-19',
+        version: version,
         language: 'ko',
         geoRegion: 'KR',
         geoPlacename: '대한민국'

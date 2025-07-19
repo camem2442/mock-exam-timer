@@ -63,6 +63,7 @@ const ExamScreen: React.FC = () => {
         questions, questionNumbers, subjectiveInputs, lapCounter,
         batchMode, batchSelectedQuestions, handleLap, reset: resetSession,
         focusedQuestionNumber, setFocusedQuestionNumber,
+        isMarkingMode, toggleMarkingMode,
     } = examSession;
 
     const review = useReview(questionNumbers);
@@ -346,16 +347,38 @@ const ExamScreen: React.FC = () => {
                             />
                     ) : (
                         <ActiveExamView
+                            problemRefs={problemRefs}
+                            questions={questionsWithGrading}
+                            onLap={handleLap}
+                            focusedQuestionNumber={focusedQuestionNumber}
+                            setFocusedQuestionNumber={setFocusedQuestionNumber}
+                            subjectiveInputs={subjectiveInputs}
+                            onSubjectiveInputChange={(number, value) => examSession.setSubjectiveInputs(prev => ({...prev, [number]: value}))}
+                            batchMode={batchMode}
+                            onBatchModeChange={examSession.setBatchMode}
+                            onBatchRecord={examSession.handleBatchRecord}
+                            batchSelectedQuestions={batchSelectedQuestions}
+                            onFinishExam={handleFinishExam}
+                            isExamActive={isExamActive}
+                            isMarkingMode={isMarkingMode}
+                            onMarkingModeChange={toggleMarkingMode}
+                            timer={{
+                                timeLeft: timer.timeLeft,
+                                elapsedTime: timer.elapsedTime,
+                                currentProblemTime: timer.currentProblemTime,
+                                overtime: timer.overtime,
+                                isPaused: timer.isPaused,
+                                timeUp: timer.timeUp,
+                                togglePause: timer.togglePause,
+                                recordLap: timer.recordLap,
+                            }}
                             examName={examName}
                             isUnlimitedTime={isUnlimitedTime}
                             startQuestionStr={startQuestionStr}
                             endQuestionStr={endQuestionStr}
                             totalMinutesStr={totalMinutesStr}
-                            timer={timer}
-                            examSession={examSession}
-                            onFinishExam={handleFinishExam}
                         />
-                           )}
+                    )}
                 </div>
             </div>
             

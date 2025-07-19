@@ -11,6 +11,7 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
   const [subjectiveInputs, setSubjectiveInputs] = useState<Record<number, string>>({});
   const [lapCounter, setLapCounter] = useState(0);
   const [batchMode, setBatchMode] = useState(false);
+  const [isMarkingMode, setIsMarkingMode] = useState(false);
   const [batchSelectedQuestions, setBatchSelectedQuestions] = useState<Set<number>>(new Set());
 
   const findNextQuestion = useCallback((currentQNum: number): number | null => {
@@ -24,6 +25,10 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
     const firstUnansweredFromStart = questionNumbers.find(qNum => questions[qNum]?.attempts === 0);
     return firstUnansweredFromStart ?? null;
   }, [questions, questionNumbers]);
+
+  const toggleMarkingMode = useCallback(() => {
+    setIsMarkingMode(prev => !prev);
+  }, []);
 
   const handleLap = useCallback((questionNumber: number, answer?: string) => {
     if (!isExamActive) return;
@@ -47,6 +52,21 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
             }));
         }
         return;
+    }
+
+    if (isMarkingMode) {
+      setQuestions(prev => ({
+          ...prev,
+          [questionNumber]: {
+              ...prev[questionNumber],
+              answer: answer !== undefined ? (answer === '' ? null : answer) : prev[questionNumber].answer
+          }
+      }));
+      const nextQuestionNumber = findNextQuestion(questionNumber);
+      if (nextQuestionNumber !== null) {
+          setFocusedQuestionNumber(nextQuestionNumber);
+      }
+      return;
     }
     
     const lapTimestamp = timer.elapsedTime;
@@ -80,7 +100,7 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
     }
     timer.recordLap();
 
-  }, [isExamActive, batchMode, findNextQuestion, timer]);
+  }, [isExamActive, batchMode, isMarkingMode, findNextQuestion, timer]);
 
   const handleBatchRecord = useCallback(() => {
     if (!isExamActive || batchSelectedQuestions.size === 0) return;
@@ -110,6 +130,7 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
 
     setBatchSelectedQuestions(new Set());
     setBatchMode(false);
+    setIsMarkingMode(false);
     setLapCounter(c => c + 1);
     timer.recordLap();
   }, [isExamActive, batchSelectedQuestions, timer]);
@@ -122,6 +143,7 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
     setLapCounter(0);
     setBatchMode(false);
     setBatchSelectedQuestions(new Set());
+    setIsMarkingMode(false);
   }, []);
   
   return {
@@ -137,6 +159,8 @@ export const useExamSession = (timer: TimerHookReturn, isExamActive: boolean) =>
     setLapCounter,
     batchMode,
     setBatchMode,
+    isMarkingMode,
+    toggleMarkingMode,
     batchSelectedQuestions,
     setBatchSelectedQuestions,
     handleLap,

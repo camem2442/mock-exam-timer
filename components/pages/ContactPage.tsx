@@ -105,8 +105,8 @@ export const ContactPage: React.FC = () => {
                                 </p>
                                 <div className="space-y-2 text-lg">
                                     <p><strong>문의:</strong> {siteConfig.contact.email}</p>
-                                    <p><strong>버전:</strong> v1.2.0</p>
-                                    <p><strong>최종 업데이트:</strong> 2025년 7월 19일</p>
+                                    <p><strong>버전:</strong> v{siteConfig.seo.version}</p>
+                                    <p><strong>최종 업데이트:</strong> {siteConfig.seo.dateModified}</p>
                                 </div>
                             </div>
                         </section>

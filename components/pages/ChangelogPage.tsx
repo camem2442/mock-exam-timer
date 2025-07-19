@@ -9,10 +9,15 @@ export const ChangelogPage: React.FC = () => {
             <div className="max-w-4xl mx-auto">
                 <Card className="p-6 sm:p-8">
                     <header className="mb-8">
-                        <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                            업데이트 기록
-                        </h1>
-                        <div className="border-b border-border mb-6"></div>
+                        <div className="flex justify-between items-center">
+                            <h1 className="text-3xl sm:text-4xl font-bold text-foreground">
+                                업데이트 기록
+                            </h1>
+                            <span className="text-lg text-muted-foreground font-semibold">
+                               v{siteConfig.seo.version}
+                            </span>
+                        </div>
+                        <div className="border-b border-border mt-4 mb-6"></div>
                     </header>
                     
                     <main className="space-y-8 text-muted-foreground">

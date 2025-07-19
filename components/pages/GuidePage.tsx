@@ -16,7 +16,7 @@ export const GuidePage: React.FC = () => {
                     
                     <main className="space-y-8 text-muted-foreground">
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">1. 시험 설정</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">1. 시험 설정</h2>
                             <p className="mb-4 text-lg">
                                 시작하기 전에 풀이할 시험을 설정합니다.
                             </p>
@@ -28,7 +28,7 @@ export const GuidePage: React.FC = () => {
                         </section>
                         
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">2. 시험 진행</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">2. 시험 진행</h2>
                             <p className="mb-4 text-lg">
                                 '시험 시작' 버튼을 누르면 타이머가 작동하며 문제 풀이를 기록할 수 있습니다.
                             </p>
@@ -39,6 +39,20 @@ export const GuidePage: React.FC = () => {
                                         <li className="pl-2"><strong>클릭:</strong> 문제 번호(예: <span className="font-mono bg-muted px-2 py-1 rounded">13번</span>) 또는 객관식 번호(1~5)를 클릭하여 답안을 기록합니다.</li>
                                         <li className="pl-2"><strong>키보드 단축키:</strong> 키보드의 숫자 키 (1, 2, 3, 4, 5)를 누르면 현재 포커스된 문제의 답이 바로 마킹되고 다음 문제로 넘어갑니다. (가장 빠른 방법)</li>
                                         <li className="pl-2"><strong>주관식:</strong> 답안 입력 후 '저장' 버튼을 누르거나 Enter 키를 쳐서 기록합니다.</li>
+                                    </ul>
+                                </li>
+                                <li className="pl-2">
+                                    <strong>시간만 기록하고 넘어가기:</strong>
+                                    <p className="pl-6 mt-2">
+                                        문제를 풀다가 답을 정하지 못하고 다음 문제로 넘어가고 싶을 때, 해당 문제의 파란색 번호 버튼(예: <span className="font-mono bg-muted px-2 py-1 rounded">13번</span>)을 누르면 답안은 비워둔 채 현재까지의 풀이 시간만 기록되고 다음 문제로 넘어갑니다.
+                                    </p>
+                                </li>
+                                <li className="pl-2">
+                                    <strong>마킹 모드 (시간 기록 없이 답안만 수정):</strong>
+                                    <ul className="list-['\2013'] space-y-3 pl-6 mt-3">
+                                        <li className="pl-2">'마킹 모드' 토글을 켜면 타이머가 흐르더라도 모든 시간 기록 기능이 일시적으로 중지됩니다.</li>
+                                        <li className="pl-2">시험 종료 후 OMR 카드에 답을 옮겨 적는 상황을 시뮬레이션 하거나, 이전에 마킹한 답을 시간 변화 없이 수정하고 싶을 때 유용합니다.</li>
+                                        <li className="pl-2">예를 들어, 모든 문제를 다 푼 뒤 마킹 모드를 켜고 1번 문제부터 답안을 순서대로 클릭하면, 실제 OMR 마킹처럼 시간 기록 없이 답안만 입력할 수 있습니다.</li>
                                     </ul>
                                 </li>
                                 <li className="pl-2"><strong>현재 문제 리셋:</strong> '현재 문제 풀이 시간'을 0으로 초기화합니다.</li>
@@ -54,7 +68,7 @@ export const GuidePage: React.FC = () => {
                         </section>
                         
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">3. 시험 종료 및 분석</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">3. 시험 종료 및 분석</h2>
                             <p className="mb-4 text-lg">
                                 '시험 종료' 버튼을 누르면 풀이가 중단되고 '풀이 과정 분석 리포트'가 나타납니다.
                             </p>
@@ -66,7 +80,7 @@ export const GuidePage: React.FC = () => {
                         </section>
                         
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">4. 시험 기록 저장 및 관리</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">4. 시험 기록 저장 및 관리</h2>
                             <p className="mb-4 text-lg">
                                 풀이 과정 분석 리포트에서 시험 결과를 저장하고 관리할 수 있습니다.
                             </p>
@@ -81,7 +95,7 @@ export const GuidePage: React.FC = () => {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">5. 결과 공유</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">5. 결과 공유</h2>
                             <p className="mb-4 text-lg">
                                 풀이 결과 분석 리포트나 공유된 링크 페이지에서 다른 사람에게 결과를 이미지와 링크로 공유할 수 있습니다.
                             </p>
@@ -93,7 +107,7 @@ export const GuidePage: React.FC = () => {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-semibold text-primary mb-4">6. 홈 화면에 추가 (PWA)</h2>
+                            <h2 className="text-2xl font-semibold text-brand mb-4">6. 홈 화면에 추가 (PWA)</h2>
                             <p className="mb-4 text-lg">
                                 MockTimer를 스마트폰이나 PC에 앱처럼 설치하여 더 빠르고 편리하게 이용할 수 있습니다.
                             </p>

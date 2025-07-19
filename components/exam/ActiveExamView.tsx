@@ -1,59 +1,75 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, type RefObject } from 'react';
 import { Card } from '../ui/Card';
 import TimerDisplay from './TimerDisplay';
 import QuickNav from './QuickNav';
 import DynamicMarkingWindow from './DynamicMarkingWindow';
 import ControlToolbar from './ControlToolbar';
 import ProblemList from './ProblemList';
-import { type useTimer } from '../../hooks/useTimer';
-import { type useExamSession } from '../../hooks/useExamSession';
-
-type TimerHookReturn = ReturnType<typeof useTimer>;
-type ExamSessionHookReturn = ReturnType<typeof useExamSession>;
+import { type Question, type SolveEvent } from '../../types';
 
 interface ActiveExamViewProps {
+  problemRefs: RefObject<Record<number, HTMLDivElement | null>>;
+  questions: (Question & { isCorrect?: boolean })[];
+  onLap: (questionNumber: number, answer?: string) => void;
+  focusedQuestionNumber: number | null;
+  setFocusedQuestionNumber: (num: number | null) => void;
+  subjectiveInputs: Record<number, string>;
+  onSubjectiveInputChange: (number: number, value: string) => void;
+  batchMode: boolean;
+  onBatchModeChange: (enabled: boolean) => void;
+  onBatchRecord: () => void;
+  batchSelectedQuestions: Set<number>;
+  onFinishExam: () => void;
+  isExamActive: boolean;
+  isMarkingMode: boolean;
+  onMarkingModeChange: () => void;
+  timer: {
+    timeLeft: number;
+    elapsedTime: number;
+    currentProblemTime: number;
+    overtime: number;
+    isPaused: boolean;
+    timeUp: boolean;
+    togglePause: () => void;
+    recordLap: () => void;
+  };
   examName: string;
   isUnlimitedTime: boolean;
   startQuestionStr: string;
   endQuestionStr: string;
   totalMinutesStr: string;
-  
-  timer: TimerHookReturn;
-  examSession: ExamSessionHookReturn;
-
-  onFinishExam: () => void;
 }
 
 export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
+  problemRefs,
+  questions,
+  onLap,
+  focusedQuestionNumber,
+  setFocusedQuestionNumber,
+  subjectiveInputs,
+  onSubjectiveInputChange,
+  batchMode,
+  onBatchModeChange,
+  onBatchRecord,
+  batchSelectedQuestions,
+  onFinishExam,
+  isExamActive,
+  isMarkingMode,
+  onMarkingModeChange,
+  timer,
   examName,
   isUnlimitedTime,
   startQuestionStr,
   endQuestionStr,
   totalMinutesStr,
-  timer,
-  examSession,
-  onFinishExam,
 }) => {
-  const { 
-    questions, 
-    questionNumbers, 
-    subjectiveInputs, 
-    batchMode, 
-    batchSelectedQuestions,
-    handleLap, 
-    handleBatchRecord,
-    setSubjectiveInputs,
-    setBatchMode,
-    setBatchSelectedQuestions,
-    focusedQuestionNumber,
-    setFocusedQuestionNumber,
-  } = examSession;
 
-  const problemRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const problemListContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setProblemRef = (qNum: number, el: HTMLDivElement | null) => {
-    problemRefs.current[qNum] = el;
+    if(problemRefs.current) {
+      problemRefs.current[qNum] = el;
+    }
   };
 
   const handleJumpToQuestion = useCallback((questionNumber: number) => {
@@ -70,21 +86,22 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         const offset = targetElement.offsetTop - container.offsetTop;
         container.scrollTo({ top: offset, behavior: 'smooth' });
     }
-  }, [setFocusedQuestionNumber]);
+  }, [setFocusedQuestionNumber, problemRefs]);
 
-  const focusedQuestion = focusedQuestionNumber ? questions[focusedQuestionNumber] : null;
-  
+  const focusedQuestionObj = focusedQuestionNumber ? questions.find(q => q.number === focusedQuestionNumber) : null;
+  const questionMap = React.useMemo(() => Object.fromEntries(questions.map(q => [q.number, q])), [questions]);
+
   return (
     <div className="lg:col-span-3 space-y-8">
       <Card className="sticky top-8 z-10 bg-transparent shadow-none backdrop-blur-sm">
-        <TimerDisplay 
+        <TimerDisplay
           examName={examName}
           isUnlimited={isUnlimitedTime}
           timeLeft={timer.timeLeft}
           totalElapsed={timer.elapsedTime}
           currentProblem={timer.currentProblemTime}
           overtime={timer.overtime}
-          isExamActive={true} // This view is only shown when exam is active
+          isExamActive={isExamActive}
           isPaused={timer.isPaused}
           timeUp={timer.timeUp}
           onTogglePause={timer.togglePause}
@@ -96,53 +113,50 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         />
       </Card>
 
-      {focusedQuestion && (
+      {focusedQuestionObj && (
         <Card>
           <DynamicMarkingWindow
-            key={`focused-${focusedQuestion.number}`}
-            isExamActive={true}
-            question={focusedQuestion}
-            batchSelected={batchSelectedQuestions.has(focusedQuestion.number)}
-            onLap={handleLap}
-            subjectiveInput={subjectiveInputs[focusedQuestion.number] ?? ''}
-            onSubjectiveInputChange={(value) => setSubjectiveInputs(prev => ({...prev, [focusedQuestion.number]: value}))}
+            key={`focused-${focusedQuestionObj.number}`}
+            isExamActive={isExamActive}
+            question={focusedQuestionObj}
+            batchSelected={batchSelectedQuestions.has(focusedQuestionObj.number)}
+            onLap={onLap}
+            subjectiveInput={subjectiveInputs[focusedQuestionObj.number] ?? ''}
+            onSubjectiveInputChange={(value) => onSubjectiveInputChange(focusedQuestionObj.number, value)}
           />
         </Card>
       )}
 
-      <QuickNav 
-        questionNumbers={questionNumbers} 
-        questions={questions}
+      <QuickNav
+        questionNumbers={questions.map(q => q.number)}
+        questions={questionMap}
         onJumpTo={handleJumpToQuestion}
         focusedQuestionNumber={focusedQuestionNumber}
       />
 
       <Card className="space-y-4">
         <ControlToolbar
-          isExamActive={true}
+          isExamActive={isExamActive}
           batchMode={batchMode}
-          onBatchModeChange={(enabled) => {
-              setBatchMode(enabled);
-              if (!enabled) {
-                  setBatchSelectedQuestions(new Set());
-              }
-          }}
-          onBatchRecord={handleBatchRecord}
+          onBatchModeChange={onBatchModeChange}
+          onBatchRecord={onBatchRecord}
           isBatchRecordDisabled={!batchMode || batchSelectedQuestions.size === 0}
+          isMarkingMode={isMarkingMode}
+          onMarkingModeChange={onMarkingModeChange}
         />
-        
+
         <div className="border-t border-border pt-4">
           <div>
             <h3 className="text-lg font-bold mb-3">전체 문제 목록</h3>
             <ProblemList
               ref={problemListContainerRef}
-              isExamActive={true}
-              questionNumbers={questionNumbers}
-              questions={questions}
+              isExamActive={isExamActive}
+              questionNumbers={questions.map(q => q.number)}
+              questions={questionMap}
               batchSelectedQuestions={batchSelectedQuestions}
               subjectiveInputs={subjectiveInputs}
-              onLap={handleLap}
-              onSubjectiveInputChange={(qNum, val) => setSubjectiveInputs(prev => ({...prev, [qNum]: val}))}
+              onLap={onLap}
+              onSubjectiveInputChange={onSubjectiveInputChange}
               onQuestionFocus={handleJumpToQuestion}
               setProblemRef={setProblemRef}
             />

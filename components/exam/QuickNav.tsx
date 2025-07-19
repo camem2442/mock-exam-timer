@@ -14,6 +14,7 @@ const QuickNav: React.FC<QuickNavProps> = ({ questionNumbers, questions, onJumpT
     return (
         <Card>
             <h3 className="text-lg font-bold mb-3 text-foreground">빠른 이동</h3>
+            <div className="border-t border-border my-3"></div>
             <div className="grid grid-cols-5 sm:grid-cols-10 lg:grid-cols-15 gap-2">
                 {questionNumbers.map(qNum => {
                     const question = questions[qNum];

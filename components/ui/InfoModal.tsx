@@ -44,6 +44,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                                     <strong>시험 시작:</strong> '시험 시작' 버튼을 누르면 타이머가 작동합니다.
                                 </div>
                             </div>
+                            
                             <div className="flex items-start gap-3">
                                 <span className="bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</span>
                                 <div>
