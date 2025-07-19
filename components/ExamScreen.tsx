@@ -127,11 +127,15 @@ const ExamScreen: React.FC = () => {
     }, [resetSession, timer, setIsGradingModalOpen, setSubmittedCorrectAnswers, grading]);
     
     const handleStartExam = useCallback(() => {
+        console.log('🚀 handleStartExam 시작');
         const start = parseInt(startQuestionStr, 10);
         const end = parseInt(endQuestionStr, 10);
         const totalMinutes = parseInt(totalMinutesStr, 10);
 
+        console.log('📊 시험 설정:', { start, end, totalMinutes, isUnlimitedTime });
+
         if (isNaN(start) || isNaN(end) || (!isUnlimitedTime && isNaN(totalMinutes)) || start <= 0 || end <= 0 || start > end) {
+            console.log('❌ 유효성 검사 실패');
             setSetupError('유효한 문제 번호와 시험 시간을 입력해주세요.');
             return;
         }
@@ -147,13 +151,17 @@ const ExamScreen: React.FC = () => {
             initialQuestions[i] = { number: i, solveTime: 0, answer: null, attempts: 0, solveEvents: [] };
         }
         
+        console.log('📝 문제 설정:', { qNumbers, initialQuestions });
+        
         examSession.setQuestions(initialQuestions);
         examSession.setQuestionNumbers(qNumbers);
         setFocusedQuestionNumber(qNumbers[0]);
 
+        console.log('🔄 상태 업데이트 시작');
         // 상태 업데이트를 즉시 실행
         setIsExamActive(true);
         timer.start();
+        console.log('✅ 시험 시작 완료');
     }, [startQuestionStr, endQuestionStr, totalMinutesStr, isUnlimitedTime, resetExamState, timer, examSession, setFocusedQuestionNumber]);
     
     const handleContinueExam = useCallback(() => {
@@ -350,14 +358,19 @@ const ExamScreen: React.FC = () => {
 
                 <div className="lg:col-span-3 space-y-8">
                     {!isExamActive ? (
-                        <ExamSetupView 
+                        <>
+                            {console.log('🔧 ExamSetupView 렌더링', { isExamActive })}
+                            <ExamSetupView 
                             examSetup={examSetup}
                                 onStart={handleStartExam}
                             onShowRecords={() => examRecord.setIsRecordModalOpen(true)}
                                 error={setupError}
                             />
+                        </>
                     ) : (
-                        <ActiveExamView
+                        <>
+                            {console.log('🎯 ActiveExamView 렌더링', { isExamActive, questionsLength: Object.keys(questions).length })}
+                            <ActiveExamView
                             problemRefs={problemRefs}
                             questions={questionsWithGrading}
                             onLap={handleLap}
@@ -389,6 +402,7 @@ const ExamScreen: React.FC = () => {
                             endQuestionStr={endQuestionStr}
                             totalMinutesStr={totalMinutesStr}
                         />
+                        </>
                     )}
                 </div>
             </div>
