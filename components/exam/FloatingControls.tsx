@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ToggleSwitch } from '../ui/ToggleSwitch';
 import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
 import { Tooltip } from '../ui/Tooltip';
 
 interface FloatingControlsProps {
@@ -27,7 +26,7 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
 
     return (
         <div className="fixed bottom-4 right-4 z-50">
-            <Card className="shadow-lg bg-background/95 backdrop-blur-sm border">
+            <div className="bg-background/80 backdrop-blur-md border border-border/50 rounded-lg shadow-lg">
                 {isExpanded ? (
                     <div className="p-3 space-y-3 min-w-[200px]">
                         {/* 헤더 */}
@@ -37,7 +36,7 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => setIsExpanded(false)}
-                                className="w-6 h-6 p-0"
+                                className="w-6 h-6 p-0 hover:bg-accent/50"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -95,16 +94,16 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
                         </Button>
                     </div>
                 ) : (
-                    <Button
+                    <div 
+                        className="p-3 hover:bg-accent/20 rounded-lg cursor-pointer transition-colors"
                         onClick={() => setIsExpanded(true)}
-                        size="sm"
-                        variant="default"
-                        className="px-3 py-2 rounded-md bg-background/95 backdrop-blur-sm border"
                     >
-                        <span className="text-sm font-medium">모드 설정</span>
-                    </Button>
+                        <span className="text-sm font-medium text-foreground">
+                            모드 설정
+                        </span>
+                    </div>
                 )}
-            </Card>
+            </div>
         </div>
     );
 };
