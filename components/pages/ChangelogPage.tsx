@@ -42,6 +42,7 @@ export const ChangelogPage: React.FC = () => {
                                     <ul className="list-disc space-y-2 pl-6 text-lg">
                                         <li className="pl-2">PWA 지원 및 '홈 화면에 추가' 기능</li>
                                         <li className="pl-2">결과 이미지/링크 공유 기능</li>
+                                        <li className="pl-3">배율 조절 기능 추가</li>
                                     </ul>
                                 </div>
                                 <div className="border-l-4 border-border pl-6">
