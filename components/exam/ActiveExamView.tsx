@@ -66,6 +66,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
   const problemListContainerRef = useRef<HTMLDivElement | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [visibleRange, setVisibleRange] = useState({ start: 1, end: 5 });
 
   // 스크롤 감지
   useEffect(() => {
@@ -104,6 +105,49 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
   const focusedQuestionObj = focusedQuestionNumber ? questions.find(q => q.number === focusedQuestionNumber) : null;
   const questionMap = React.useMemo(() => Object.fromEntries(questions.map(q => [q.number, q])), [questions]);
+
+  // 스크롤 버튼 핸들러
+  const scrollProblemList = useCallback((direction: 'up' | 'down') => {
+    const container = problemListContainerRef.current;
+    if (!container) return;
+
+    const itemHeight = container.firstElementChild?.getBoundingClientRect().height || 0;
+    const scrollAmount = itemHeight * 5; // 5개씩 스크롤
+
+    if (direction === 'up') {
+      container.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+    }
+  }, []);
+
+  // 스크롤 위치에 따른 범위 업데이트
+  useEffect(() => {
+    const container = problemListContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const itemHeight = container.firstElementChild?.getBoundingClientRect().height || 0;
+      if (itemHeight === 0) return;
+
+      const scrollTop = container.scrollTop;
+      const startIndex = Math.floor(scrollTop / itemHeight);
+      const visibleCount = Math.ceil(container.clientHeight / itemHeight);
+      
+      setVisibleRange({
+        start: Math.min(startIndex + 1, questions.length),
+        end: Math.min(startIndex + visibleCount, questions.length)
+      });
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    handleScroll(); // 초기 상태 설정
+
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [questions.length]);
+
+  const canScrollUp = visibleRange.start > 1;
+  const canScrollDown = visibleRange.end < questions.length;
 
   return (
     <div className="lg:col-span-3 space-y-8">
@@ -164,7 +208,38 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
         <div className="border-t border-border pt-4">
           <div>
-            <h3 className="text-lg font-bold mb-3">전체 문제 목록</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-bold">전체 문제 목록</h3>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="icon"
+                  variant="outline"
+                  onClick={() => scrollProblemList('up')}
+                  disabled={!canScrollUp}
+                  className="h-8 w-8"
+                  title="위로 5문제"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                </Button>
+                <span className="text-sm text-muted-foreground px-2 min-w-[80px] text-center">
+                  {visibleRange.start}-{visibleRange.end} / {questions.length}
+                </span>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  onClick={() => scrollProblemList('down')}
+                  disabled={!canScrollDown}
+                  className="h-8 w-8"
+                  title="아래로 5문제"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </Button>
+              </div>
+            </div>
             <ProblemList
               ref={problemListContainerRef}
               isExamActive={isExamActive}
