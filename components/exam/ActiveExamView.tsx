@@ -170,7 +170,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   const canScrollDown = visibleRange.end < questions.length;
 
   return (
-    <div className="lg:col-span-3 space-y-8">
+    <div className="space-y-8">
       <div className="sticky top-8 z-10 space-y-4">
         <Card className="bg-transparent shadow-none backdrop-blur-sm">
           <TimerDisplay
