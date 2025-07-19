@@ -3,9 +3,9 @@ import { Card } from '../ui/Card';
 import TimerDisplay from './TimerDisplay';
 import QuickNav from './QuickNav';
 import DynamicMarkingWindow from './DynamicMarkingWindow';
-import ControlToolbar from './ControlToolbar';
 import ProblemList from './ProblemList';
 import ProblemListHeader from './ProblemListHeader';
+import FloatingControls from './FloatingControls';
 import { type Question } from '../../types';
 
 interface ActiveExamViewProps {
@@ -160,17 +160,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
       />
 
       <Card className="space-y-4">
-        <ControlToolbar
-          isExamActive={isExamActive}
-          batchMode={batchMode}
-          onBatchModeChange={onBatchModeChange}
-          onBatchRecord={onBatchRecord}
-          isBatchRecordDisabled={!batchMode || batchSelectedQuestions.size === 0}
-          isMarkingMode={isMarkingMode}
-          onMarkingModeChange={onMarkingModeChange}
-        />
-
-        <div className="border-t border-border pt-4">
+        <div className="pt-4">
           <div>
             <ProblemListHeader
               currentQuestionIndex={currentQuestionIndex}
@@ -193,6 +183,16 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
           </div>
         </div>
       </Card>
+
+      <FloatingControls
+        isExamActive={isExamActive}
+        batchMode={batchMode}
+        onBatchModeChange={onBatchModeChange}
+        onBatchRecord={onBatchRecord}
+        isBatchRecordDisabled={!batchMode || batchSelectedQuestions.size === 0}
+        isMarkingMode={isMarkingMode}
+        onMarkingModeChange={onMarkingModeChange}
+      />
     </div>
   );
 }; 
