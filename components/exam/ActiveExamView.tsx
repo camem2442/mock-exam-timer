@@ -93,39 +93,41 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
 
   return (
     <div className="lg:col-span-3 space-y-8">
-      <Card className="sticky top-8 z-10 bg-transparent shadow-none backdrop-blur-sm">
-        <TimerDisplay
-          examName={examName}
-          isUnlimited={isUnlimitedTime}
-          timeLeft={timer.timeLeft}
-          totalElapsed={timer.elapsedTime}
-          currentProblem={timer.currentProblemTime}
-          overtime={timer.overtime}
-          isExamActive={isExamActive}
-          isPaused={timer.isPaused}
-          timeUp={timer.timeUp}
-          onTogglePause={timer.togglePause}
-          onResetTime={timer.recordLap}
-          onFinish={onFinishExam}
-          startQuestion={startQuestionStr}
-          endQuestion={endQuestionStr}
-          totalMinutes={totalMinutesStr}
-        />
-      </Card>
-
-      {focusedQuestionObj && (
-        <Card>
-          <DynamicMarkingWindow
-            key={`focused-${focusedQuestionObj.number}`}
+      <div className="sticky top-8 z-10 space-y-4">
+        <Card className="bg-transparent shadow-none backdrop-blur-sm">
+          <TimerDisplay
+            examName={examName}
+            isUnlimited={isUnlimitedTime}
+            timeLeft={timer.timeLeft}
+            totalElapsed={timer.elapsedTime}
+            currentProblem={timer.currentProblemTime}
+            overtime={timer.overtime}
             isExamActive={isExamActive}
-            question={focusedQuestionObj}
-            batchSelected={batchSelectedQuestions.has(focusedQuestionObj.number)}
-            onLap={onLap}
-            subjectiveInput={subjectiveInputs[focusedQuestionObj.number] ?? ''}
-            onSubjectiveInputChange={(value) => onSubjectiveInputChange(focusedQuestionObj.number, value)}
+            isPaused={timer.isPaused}
+            timeUp={timer.timeUp}
+            onTogglePause={timer.togglePause}
+            onResetTime={timer.recordLap}
+            onFinish={onFinishExam}
+            startQuestion={startQuestionStr}
+            endQuestion={endQuestionStr}
+            totalMinutes={totalMinutesStr}
           />
         </Card>
-      )}
+
+        {focusedQuestionObj && (
+          <Card className="bg-background/95 backdrop-blur-sm shadow-md">
+            <DynamicMarkingWindow
+              key={`focused-${focusedQuestionObj.number}`}
+              isExamActive={isExamActive}
+              question={focusedQuestionObj}
+              batchSelected={batchSelectedQuestions.has(focusedQuestionObj.number)}
+              onLap={onLap}
+              subjectiveInput={subjectiveInputs[focusedQuestionObj.number] ?? ''}
+              onSubjectiveInputChange={(value) => onSubjectiveInputChange(focusedQuestionObj.number, value)}
+            />
+          </Card>
+        )}
+      </div>
 
       <QuickNav
         questionNumbers={questions.map(q => q.number)}
