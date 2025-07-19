@@ -23,6 +23,8 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
     onMarkingModeChange
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    
+    console.log('FloatingControls rendering:', { isExamActive, batchMode, isMarkingMode });
 
     return (
         <div className="fixed bottom-4 right-4 z-50">
@@ -47,7 +49,10 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
                         {/* 마킹 모드 */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <span className="text-sm">🏷️</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-muted-foreground">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6z" />
+                                </svg>
                                 <span className="text-sm">마킹 모드</span>
                             </div>
                             <ToggleSwitch 
@@ -60,7 +65,9 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
                         {/* 일괄 선택 */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <span className="text-sm">📋</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-muted-foreground">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 17.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                </svg>
                                 <span className="text-sm">일괄 선택</span>
                             </div>
                             <ToggleSwitch 
