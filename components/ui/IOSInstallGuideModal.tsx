@@ -43,7 +43,12 @@ export const IOSInstallGuideModal: React.FC<IOSInstallGuideModalProps> = ({ isOp
                 <div>
                   <p className="text-foreground font-medium">공유 버튼 탭</p>
                   <p className="text-muted-foreground text-sm">
-                    Safari 브라우저 하단의 공유 버튼(□↑)을 탭하세요
+                    Safari 브라우저 하단의 공유 버튼
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mx-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v10m0-10L8 7m4-4l4 4" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12v7a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    </svg>
+                    을 탭하세요
                   </p>
                 </div>
               </div>
