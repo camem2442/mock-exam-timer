@@ -23,6 +23,10 @@ export default {
           900: '#1e3a8a',
           950: '#172554',
         },
+      },
+      gridTemplateColumns: {
+        '10': 'repeat(10, minmax(0, 1fr))',
+        '15': 'repeat(15, minmax(0, 1fr))',
       }
     }
   },

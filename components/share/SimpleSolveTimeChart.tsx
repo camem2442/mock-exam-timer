@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Recharts from 'recharts';
 import { type Question } from '../../types';
 import { useChartData } from '../../hooks/useChartData';
@@ -10,6 +10,31 @@ interface SimpleSolveTimeChartProps {
 
 const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions }) => {
     const { hasData, solveOrderData } = useChartData(questions);
+    const [chartWidth, setChartWidth] = useState(580);
+
+    // 화면 크기에 따른 차트 너비 계산
+    useEffect(() => {
+        const updateChartWidth = () => {
+            const width = window.innerWidth;
+            let newWidth = 580;
+            
+            if (width <= 360) {
+                newWidth = Math.min(width - 32, 320);
+            } else if (width <= 480) {
+                newWidth = Math.min(width - 24, 400);
+            } else if (width <= 640) {
+                newWidth = Math.min(width - 32, 500);
+            } else if (width <= 768) {
+                newWidth = Math.min(width - 32, 550);
+            }
+            
+            setChartWidth(newWidth);
+        };
+        
+        updateChartWidth();
+        window.addEventListener('resize', updateChartWidth);
+        return () => window.removeEventListener('resize', updateChartWidth);
+    }, []);
 
     const tickColor = '#94a3b8'; // slate-400
     const gridColor = 'rgba(100, 116, 139, 0.2)'; // slate-500 with opacity
@@ -44,12 +69,21 @@ const SimpleSolveTimeChart: React.FC<SimpleSolveTimeChartProps> = ({ questions }
     // 데이터 포인트 수에 따라 막대 너비를 동적으로 설정
     const barSize = solveOrderData.length < 10 ? 40 : undefined;
 
+    // 화면 크기에 따른 마진 조정
+    const getMargin = () => {
+        const width = window.innerWidth;
+        if (width <= 480) {
+            return { top: 10, right: 10, left: 10, bottom: 10 };
+        }
+        return { top: 10, right: 30, left: 20, bottom: 10 };
+    };
+
     return (
-        <div className="w-full h-64">
+        <div className="w-full h-64 overflow-hidden">
             <Recharts.ResponsiveContainer width="100%" height="100%">
                 <Recharts.ComposedChart
                     data={solveOrderData}
-                    margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
+                    margin={getMargin()}
                 >
                     <Recharts.CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                     <Recharts.XAxis 

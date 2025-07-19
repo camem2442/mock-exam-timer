@@ -78,7 +78,7 @@
   }
   @media (max-width: 640px) {
     html {
-      font-size: 14px;
+      font-size: 16px; /* iOS 자동 확대 방지 */
     }
   }
 
@@ -90,5 +90,159 @@
     /* 모바일에서 확대 시 스크롤 방지 */
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
+  }
+
+  /* ResultImage 고정 크기 (이미지 생성용) */
+  .result-image-fixed {
+    width: 580px !important;
+    max-width: 580px !important;
+    min-width: 580px !important;
+  }
+
+  /* ===== 모바일 최적화 (기본 기능만) ===== */
+  
+  /* 기본 모바일 스타일 (768px 이하) */
+  @media (max-width: 768px) {
+    /* 🎯 터치 최적화 */
+    button:not(.toggle-switch-button), 
+    [role="button"]:not(.toggle-switch-button),
+    .btn,
+    input[type="checkbox"],
+    input[type="radio"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* 📱 키보드 확대 방지 - 모든 입력 요소 */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="search"],
+    input[type="url"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    textarea,
+    select {
+      font-size: 16px !important; /* iOS 자동 확대 방지 */
+      -webkit-text-size-adjust: 100%; /* 텍스트 크기 자동 조정 방지 */
+      -ms-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    /* ✨ 터치 피드백 애니메이션 */
+    button:not(.toggle-switch-button):active,
+    [role="button"]:not(.toggle-switch-button):active,
+    .btn:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+
+    /* 📱 스크롤 성능 최적화 */
+    .overflow-y-auto,
+    .overflow-x-auto {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+
+    /* 🚫 텍스트 선택 방지 */
+    button:not(.toggle-switch-button),
+    [role="button"]:not(.toggle-switch-button),
+    .btn {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* 📝 폰트 최적화 */
+    body {
+      font-size: 16px; /* iOS 자동 확대 방지 */
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    /* 🎨 카드 스타일 (기존 스타일 유지) */
+    .bg-white,
+    .dark .bg-slate-900 {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .dark .bg-slate-900 {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 🎯 입력 필드 개선 */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="search"],
+    input[type="url"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    textarea,
+    select {
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-size: 16px; /* iOS 자동 확대 방지 */
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="tel"]:focus,
+    input[type="search"]:focus,
+    input[type="url"]:focus,
+    input[type="date"]:focus,
+    input[type="time"]:focus,
+    input[type="datetime-local"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    /* 🎨 모달 개선 */
+    .modal-container {
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 📊 테이블 개선 */
+    table {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* 🎯 포커스 표시 개선 */
+    *:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+  }
+
+  /* ===== 작은 화면 최적화 (480px 이하) ===== */
+  @media (max-width: 480px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    /* 더 큰 터치 영역 */
+    button:not(.toggle-switch-button), 
+    [role="button"]:not(.toggle-switch-button),
+    .btn {
+      min-height: 48px;
+      min-width: 48px;
+    }
   }
 } 

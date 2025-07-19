@@ -1,11 +1,11 @@
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { Question } from '../../types';
 import SimpleSolveTimeChart from './SimpleSolveTimeChart';
 import FinalAnswerSheet from '../review/FinalAnswerSheet';
 import { formatTime } from '../../utils/formatters';
 import { siteConfig } from '../../config/site';
 
-interface ResultImageProps {
+interface ResultImageDisplayProps {
   questions: Question[];
   examName: string;
   includeGrading: boolean;
@@ -13,8 +13,33 @@ interface ResultImageProps {
   totalMinutes?: number;
 }
 
-export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
+export const ResultImageDisplay = forwardRef<HTMLDivElement, ResultImageDisplayProps>(
   ({ questions, examName, includeGrading, blurAnswer, totalMinutes }, ref) => {
+    const [containerWidth, setContainerWidth] = useState(580);
+    
+    // 화면 크기에 따른 너비 계산
+    useEffect(() => {
+      const updateWidth = () => {
+        const width = window.innerWidth;
+        let newWidth = 580;
+        
+        if (width <= 360) {
+          newWidth = Math.min(width - 32, 320);
+        } else if (width <= 480) {
+          newWidth = Math.min(width - 24, 400);
+        } else if (width <= 640) {
+          newWidth = Math.min(width - 32, 500);
+        } else if (width <= 768) {
+          newWidth = Math.min(width - 32, 550);
+        }
+        
+        setContainerWidth(newWidth);
+      };
+      
+      updateWidth();
+      window.addEventListener('resize', updateWidth);
+      return () => window.removeEventListener('resize', updateWidth);
+    }, []);
     
     // 채점된 문제 수 계산
     const gradedQuestions = questions.filter(q => q.isCorrect !== undefined);
@@ -25,18 +50,18 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
     const displayQuestions = includeGrading ? questions : questions.map(q => ({ ...q, isCorrect: undefined }));
 
     return (
-      // 세로형 이미지의 전체 크기와 스타일 지정
       <div 
         ref={ref} 
-        className="bg-slate-900 text-white p-6 result-image-fixed" 
+        className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 overflow-hidden" 
         style={{ 
           fontFamily: "'Noto Sans KR', sans-serif",
-          width: 580,
-          maxWidth: 580,
-          minWidth: 580
+          width: containerWidth,
+          margin: '0 auto',
+          boxSizing: 'border-box'
         }}
-        data-testid="result-image-container"
+        data-testid="result-image-display-container"
       >
+        <div className="bg-slate-900 text-white p-6 rounded-lg">
         
         <header className="text-center mb-6">
           <h1 className="text-3xl font-bold text-white">{examName}</h1>
@@ -101,7 +126,8 @@ export const ResultImage = forwardRef<HTMLDivElement, ResultImageProps>(
           <p className="text-2xl font-bold text-blue-400">{siteConfig.domain.replace('https://', '')}</p>
           <p className="text-base text-slate-300">나만의 시험 분석 파트너</p>
         </footer>
+        </div>
       </div>
     );
   }
-); 
+);

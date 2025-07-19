@@ -114,6 +114,10 @@ export const GradingModal: FC<GradingModalProps> = ({
                           checked={subjectiveProblems.has(num)}
                           onChange={() => handleToggleSubjective(num)}
                           className="h-5 w-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                          autoComplete="off"
+                          autoCorrect="off"
+                          autoCapitalize="off"
+                          spellCheck="false"
                         />
                       </td>
                     ))}

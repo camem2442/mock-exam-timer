@@ -19,6 +19,7 @@ import { ExamSetupView } from './exam/ExamSetupView';
 import { ActiveExamView } from './exam/ActiveExamView';
 import { usePwaInstall } from '../hooks/usePwaInstall';
 import { siteConfig } from '../config/site';
+import { IOSInstallGuideModal } from './ui/IOSInstallGuideModal';
 
 const ExamScreen: React.FC = () => {
     // --- State ---
@@ -33,7 +34,7 @@ const ExamScreen: React.FC = () => {
 
     // --- Hooks ---
     const examSetup = useExamSetup();
-    const { canInstall, triggerInstallPrompt } = usePwaInstall();
+    const { canInstall, triggerInstallPrompt, isIOS, isStandalone, showIOSGuide, closeIOSGuide } = usePwaInstall();
     const {
         examName, setExamName,
         startQuestionStr, setStartQuestionStr,
@@ -265,11 +266,22 @@ const ExamScreen: React.FC = () => {
                 <div className="space-y-4">
                     <hr className="border-slate-200 dark:border-slate-700" />
                     <div className="flex flex-col gap-2">
-                        {canInstall && (
-                            <Button variant="outline" onClick={triggerInstallPrompt}>
-                                📲 홈 화면에 추가
-                            </Button>
-                        )}
+                                                  {canInstall && (
+                              <Button variant="outline" onClick={async () => {
+                                  const result = await triggerInstallPrompt();
+                                  
+                                  // 결과에 따른 처리
+                                  if (result?.type === 'already-installed') {
+                                      alert('이미 앱으로 실행 중입니다!');
+                                  } else if (result?.type === 'not-supported') {
+                                      alert('이미 앱이 설치되어 있거나, 브라우저에서 지원하지 않습니다.');
+                                  } else if (result?.type === 'ios-unsupported') {
+                                      alert('iOS에서는 Safari 브라우저를 사용하여 홈 화면에 추가할 수 있습니다.');
+                                  }
+                              }}>
+                                  {isIOS ? '📱 홈 화면에 추가 (iOS)' : '📲 홈 화면에 추가'}
+                              </Button>
+                          )}
                          <Button
                             variant="outline"
                             onClick={async () => {
@@ -351,6 +363,8 @@ const ExamScreen: React.FC = () => {
                     </Card>
                 </div>
             )}
+            
+            <IOSInstallGuideModal isOpen={showIOSGuide} onClose={closeIOSGuide} />
         </>
     );
 };
