@@ -64,7 +64,7 @@ const GuidePageWrapper: React.FC = () => {
         <title>사용 방법 안내 - {siteConfig.title}</title>
         <meta name="description" content="MockTimer의 상세한 사용 방법을 안내합니다. 시험 설정부터 결과 분석까지 단계별로 설명합니다." />
         <meta name="keywords" content="MockTimer 사용법, 시험 타이머 사용법, 문제풀이 타이머 가이드, 시험 준비 도구 사용법" />
-        <meta property="og:title" content={`사용 방법 안내 - ${siteConfig.title}`} />
+        <meta property="og:title" content={`사용 방법 안내 - ${siteConfig.name}`} />
         <meta property="og:description" content="MockTimer의 상세한 사용 방법을 안내합니다." />
         <meta property="og:url" content={`${siteConfig.domain}/guide`} />
       </Helmet>
@@ -81,7 +81,7 @@ const ChangelogPageWrapper: React.FC = () => {
         <title>업데이트 기록 - {siteConfig.title}</title>
         <meta name="description" content="MockTimer의 버전별 업데이트 기록과 개발 로드맵을 확인하세요." />
         <meta name="keywords" content="MockTimer 업데이트, 시험 타이머 버전, 문제풀이 타이머 변경사항" />
-        <meta property="og:title" content={`업데이트 기록 - ${siteConfig.title}`} />
+        <meta property="og:title" content={`업데이트 기록 - ${siteConfig.name}`} />
         <meta property="og:description" content="MockTimer의 버전별 업데이트 기록을 확인하세요." />
         <meta property="og:url" content={`${siteConfig.domain}/changelog`} />
       </Helmet>
@@ -98,7 +98,7 @@ const ContactPageWrapper: React.FC = () => {
         <title>문의 및 피드백 - {siteConfig.title}</title>
         <meta name="description" content="MockTimer에 대한 문의사항이나 피드백을 보내주세요. 자주 묻는 질문과 답변도 확인할 수 있습니다." />
         <meta name="keywords" content="MockTimer 문의, 시험 타이머 피드백, 문제풀이 타이머 FAQ, 고객 지원" />
-        <meta property="og:title" content={`문의 및 피드백 - ${siteConfig.title}`} />
+        <meta property="og:title" content={`문의 및 피드백 - ${siteConfig.name}`} />
         <meta property="og:description" content="MockTimer에 대한 문의사항이나 피드백을 보내주세요." />
         <meta property="og:url" content={`${siteConfig.domain}/contact`} />
       </Helmet>
@@ -113,11 +113,26 @@ const FAQPageWrapper: React.FC = () => {
       <Helmet>
         <title>자주 묻는 질문 - {siteConfig.title}</title>
         <meta name="description" content="MockTimer 사용자들이 자주 묻는 질문과 답변을 모았습니다. 궁금한 점이 있다면 먼저 확인해보세요." />
-        <meta property="og:title" content={`자주 묻는 질문 - ${siteConfig.title}`} />
+        <meta property="og:title" content={`자주 묻는 질문 - ${siteConfig.name}`} />
         <meta property="og:description" content="MockTimer 사용자들이 자주 묻는 질문과 답변을 모았습니다." />
         <meta property="og:url" content={`${siteConfig.domain}/faq`} />
       </Helmet>
       <FAQPage />
+    </>
+  );
+};
+
+const PrivacyPolicyPageWrapper: React.FC = () => {
+  return (
+    <>
+      <Helmet>
+        <title>개인정보 처리방침 - {siteConfig.title}</title>
+        <meta name="description" content="MockTimer의 개인정보 처리방침에 대해 안내합니다." />
+        <meta property="og:title" content={`개인정보 처리방침 - ${siteConfig.name}`} />
+        <meta property="og:description" content="MockTimer의 개인정보 처리방침에 대해 안내합니다." />
+        <meta property="og:url" content={`${siteConfig.domain}/privacy`} />
+      </Helmet>
+      <PrivacyPolicyPage />
     </>
   );
 };
@@ -141,7 +156,7 @@ const AppContent: React.FC = () => {
         <Route path="/changelog" element={<ChangelogPageWrapper />} />
         <Route path="/contact" element={<ContactPageWrapper />} />
         <Route path="/faq" element={<FAQPageWrapper />} />
-        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPageWrapper />} />
         <Route path="/share/:id" element={<SharePage />} />
       </Routes>
       <Analytics />

@@ -6,6 +6,7 @@ export const siteConfig = {
     domain: 'https://www.mocktimer.kr',
     
     // 사이트 메타 정보
+    name: 'MockTimer',
     title: 'MockTimer | 모의고사 타이머 & 채점·분석기',
     description: '모의고사 타이머 & 채점·분석기 : 시간 관리 능력을 극대화하여 최고의 성과를 만드세요.',
     keywords: 'MockTimer, 목타이머, 모의고사 타이머, 시험 타이머, 문제풀이 시간, 국어 타이머, 수학 타이머, 수능 타이머, 공시 타이머, LEET 타이머, CPA 타이머, 학습 분석, 시간 관리, 시험 준비, 수험생 도구',
