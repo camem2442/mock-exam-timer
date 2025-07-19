@@ -65,7 +65,7 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   endQuestionStr,
   totalMinutesStr,
 }) => {
-  console.log('ActiveExamView rendering:', { isExamActive, questions: questions.length });
+
 
   const problemListContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -74,6 +74,22 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
       problemRefs.current[qNum] = el;
     }
   };
+
+  const handleJumpToQuestion = useCallback((questionNumber: number) => {
+    setFocusedQuestionNumber(questionNumber);
+    
+    const container = problemListContainerRef.current;
+    const targetElement = problemRefs.current[questionNumber];
+
+    if (container && targetElement) {
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = targetElement.getBoundingClientRect();
+        const isVisible = targetRect.top >= containerRect.top && targetRect.bottom <= containerRect.bottom;
+        if(isVisible) return;
+        const offset = targetElement.offsetTop - container.offsetTop;
+        container.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  }, [setFocusedQuestionNumber, problemRefs]);
 
   // 스크롤 네비게이션 로직
   const handleScrollUp = useCallback(() => {
@@ -98,22 +114,6 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
   const currentQuestionIndex = focusedQuestionNumber 
     ? questions.findIndex(q => q.number === focusedQuestionNumber) + 1 
     : 1;
-
-  const handleJumpToQuestion = useCallback((questionNumber: number) => {
-    setFocusedQuestionNumber(questionNumber);
-    
-    const container = problemListContainerRef.current;
-    const targetElement = problemRefs.current[questionNumber];
-
-    if (container && targetElement) {
-        const containerRect = container.getBoundingClientRect();
-        const targetRect = targetElement.getBoundingClientRect();
-        const isVisible = targetRect.top >= containerRect.top && targetRect.bottom <= containerRect.bottom;
-        if(isVisible) return;
-        const offset = targetElement.offsetTop - container.offsetTop;
-        container.scrollTo({ top: offset, behavior: 'smooth' });
-    }
-  }, [setFocusedQuestionNumber, problemRefs]);
 
   const focusedQuestionObj = focusedQuestionNumber ? questions.find(q => q.number === focusedQuestionNumber) : null;
   const questionMap = React.useMemo(() => Object.fromEntries(questions.map(q => [q.number, q])), [questions]);
@@ -190,7 +190,6 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         </div>
       </Card>
 
-{/* FloatingControls 임시 주석 처리
       <FloatingControls
         isExamActive={isExamActive}
         batchMode={batchMode}
@@ -200,7 +199,6 @@ export const ActiveExamView: React.FC<ActiveExamViewProps> = ({
         isMarkingMode={isMarkingMode}
         onMarkingModeChange={onMarkingModeChange}
       />
-      */}
     </div>
   );
 }; 
