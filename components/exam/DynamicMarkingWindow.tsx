@@ -52,13 +52,9 @@ const DynamicMarkingWindow: React.FC<DynamicMarkingWindowProps> = ({
                             key={ans}
                             onClick={(e) => handleAction(e, () => onLap(qNum, ans.toString()))}
                             disabled={!isExamActive}
-                            variant={question.answer === ans.toString() ? 'default' : 'outline'}
+                            variant={question.answer === ans.toString() ? 'default' : 'secondary'}
                             size="icon"
-                            className={`w-8 h-8 rounded-md ${
-                                question.answer === ans.toString() 
-                                    ? 'bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600' 
-                                    : 'bg-gray-50 hover:bg-gray-100 border-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600'
-                            }`}
+                            className="w-8 h-8 rounded-md"
                         >
                             {ans}
                         </Button>

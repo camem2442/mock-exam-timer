@@ -23,16 +23,10 @@ const QuickNav: React.FC<QuickNavProps> = ({ questionNumbers, questions, onJumpT
                     return (
                         <Button
                             key={qNum}
-                            variant={qNum === focusedQuestionNumber ? 'default' : (hasAnswer ? 'outline' : 'secondary')}
+                            variant={qNum === focusedQuestionNumber ? 'default' : (hasAnswer ? 'success' : 'secondary')}
                             size="sm"
                             onClick={() => onJumpTo(qNum)}
-                            className={`!px-2 !py-1 justify-center ${
-                                qNum === focusedQuestionNumber 
-                                    ? 'bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600'
-                                    : hasAnswer 
-                                        ? 'bg-green-50 hover:bg-green-100 border-green-300 text-green-800 dark:bg-green-900/30 dark:hover:bg-green-900/50 dark:border-green-600 dark:text-green-300'
-                                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300'
-                            }`}
+                            className="!px-2 !py-1 justify-center"
                         >
                             {qNum}
                         </Button>
