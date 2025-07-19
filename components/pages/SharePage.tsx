@@ -9,6 +9,7 @@ import { Spinner } from '../ui/Spinner';
 import { siteConfig } from '../../config/site';
 import { Button } from '../ui/Button';
 import SharePreviewModal from '../share/SharePreviewModal';
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 
 interface SharedResultData {
     questions: Question[];
@@ -23,10 +24,12 @@ const SharePage: React.FC = () => {
     const [resultData, setResultData] = useState<SharedResultData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [isCopied, setIsCopied] = useState(false);
     const [isSharing, setIsSharing] = useState(false);
     const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
     const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+    
+    // 클립보드 복사 훅 사용
+    const { copy, isCopied, error: copyError } = useCopyToClipboard();
 
     const imageRef = useRef<HTMLDivElement>(null);
     const shareUrl = window.location.href;
@@ -57,10 +60,7 @@ const SharePage: React.FC = () => {
     }, []);
 
     const handleCopyLink = () => {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 2000);
-        });
+        copy(shareUrl);
     };
 
     const generateAndShowPreview = async () => {
@@ -195,12 +195,15 @@ const SharePage: React.FC = () => {
             <div className="mt-8 flex flex-col items-center gap-4">
                 <div className="flex w-full max-w-sm gap-2">
                     <Button onClick={handleCopyLink} variant="outline" className="flex-1">
-                        {isCopied ? '복사 완료!' : '링크 복사'}
+                        {isCopied ? '✓ 복사 완료!' : '링크 복사'}
                     </Button>
                     <Button onClick={generateAndShowPreview} className="flex-1">
                         {isSharing ? <Spinner /> : '공유하기'}
                     </Button>
                 </div>
+                {copyError && (
+                    <p className="text-sm text-destructive">{copyError}</p>
+                )}
                 <Link to="/" className="text-sm text-muted-foreground hover:text-primary hover:underline">
                     새로운 시험 시작하기
                 </Link>
