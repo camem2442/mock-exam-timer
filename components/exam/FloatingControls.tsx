@@ -75,7 +75,7 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 17.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                 </svg>
                                 <span className="text-sm">일괄 선택</span>
-                                <Tooltip text="여러 문제를 선택하여 시간을 한 번에 나눠서 기록하는 모드입니다. 기록하지 않고 토글을 해제하면 선택이 리셋됩니다.">
+                                <Tooltip text="여러 문제를 선택하여 시간을 한 번에 나눠서 기록하는 모드입니다. 일괄 기록 버튼으로 선택한 문제들의 시간을 기록할 수 있고, 기록하지 않고 토글을 해제하면 선택이 리셋됩니다.">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 text-muted-foreground cursor-help">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
                                     </svg>
@@ -89,21 +89,14 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
                         </div>
 
                         {/* 일괄 기록 버튼 */}
-                        <div className="flex items-center gap-2">
-                            <Button 
-                                onClick={onBatchRecord} 
-                                disabled={isBatchRecordDisabled}
-                                size="sm"
-                                className="flex-1"
-                            >
-                                일괄 기록
-                            </Button>
-                            <Tooltip text="선택한 문제들의 시간을 일괄 기록합니다.">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 text-muted-foreground cursor-help">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                                </svg>
-                            </Tooltip>
-                        </div>
+                        <Button 
+                            onClick={onBatchRecord} 
+                            disabled={isBatchRecordDisabled}
+                            size="sm"
+                            className="w-full"
+                        >
+                            일괄 기록
+                        </Button>
                     </div>
                 ) : (
                     <div 
